@@ -1,5 +1,38 @@
 [
   {
+    "id": "4b1fe7d113250a9c0865",
+    "title": "Real Madrid and PSG keen on Suzuki - Saturday's gossip",
+    "summary": "Paris St-Germain and Real Madrid interested in Aston Villa keeper Zion Suzuki, Inter Milan weighing up move for Crystal Palace's Chris Richards, plus more.",
+    "originalTitle": "Real Madrid and PSG keen on Suzuki - Saturday's gossip",
+    "originalSummary": "Paris St-Germain and Real Madrid interested in Aston Villa keeper Zion Suzuki, Inter Milan weighing up move for Crystal Palace's Chris Richards, plus more.",
+    "originalLanguage": "en",
+    "displayLanguage": "pt-PT",
+    "source": "BBC Sport",
+    "domain": "bbc.co.uk",
+    "url": "https://bbc.co.uk/sport/football/articles/c98rzz0rjjvdo",
+    "date": "2026-11-06T21:08:04+00:00",
+    "collectedAt": "2026-11-06T21:35:08+00:00",
+    "player": "",
+    "currentClub": "",
+    "destination": "",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "relevance": 25,
+    "classificationReasons": [
+      "Palavras-chave de transferências",
+      "Possível rumor"
+    ],
+    "detectedPlayers": [],
+    "editorApproved": false,
+    "editorStatus": "Por verificar",
+    "editorNotes": "",
+    "independentSources": [
+      "BBC Sport"
+    ],
+    "engineVersion": "4.0",
+    "sourceCount": 1
+  },
+  {
     "id": "82c9bc8fbe920222636c",
     "title": "Aston Villa latest: Emery confirms further contract talks to be held next week",
     "summary": "",
@@ -21,6 +54,38 @@
     "transferRelevance": 2
   },
   {
+    "id": "9f001d78da8f0787ef61",
+    "title": "Jobe joins brother Jude with England to showcase his own talent",
+    "summary": "\"He's coming on his own merit,\" said Thomas Tuchel, after extolling the strengths of Jobe Bellingham.",
+    "originalTitle": "Jobe joins brother Jude with England to showcase his own talent",
+    "originalSummary": "\"He's coming on his own merit,\" said Thomas Tuchel, after extolling the strengths of Jobe Bellingham.",
+    "originalLanguage": "en",
+    "displayLanguage": "pt-PT",
+    "source": "Sky Sports",
+    "domain": "skysports.com",
+    "url": "https://skysports.com/football/news/12040/13608890/england-jobe-bellingham-has-the-chance-to-showcase-his-own-talent-alongside-brother-jude-in-thomas-tuchels-squad",
+    "date": "2026-11-06T14:24:00+00:00",
+    "collectedAt": "2026-11-06T21:35:08+00:00",
+    "player": "",
+    "currentClub": "",
+    "destination": "",
+    "status": "Possível confirmação",
+    "suggestedStatus": "Possível confirmação",
+    "relevance": 25,
+    "classificationReasons": [
+      "Linguagem de confirmação"
+    ],
+    "detectedPlayers": [],
+    "editorApproved": false,
+    "editorStatus": "Por verificar",
+    "editorNotes": "",
+    "independentSources": [
+      "Sky Sports"
+    ],
+    "engineVersion": "4.0",
+    "sourceCount": 1
+  },
+  {
     "id": "43582232c02a8eeb9982",
     "title": "Jobe joins brother Jude with England to showcase his own talent",
     "summary": "\"He's coming on his own merit,\" said Thomas Tuchel, after extolling the strengths of Jobe Bellingham.",
@@ -37,6 +102,38 @@
     "destination": "",
     "classification": "Notícia de transferências",
     "transferRelevance": 2
+  },
+  {
+    "id": "90280ff2ecb3ec4212fc",
+    "title": "Goodwin keen but realistic over Cameron move - gossip",
+    "summary": "Dundee United manager addresses possibility of formalising move for loan player as Dundee set for stadium public consultation.",
+    "originalTitle": "Goodwin keen but realistic over Cameron move - gossip",
+    "originalSummary": "Dundee United manager addresses possibility of formalising move for loan player as Dundee set for stadium public consultation.",
+    "originalLanguage": "en",
+    "displayLanguage": "pt-PT",
+    "source": "BBC Sport",
+    "domain": "bbc.co.uk",
+    "url": "https://bbc.co.uk/sport/football/articles/c8wy9z99we1yo",
+    "date": "2026-11-06T07:27:05+00:00",
+    "collectedAt": "2026-11-06T21:35:09+00:00",
+    "player": "",
+    "currentClub": "",
+    "destination": "",
+    "status": "Por verificar",
+    "suggestedStatus": "Por verificar",
+    "relevance": 15,
+    "classificationReasons": [
+      "Palavras-chave de transferências"
+    ],
+    "detectedPlayers": [],
+    "editorApproved": false,
+    "editorStatus": "Por verificar",
+    "editorNotes": "",
+    "independentSources": [
+      "BBC Sport"
+    ],
+    "engineVersion": "4.0",
+    "sourceCount": 1
   },
   {
     "id": "f703a576b45d044ba763",
@@ -79,6 +176,38 @@
     "transferRelevance": 2
   },
   {
+    "id": "cab3e67b8a3b57d3b1eb",
+    "title": "Emery close to agreeing new Aston Villa contract",
+    "summary": "Aston Villa manager Unai Emery is close to agreeing a contract extension at the club.",
+    "originalTitle": "Emery close to agreeing new Aston Villa contract",
+    "originalSummary": "Aston Villa manager Unai Emery is close to agreeing a contract extension at the club.",
+    "originalLanguage": "en",
+    "displayLanguage": "pt-PT",
+    "source": "BBC Sport",
+    "domain": "bbc.co.uk",
+    "url": "https://bbc.co.uk/sport/football/articles/cw99zde82nmno",
+    "date": "2026-11-05T15:45:22+00:00",
+    "collectedAt": "2026-11-06T21:35:10+00:00",
+    "player": "",
+    "currentClub": "",
+    "destination": "",
+    "status": "Por verificar",
+    "suggestedStatus": "Por verificar",
+    "relevance": 15,
+    "classificationReasons": [
+      "Palavras-chave de transferências"
+    ],
+    "detectedPlayers": [],
+    "editorApproved": false,
+    "editorStatus": "Por verificar",
+    "editorNotes": "",
+    "independentSources": [
+      "BBC Sport"
+    ],
+    "engineVersion": "4.0",
+    "sourceCount": 1
+  },
+  {
     "id": "17de4b62fa6e53dfcc16",
     "title": "Emery close to agreeing new Aston Villa contract",
     "summary": "Aston Villa manager Unai Emery is close to agreeing a contract extension at the club.",
@@ -98,6 +227,39 @@
     ],
     "classification": "Notícia de transferências",
     "transferRelevance": 2
+  },
+  {
+    "id": "3c74341e7ce6feb36be8",
+    "title": "What new Kane deal means for England and the Premier League record",
+    "summary": "Harry Kane's new deal at Bayern Munich may end his Premier League career but offers fresh hope he can lead England to glory, writes Phil McNulty.",
+    "originalTitle": "What new Kane deal means for England and the Premier League record",
+    "originalSummary": "Harry Kane's new deal at Bayern Munich may end his Premier League career but offers fresh hope he can lead England to glory, writes Phil McNulty.",
+    "originalLanguage": "en",
+    "displayLanguage": "pt-PT",
+    "source": "BBC Sport",
+    "domain": "bbc.co.uk",
+    "url": "https://bbc.co.uk/sport/football/articles/cm93zvzzl33zo",
+    "date": "2026-11-05T14:44:34+00:00",
+    "collectedAt": "2026-11-06T21:35:11+00:00",
+    "player": "",
+    "currentClub": "",
+    "destination": "",
+    "status": "Negociações",
+    "suggestedStatus": "Negociações",
+    "relevance": 45,
+    "classificationReasons": [
+      "Palavras-chave de transferências",
+      "Possíveis negociações"
+    ],
+    "detectedPlayers": [],
+    "editorApproved": false,
+    "editorStatus": "Por verificar",
+    "editorNotes": "",
+    "independentSources": [
+      "BBC Sport"
+    ],
+    "engineVersion": "4.0",
+    "sourceCount": 1
   },
   {
     "id": "309bc7bec0dafd13eb67",
@@ -143,6 +305,38 @@
     "transferRelevance": 3
   },
   {
+    "id": "b977acad9b1ca8abc554",
+    "title": "'He's been fantastic' - how Konsa has fitted in seamlessly at Arsenal",
+    "summary": "BBC Sport's Kelly Cates, Danny Murphy and Micah Richards analyse how good Ezri Konsa has been for Arsenal after signing from Aston Villa in the summer, especially in their 1-0 Premier League win against Liverpool at Anfield.",
+    "originalTitle": "'He's been fantastic' - how Konsa has fitted in seamlessly at Arsenal",
+    "originalSummary": "BBC Sport's Kelly Cates, Danny Murphy and Micah Richards analyse how good Ezri Konsa has been for Arsenal after signing from Aston Villa in the summer, especially in their 1-0 Premier League win against Liverpool at Anfield.",
+    "originalLanguage": "en",
+    "displayLanguage": "pt-PT",
+    "source": "BBC Sport",
+    "domain": "bbc.co.uk",
+    "url": "https://bbc.co.uk/sport/football/videos/cmwy4000q97ro",
+    "date": "2026-11-02T00:00:11+00:00",
+    "collectedAt": "2026-11-06T21:35:12+00:00",
+    "player": "",
+    "currentClub": "",
+    "destination": "",
+    "status": "Por verificar",
+    "suggestedStatus": "Por verificar",
+    "relevance": 15,
+    "classificationReasons": [
+      "Palavras-chave de transferências"
+    ],
+    "detectedPlayers": [],
+    "editorApproved": false,
+    "editorStatus": "Por verificar",
+    "editorNotes": "",
+    "independentSources": [
+      "BBC Sport"
+    ],
+    "engineVersion": "4.0",
+    "sourceCount": 1
+  },
+  {
     "id": "d4f712bee68c0b90c3ee",
     "title": "'He's been fantastic' - how Konsa has fitted in seamlessly at Arsenal",
     "summary": "BBC Sport's Kelly Cates, Danny Murphy and Micah Richards analyse how good Ezri Konsa has been for Arsenal after signing from Aston Villa in the summer, especially in their 1-0 Premier League win against Liverpool at Anfield.",
@@ -164,6 +358,70 @@
     ],
     "classification": "Notícia de transferências",
     "transferRelevance": 4
+  },
+  {
+    "id": "a04ed316c874fe553acf",
+    "title": "All done deals from September-November 2026",
+    "summary": "Check out the significant signings and departures in the Premier League, Scottish Premiership, EFL and Women's Super League.",
+    "originalTitle": "All done deals from September-November 2026",
+    "originalSummary": "Check out the significant signings and departures in the Premier League, Scottish Premiership, EFL and Women's Super League.",
+    "originalLanguage": "en",
+    "displayLanguage": "pt-PT",
+    "source": "BBC Sport",
+    "domain": "bbc.co.uk",
+    "url": "https://bbc.co.uk/sport/football/articles/cvgyxyxplkvo",
+    "date": "2026-10-17T12:53:04+00:00",
+    "collectedAt": "2026-11-06T21:35:13+00:00",
+    "player": "",
+    "currentClub": "",
+    "destination": "",
+    "status": "Por verificar",
+    "suggestedStatus": "Por verificar",
+    "relevance": 30,
+    "classificationReasons": [
+      "Palavras-chave de transferências"
+    ],
+    "detectedPlayers": [],
+    "editorApproved": false,
+    "editorStatus": "Por verificar",
+    "editorNotes": "",
+    "independentSources": [
+      "BBC Sport"
+    ],
+    "engineVersion": "4.0",
+    "sourceCount": 1
+  },
+  {
+    "id": "1d01cdb8964774a6c24e",
+    "title": "Were any current Man City players signed during charges period?",
+    "summary": "BBC Sport's Ask Me Anything team looks at whether any Manchester City players were signed during the time the club have been found guilty of breaching the Premier League's financial rules.",
+    "originalTitle": "Were any current Man City players signed during charges period?",
+    "originalSummary": "BBC Sport's Ask Me Anything team looks at whether any Manchester City players were signed during the time the club have been found guilty of breaching the Premier League's financial rules.",
+    "originalLanguage": "en",
+    "displayLanguage": "pt-PT",
+    "source": "BBC Sport",
+    "domain": "bbc.co.uk",
+    "url": "https://bbc.co.uk/sport/articles/cmje5wl5ek32o",
+    "date": "2026-10-13T10:13:34+00:00",
+    "collectedAt": "2026-11-06T21:35:14+00:00",
+    "player": "",
+    "currentClub": "",
+    "destination": "",
+    "status": "Por verificar",
+    "suggestedStatus": "Por verificar",
+    "relevance": 15,
+    "classificationReasons": [
+      "Palavras-chave de transferências"
+    ],
+    "detectedPlayers": [],
+    "editorApproved": false,
+    "editorStatus": "Por verificar",
+    "editorNotes": "",
+    "independentSources": [
+      "BBC Sport"
+    ],
+    "engineVersion": "4.0",
+    "sourceCount": 1
   },
   {
     "id": "2fdb6a2240142c59fa51",
