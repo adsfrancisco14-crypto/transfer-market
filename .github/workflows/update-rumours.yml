@@ -33,17 +33,20 @@ jobs:
           pip install feedparser
 
       - name: Procurar notícias de transferências
+        env:
+          FABRIZIO_RSS_URL: ${{ secrets.FABRIZIO_RSS_URL || 'https://rsshub.app/telegram/channel/fabrizioromanotg' }}
         run: python atualizar_rumores.py
 
-      - name: Guardar novos candidatos
+      - name: Guardar novos candidatos e relatório
         run: |
           git config user.name "Transfer Market Bot"
           git config user.email "actions@users.noreply.github.com"
 
           git add candidatos.json
+          git add relatorio_fontes.json
 
           if ! git diff --cached --quiet; then
-            git commit -m "Atualização automática de candidatos"
+            git commit -m "Atualização automática do Transfer Radar V3"
             git push
           else
             echo "Não existem alterações."
