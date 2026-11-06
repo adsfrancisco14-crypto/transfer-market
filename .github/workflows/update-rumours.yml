@@ -1,6 +1,7 @@
+
 name: Atualizar radar de transferências
 
-on:
+'on':
   schedule:
     - cron: "*/5 * * * *"
 
