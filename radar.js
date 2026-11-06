@@ -1,97 +1,19 @@
 
 /* ==========================================================
    TRANSFER MARKET — TRANSFER RADAR
-   Versão 3.0
-   Motor principal do radar de transferências
+   Versão 4.0 — Notícias reais
+   Fonte principal: candidatos.json
    Atualização automática: 1 minuto
    ========================================================== */
 
 (() => {
   "use strict";
 
-  /* ==========================================================
-     1. CONFIGURAÇÃO
-     ========================================================== */
-
   const CONFIG = {
-    dataUrl: "./rumores.json",
-
-    // Atualização automática de 1 em 1 minuto
+    dataUrl: "./candidatos.json",
     refreshInterval: 60 * 1000,
-
-    language: "pt-PT",
-    maxSummaryLength: 500,
-
-    statuses: [
-      "Interesse",
-      "Rumor",
-      "Negociações",
-      "Acordo próximo",
-      "Confirmada"
-    ],
-
-    leagues: [
-      "Inglaterra",
-      "Espanha",
-      "Itália",
-      "Alemanha",
-      "França",
-      "Portugal",
-      "Europa"
-    ]
+    language: "pt-PT"
   };
-
-  /* ==========================================================
-     2. INFORMAÇÃO DOS ESTADOS
-     ========================================================== */
-
-  const STATUS_INFO = {
-    "Interesse": {
-      label: "Interesse",
-      description: "Interesse reportado, sem negociações confirmadas.",
-      priority: 1
-    },
-
-    "Rumor": {
-      label: "Rumor",
-      description: "Informação ainda por confirmar.",
-      priority: 2
-    },
-
-    "Negociações": {
-      label: "Em negociações",
-      description: "Existem indicações de conversações entre as partes.",
-      priority: 3
-    },
-
-    "Acordo próximo": {
-      label: "Acordo próximo",
-      description: "Há indicações de que um acordo poderá estar perto.",
-      priority: 4
-    },
-
-    "Confirmada": {
-      label: "Confirmada",
-      description: "Transferência oficialmente confirmada.",
-      priority: 5
-    }
-  };
-
-  /* ==========================================================
-     3. CREDIBILIDADE
-     ========================================================== */
-
-  const CREDIBILITY_INFO = {
-    "Muito elevada": { label: "Muito elevada", level: 5 },
-    "Elevada": { label: "Elevada", level: 4 },
-    "Média": { label: "Média", level: 3 },
-    "Baixa": { label: "Baixa", level: 2 },
-    "Por avaliar": { label: "Por avaliar", level: 0 }
-  };
-
-  /* ==========================================================
-     4. ELEMENTOS HTML
-     ========================================================== */
 
   const elements = {
     feed: document.getElementById("rumour-feed"),
@@ -105,88 +27,33 @@
     demoAlert: document.querySelector(".demo-alert")
   };
 
-  /* ==========================================================
-     5. ESTADO DA APLICAÇÃO
-     ========================================================== */
-
   let allItems = [];
-  let filteredItems = [];
   let currentSort = "newest";
-  let isLoading = false;
+  let loading = false;
   let lastUpdated = null;
-  let refreshTimer = null;
-
-  /* ==========================================================
-     6. FUNÇÕES GERAIS
-     ========================================================== */
 
   function normalize(value) {
-    return String(value ?? "")
+    return String(value || "")
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
-      .toLocaleLowerCase(CONFIG.language)
+      .toLowerCase()
       .trim();
   }
 
-  function safeText(value, fallback = "Informação indisponível") {
-    if (typeof value !== "string" && typeof value !== "number") {
-      return fallback;
-    }
-
-    const result = String(value).trim();
-
-    return result || fallback;
-  }
-
-  function createElement(tag, className, text) {
+  function createElement(tag, className, value) {
     const element = document.createElement(tag);
 
-    if (className) {
-      element.className = className;
-    }
-
-    if (text !== undefined && text !== null) {
-      element.textContent = String(text);
-    }
+    if (className) element.className = className;
+    if (value !== undefined) element.textContent = value;
 
     return element;
   }
 
-  function formatDate(value) {
-    if (!value) return "Data não indicada";
-
-    const date = new Date(value);
-
-    if (Number.isNaN(date.getTime())) {
-      return String(value);
-    }
-
-    return new Intl.DateTimeFormat(CONFIG.language, {
-      day: "2-digit",
-      month: "short",
-      year: "numeric"
-    }).format(date);
-  }
-
-  function formatToday() {
-    if (!elements.today) return;
-
-    elements.today.textContent = new Intl.DateTimeFormat(
-      CONFIG.language,
-      { dateStyle: "long" }
-    ).format(new Date());
-  }
-
   function safeUrl(value) {
-    if (!value || typeof value !== "string") return null;
-
     try {
       const url = new URL(value);
 
-      if (
-        url.protocol !== "https:" &&
-        url.protocol !== "http:"
-      ) {
+      if (!["https:", "http:"].includes(url.protocol)) {
         return null;
       }
 
@@ -196,491 +63,182 @@
     }
   }
 
-  function getStatusClass(status) {
-    return normalize(status).replace(/\s+/g, "-");
-  }
+  function formatDate(value) {
+    if (!value) return "Data não indicada";
 
-  function getStatusInfo(status) {
-    return STATUS_INFO[status] || {
-      label: status || "Por classificar",
-      description: "Estado da informação não especificado.",
-      priority: 0
-    };
-  }
+    const date = new Date(value);
 
-  function getCredibility(item) {
-    const value = safeText(item.credibility, "Por avaliar");
-
-    return CREDIBILITY_INFO[value] || {
-      label: value,
-      level: 0
-    };
-  }
-
-  /* ==========================================================
-     7. VALIDAÇÃO DOS DADOS
-     ========================================================== */
-
-  function validateItem(item, index) {
-    if (
-      !item ||
-      typeof item !== "object" ||
-      Array.isArray(item)
-    ) {
-      return null;
+    if (Number.isNaN(date.getTime())) {
+      return "Data não indicada";
     }
 
-    const player = safeText(item.player, "");
+    return new Intl.DateTimeFormat("pt-PT", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric"
+    }).format(date);
+  }
 
-    if (!player) {
-      console.warn(
-        `Notícia ${index + 1} ignorada: falta o jogador.`
-      );
-
-      return null;
-    }
-
-    return {
-      id: safeText(item.id, `transfer-${index + 1}`),
-
-      player,
-
-      currentClub: safeText(
-        item.currentClub,
-        "Clube não indicado"
-      ),
-
-      destination: safeText(
-        item.destination,
-        "Destino não indicado"
-      ),
-
-      status: safeText(item.status, "Rumor"),
-
-      league: safeText(item.league, "Europa"),
-
-      summary: safeText(
-        item.summary,
-        "Sem descrição disponível."
-      ).slice(0, CONFIG.maxSummaryLength),
-
-      source: safeText(item.source, "Fonte não indicada"),
-
-      date: safeText(item.date, ""),
-
-      url: safeUrl(item.url),
-
-      credibility: safeText(
-        item.credibility,
-        "Por avaliar"
-      ),
-
-      confidenceReason: safeText(
-        item.confidenceReason,
-        ""
-      ),
-
-      fee: safeText(item.fee, ""),
-
-      contract: safeText(item.contract, ""),
-
-      tags: Array.isArray(item.tags)
-        ? item.tags
-            .filter(tag => typeof tag === "string")
-            .slice(0, 8)
-        : [],
-
-      official: item.official === true
-    };
+  function getDateValue(item) {
+    const date = new Date(item.date);
+    return Number.isNaN(date.getTime()) ? 0 : date.getTime();
   }
 
   function validateData(data) {
     if (!Array.isArray(data)) {
-      throw new Error(
-        "O ficheiro rumores.json não contém uma lista válida."
-      );
+      throw new Error("O ficheiro candidatos.json não contém uma lista válida.");
     }
 
     return data
-      .map((item, index) => validateItem(item, index))
-      .filter(Boolean);
+      .filter(item => item && typeof item === "object")
+      .map((item, index) => ({
+        id: item.id || `noticia-${index}`,
+        title: item.title || item.player || "Notícia de futebol",
+        summary: item.summary || "Não existe resumo disponível para este artigo.",
+        source: item.source || "Fonte não indicada",
+        url: safeUrl(item.url),
+        date: item.date || "",
+        status: item.status || "Por verificar",
+        league: item.league || "Europa",
+        player: item.player || "",
+        currentClub: item.currentClub || "",
+        destination: item.destination || "",
+        detectedClubs: Array.isArray(item.detectedClubs)
+          ? item.detectedClubs
+          : [],
+        relevance: Number(item.transferRelevance) || 0,
+        verification: item.verification || "Artigo recolhido automaticamente. Ainda não foi verificado."
+      }))
+      .filter(item => item.url && item.source);
   }
 
-  /* ==========================================================
-     8. ESTATÍSTICAS
-     ========================================================== */
+  function addPendingStatusOption() {
+    if (!elements.status) return;
 
-  function calculateStatistics(items) {
-    return {
-      total: items.length,
+    const exists = [...elements.status.options]
+      .some(option => option.value === "Por verificar");
 
-      rumours: items.filter(
-        item => item.status === "Rumor"
-      ).length,
-
-      negotiations: items.filter(
-        item => item.status === "Negociações"
-      ).length,
-
-      close: items.filter(
-        item => item.status === "Acordo próximo"
-      ).length,
-
-      confirmed: items.filter(
-        item => item.status === "Confirmada"
-      ).length
-    };
-  }
-
-  function createStatisticsPanel() {
-    if (!elements.feed) return null;
-
-    let panel = document.getElementById("radar-statistics");
-
-    if (panel) return panel;
-
-    panel = createElement("section", "radar-statistics");
-    panel.id = "radar-statistics";
-
-    panel.setAttribute(
-      "aria-label",
-      "Estatísticas do mercado"
-    );
-
-    const section = elements.feed.closest(".feed-section");
-
-    if (section) {
-      const top = section.querySelector(".feed-top");
-
-      if (top) {
-        top.insertAdjacentElement("afterend", panel);
-      } else {
-        section.insertBefore(panel, elements.feed);
-      }
+    if (!exists) {
+      const option = document.createElement("option");
+      option.value = "Por verificar";
+      option.textContent = "Por verificar";
+      elements.status.append(option);
     }
-
-    return panel;
   }
 
-  function renderStatistics(items) {
-    const panel = createStatisticsPanel();
+  function createSortControl() {
+    const section = elements.feed?.closest(".feed-section");
+    const top = section?.querySelector(".feed-top");
 
-    if (!panel) return;
+    if (!top || document.getElementById("radar-sort")) return;
 
-    const stats = calculateStatistics(items);
+    const wrapper = createElement("div", "radar-sort-wrapper");
+    const label = createElement("label", "", "Ordenar por");
 
-    const cards = [
-      ["Total de movimentos", stats.total, "total"],
-      ["Rumores", stats.rumours, "rumour"],
-      ["Negociações", stats.negotiations, "negotiation"],
-      ["Acordos próximos", stats.close, "close"],
-      ["Confirmadas", stats.confirmed, "confirmed"]
-    ];
+    label.htmlFor = "radar-sort";
 
-    panel.replaceChildren();
+    const select = createElement("select", "radar-sort");
+    select.id = "radar-sort";
 
-    cards.forEach(([label, value, type]) => {
-      const card = createElement(
-        "div",
-        `stat-card stat-${type}`
-      );
-
-      const number = createElement(
-        "strong",
-        "stat-number",
-        value
-      );
-
-      const title = createElement(
-        "span",
-        "stat-label",
-        label
-      );
-
-      card.append(number, title);
-      panel.append(card);
+    [
+      ["newest", "Mais recentes"],
+      ["oldest", "Mais antigas"],
+      ["relevance", "Relevância"]
+    ].forEach(([value, name]) => {
+      const option = createElement("option", "", name);
+      option.value = value;
+      select.append(option);
     });
+
+    select.addEventListener("change", () => {
+      currentSort = select.value;
+      applyFilters();
+    });
+
+    wrapper.append(label, select);
+    top.insertAdjacentElement("afterend", wrapper);
   }
 
-  /* ==========================================================
-     9. INFORMAÇÃO DOS CARTÕES
-     ========================================================== */
-
-  function createMetaItem(label, value, className = "") {
-    if (!value) return null;
-
-    const wrapper = createElement(
-      "div",
-      `meta-item ${className}`.trim()
+  function createMeta(label, value) {
+    const wrapper = createElement("div", "meta-item");
+    wrapper.append(
+      createElement("span", "meta-label", label),
+      createElement("span", "meta-value", value)
     );
-
-    const heading = createElement(
-      "span",
-      "meta-label",
-      label
-    );
-
-    const content = createElement(
-      "span",
-      "meta-value",
-      value
-    );
-
-    wrapper.append(heading, content);
-
     return wrapper;
   }
 
-  function createSourceLink(url) {
-    if (!url) return null;
-
-    const link = createElement(
-      "a",
-      "source-link",
-      "Ver fonte original ↗"
-    );
-
-    link.href = url;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-
-    return link;
-  }
-
-  function createTag(tag) {
-    return createElement("span", "rumour-tag", tag);
-  }
-
-  /* ==========================================================
-     10. CRIAÇÃO DOS CARTÕES
-     ========================================================== */
-
-  function createRumourCard(item) {
-    const card = createElement(
-      "article",
-      `rumour-card status-border-${getStatusClass(item.status)}`
-    );
-
+  function createCard(item) {
+    const card = createElement("article", "rumour-card");
     card.dataset.status = item.status;
     card.dataset.league = item.league;
 
     const main = createElement("div", "rumour-main");
+    const header = createElement("div", "rumour-card-header");
+    const titleArea = createElement("div", "player-area");
 
-    const header = createElement(
-      "div",
-      "rumour-card-header"
+    titleArea.append(
+      createElement("h3", "player-name", item.title),
+      createElement("span", "league-label", item.league)
     );
 
-    const playerArea = createElement(
-      "div",
-      "player-area"
+    const badge = createElement("span", "status status-por-verificar", item.status);
+    header.append(titleArea, badge);
+
+    const summary = createElement("p", "rumour-summary", item.summary);
+
+    const meta = createElement("div", "rumour-meta");
+    meta.append(
+      createMeta("Publicado", formatDate(item.date)),
+      createMeta("Fonte", item.source)
     );
 
-    const player = createElement(
-      "h3",
-      "player-name",
-      item.player
-    );
-
-    const league = createElement(
-      "span",
-      "league-label",
-      item.league
-    );
-
-    playerArea.append(player, league);
-
-    const badge = createElement(
-      "span",
-      `status status-${getStatusClass(item.status)}`,
-      getStatusInfo(item.status).label
-    );
-
-    badge.title = getStatusInfo(item.status).description;
-
-    header.append(playerArea, badge);
-
-    /* Percurso */
-
-    const route = createElement(
-      "div",
-      "transfer-route"
-    );
-
-    const origin = createElement(
-      "span",
-      "route-club",
-      item.currentClub
-    );
-
-    const arrow = createElement(
-      "span",
-      "route-arrow",
-      "→"
-    );
-
-    const destination = createElement(
-      "span",
-      "route-club route-destination",
-      item.destination
-    );
-
-    route.append(origin, arrow, destination);
-
-    /* Descrição */
-
-    const summary = createElement(
-      "p",
-      "rumour-summary",
-      item.summary
-    );
-
-    /* Metadados */
-
-    const meta = createElement(
-      "div",
-      "rumour-meta"
-    );
-
-    const date = createMetaItem(
-      "Publicado",
-      formatDate(item.date)
-    );
-
-    const source = createMetaItem(
-      "Fonte",
-      item.source
-    );
-
-    const fee = createMetaItem(
-      "Valor",
-      item.fee
-    );
-
-    const contract = createMetaItem(
-      "Contrato",
-      item.contract
-    );
-
-    [date, source, fee, contract].forEach(element => {
-      if (element) meta.append(element);
-    });
-
-    /* Credibilidade */
-
-    const credibility = getCredibility(item);
-
-    const credibilityArea = createElement(
-      "div",
-      "credibility-area"
-    );
-
-    const credibilityLabel = createElement(
-      "span",
-      "credibility-label",
-      `Credibilidade: ${credibility.label}`
-    );
-
-    const credibilityBar = createElement(
-      "span",
-      "credibility-bar"
-    );
-
-    credibilityBar.setAttribute("role", "img");
-
-    credibilityBar.setAttribute(
-      "aria-label",
-      `Nível de credibilidade: ${credibility.label}`
-    );
-
-    const credibilityFill = createElement(
-      "span",
-      "credibility-fill"
-    );
-
-    credibilityFill.style.width =
-      `${(credibility.level / 5) * 100}%`;
-
-    credibilityBar.append(credibilityFill);
-
-    credibilityArea.append(
-      credibilityLabel,
-      credibilityBar
-    );
-
-    if (item.confidenceReason) {
-      credibilityArea.append(
-        createElement(
-          "p",
-          "credibility-reason",
-          item.confidenceReason
-        )
+    if (item.detectedClubs.length) {
+      meta.append(
+        createMeta("Clubes mencionados", item.detectedClubs.join(", "))
       );
     }
 
-    /* Etiquetas */
-
-    const tags = createElement(
-      "div",
-      "rumour-tags"
+    const verification = createElement(
+      "p",
+      "credibility-reason",
+      item.verification
     );
 
-    item.tags.forEach(tag => {
-      tags.append(createTag(tag));
-    });
-
-    /* Rodapé */
-
-    const footer = createElement(
-      "div",
-      "rumour-card-footer"
+    const relevance = createElement(
+      "p",
+      "credibility-label",
+      `Relevância automática: ${item.relevance}/10`
     );
+
+    const footer = createElement("div", "rumour-card-footer");
 
     footer.append(
       createElement(
         "span",
         "status-description",
-        getStatusInfo(item.status).description
+        "Informação recolhida automaticamente — por verificar."
       )
     );
 
-    const sourceLink = createSourceLink(item.url);
+    const link = createElement("a", "source-link", "Ver fonte original ↗");
+    link.href = item.url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    footer.append(link);
 
-    if (sourceLink) {
-      footer.append(sourceLink);
-    }
-
-    main.append(
-      header,
-      route,
-      summary,
-      meta,
-      credibilityArea
-    );
-
-    if (item.tags.length > 0) {
-      main.append(tags);
-    }
-
+    main.append(header, summary, meta, verification, relevance);
     card.append(main, footer);
 
     return card;
   }
-
-  /* ==========================================================
-     11. RENDERIZAÇÃO
-     ========================================================== */
 
   function render(items) {
     if (!elements.feed) return;
 
     const fragment = document.createDocumentFragment();
 
-    items.forEach(item => {
-      fragment.append(
-        createRumourCard(item)
-      );
-    });
+    items.forEach(item => fragment.append(createCard(item)));
 
     elements.feed.replaceChildren(fragment);
 
@@ -693,451 +251,161 @@
       elements.empty.hidden = items.length !== 0;
     }
 
-    renderStatistics(allItems);
-
     if (elements.demoAlert) {
-      const hasRealData = allItems.some(item =>
-        item.url &&
-        item.source !== "Exemplo — substituir por fonte real"
-      );
-
-      elements.demoAlert.hidden = hasRealData;
+      elements.demoAlert.hidden = true;
     }
   }
-
-  /* ==========================================================
-     12. PESQUISA
-     ========================================================== */
 
   function matchesSearch(item, term) {
     if (!term) return true;
 
-    const searchable = [
-      item.player,
-      item.currentClub,
-      item.destination,
+    const content = [
+      item.title,
       item.summary,
       item.source,
       item.status,
       item.league,
-      item.credibility,
-      item.fee,
-      item.contract,
-      ...item.tags
+      item.player,
+      ...item.detectedClubs
     ].join(" ");
 
-    return normalize(searchable).includes(
-      normalize(term)
-    );
-  }
-
-  /* ==========================================================
-     13. FILTROS
-     ========================================================== */
-
-  function applyFilters() {
-    const term = elements.search
-      ? elements.search.value.trim()
-      : "";
-
-    const status = elements.status
-      ? elements.status.value
-      : "all";
-
-    const league = elements.league
-      ? elements.league.value
-      : "all";
-
-    filteredItems = allItems.filter(item => {
-      const searchMatch = matchesSearch(item, term);
-
-      const statusMatch =
-        status === "all" || item.status === status;
-
-      const leagueMatch =
-        league === "all" || item.league === league;
-
-      return searchMatch && statusMatch && leagueMatch;
-    });
-
-    sortItems(filteredItems);
-
-    render(filteredItems);
-  }
-
-  /* ==========================================================
-     14. ORDENAÇÃO
-     ========================================================== */
-
-  function getDateValue(item) {
-    const date = new Date(item.date);
-
-    return Number.isNaN(date.getTime())
-      ? 0
-      : date.getTime();
+    return normalize(content).includes(normalize(term));
   }
 
   function sortItems(items) {
     items.sort((a, b) => {
-      switch (currentSort) {
-        case "oldest":
-          return getDateValue(a) - getDateValue(b);
-
-        case "player":
-          return a.player.localeCompare(
-            b.player,
-            CONFIG.language
-          );
-
-        case "status":
-          return getStatusInfo(b.status).priority -
-            getStatusInfo(a.status).priority;
-
-        case "credibility":
-          return getCredibility(b).level -
-            getCredibility(a).level;
-
-        case "newest":
-        default:
-          return getDateValue(b) - getDateValue(a);
+      if (currentSort === "oldest") {
+        return getDateValue(a) - getDateValue(b);
       }
+
+      if (currentSort === "relevance") {
+        return b.relevance - a.relevance;
+      }
+
+      return getDateValue(b) - getDateValue(a);
     });
   }
 
-  function createSortControl() {
-    const section = elements.feed?.closest(".feed-section");
+  function applyFilters() {
+    const term = elements.search?.value || "";
+    const status = elements.status?.value || "all";
+    const league = elements.league?.value || "all";
 
-    if (
-      !section ||
-      document.getElementById("radar-sort")
-    ) {
-      return;
-    }
+    const filtered = allItems.filter(item => {
+      const searchMatch = matchesSearch(item, term);
+      const statusMatch = status === "all" || item.status === status;
+      const leagueMatch = league === "all" || item.league === league;
 
-    const top = section.querySelector(".feed-top");
-
-    if (!top) return;
-
-    const wrapper = createElement(
-      "div",
-      "radar-sort-wrapper"
-    );
-
-    const label = createElement(
-      "label",
-      "",
-      "Ordenar por"
-    );
-
-    label.htmlFor = "radar-sort";
-
-    const select = createElement(
-      "select",
-      "radar-sort"
-    );
-
-    select.id = "radar-sort";
-
-    const options = [
-      ["newest", "Mais recentes"],
-      ["oldest", "Mais antigas"],
-      ["player", "Nome do jogador"],
-      ["status", "Estado da transferência"],
-      ["credibility", "Credibilidade"]
-    ];
-
-    options.forEach(([value, text]) => {
-      const option = createElement(
-        "option",
-        "",
-        text
-      );
-
-      option.value = value;
-      select.append(option);
+      return searchMatch && statusMatch && leagueMatch;
     });
 
-    select.addEventListener("change", () => {
-      currentSort = select.value;
-      applyFilters();
-    });
-
-    wrapper.append(label, select);
-
-    top.insertAdjacentElement(
-      "afterend",
-      wrapper
-    );
+    sortItems(filtered);
+    render(filtered);
   }
-
-  /* ==========================================================
-     15. LIMPAR FILTROS
-     ========================================================== */
 
   function clearFilters() {
-    if (elements.search) {
-      elements.search.value = "";
-    }
-
-    if (elements.status) {
-      elements.status.value = "all";
-    }
-
-    if (elements.league) {
-      elements.league.value = "all";
-    }
+    if (elements.search) elements.search.value = "";
+    if (elements.status) elements.status.value = "all";
+    if (elements.league) elements.league.value = "all";
 
     currentSort = "newest";
 
     const sort = document.getElementById("radar-sort");
-
-    if (sort) {
-      sort.value = "newest";
-    }
+    if (sort) sort.value = "newest";
 
     applyFilters();
   }
 
-  /* ==========================================================
-     16. CARREGAMENTO
-     ========================================================== */
-
-  function showLoading() {
-    if (elements.count) {
-      elements.count.textContent = "A atualizar notícias…";
-    }
-
-    if (elements.feed) {
-      elements.feed.setAttribute(
-        "aria-busy",
-        "true"
-      );
-    }
-
-    isLoading = true;
-  }
-
-  function hideLoading() {
-    if (elements.feed) {
-      elements.feed.setAttribute(
-        "aria-busy",
-        "false"
-      );
-    }
-
-    isLoading = false;
-  }
-
-  /* ==========================================================
-     17. ERROS
-     ========================================================== */
-
-  function showError(message) {
-    if (elements.count) {
-      elements.count.textContent = "Erro ao atualizar";
-    }
-
-    if (elements.feed) {
-      const error = createElement(
-        "div",
-        "radar-error"
-      );
-
-      const title = createElement(
-        "strong",
-        "",
-        "Não foi possível atualizar o radar."
-      );
-
-      const description = createElement(
-        "p",
-        "",
-        message
-      );
-
-      const retry = createElement(
-        "button",
-        "btn btn-outline",
-        "Tentar novamente"
-      );
-
-      retry.type = "button";
-
-      retry.addEventListener(
-        "click",
-        loadData
-      );
-
-      error.append(
-        title,
-        description,
-        retry
-      );
-
-      elements.feed.replaceChildren(error);
-    }
-
-    if (elements.empty) {
-      elements.empty.hidden = true;
-    }
-
-    console.error(
-      "TRANSFER MARKET:",
-      message
-    );
-  }
-
-  /* ==========================================================
-     18. CARREGAR RUMORES.JSON
-     ========================================================== */
-
   async function loadData() {
-    if (isLoading) return;
+    if (loading) return;
 
-    showLoading();
+    loading = true;
 
     try {
       const response = await fetch(
-        CONFIG.dataUrl,
-        {
-          cache: "no-store"
-        }
+        `${CONFIG.dataUrl}?t=${Date.now()}`,
+        { cache: "no-store" }
       );
 
       if (!response.ok) {
-        throw new Error(
-          `Erro HTTP ${response.status}: não foi possível encontrar rumores.json.`
-        );
+        throw new Error(`Erro HTTP ${response.status}`);
       }
 
       const data = await response.json();
 
       allItems = validateData(data);
 
-      lastUpdated = new Date();
-
+      addPendingStatusOption();
       createSortControl();
-
       applyFilters();
 
-      if (allItems.length === 0) {
-        showError(
-          "O ficheiro existe, mas ainda não contém notícias válidas."
-        );
-      }
+      lastUpdated = new Date();
 
       console.info(
-        "TRANSFER MARKET: dados atualizados.",
-        lastUpdated.toLocaleTimeString(CONFIG.language)
+        "TRANSFER MARKET: notícias carregadas:",
+        allItems.length
       );
 
     } catch (error) {
-      showError(
-        error instanceof Error
-          ? error.message
-          : "Ocorreu um erro desconhecido."
-      );
+      console.error("Erro no Transfer Radar:", error);
+
+      if (elements.count) {
+        elements.count.textContent = "Erro ao carregar notícias";
+      }
+
+      if (elements.feed) {
+        elements.feed.replaceChildren(
+          createElement(
+            "p",
+            "radar-error",
+            "Não foi possível carregar as notícias. Tenta novamente mais tarde."
+          )
+        );
+      }
     } finally {
-      hideLoading();
+      loading = false;
     }
   }
 
-  /* ==========================================================
-     19. ATUALIZAÇÃO AUTOMÁTICA DE 1 EM 1 MINUTO
-     ========================================================== */
+  function bindEvents() {
+    elements.search?.addEventListener("input", applyFilters);
+    elements.status?.addEventListener("change", applyFilters);
+    elements.league?.addEventListener("change", applyFilters);
+    elements.clear?.addEventListener("click", clearFilters);
 
-  function startAutoRefresh() {
-    if (refreshTimer) {
-      clearInterval(refreshTimer);
-    }
-
-    refreshTimer = window.setInterval(() => {
+    document.addEventListener("visibilitychange", () => {
       if (
-        document.visibilityState === "visible"
+        document.visibilityState === "visible" &&
+        lastUpdated &&
+        Date.now() - lastUpdated.getTime() >= CONFIG.refreshInterval
       ) {
         loadData();
       }
-    }, CONFIG.refreshInterval);
+    });
   }
-
-  /* ==========================================================
-     20. EVENTOS
-     ========================================================== */
-
-  function bindEvents() {
-    if (elements.search) {
-      elements.search.addEventListener(
-        "input",
-        applyFilters
-      );
-    }
-
-    if (elements.status) {
-      elements.status.addEventListener(
-        "change",
-        applyFilters
-      );
-    }
-
-    if (elements.league) {
-      elements.league.addEventListener(
-        "change",
-        applyFilters
-      );
-    }
-
-    if (elements.clear) {
-      elements.clear.addEventListener(
-        "click",
-        clearFilters
-      );
-    }
-
-    document.addEventListener(
-      "visibilitychange",
-      () => {
-        if (
-          document.visibilityState === "visible" &&
-          lastUpdated
-        ) {
-          const elapsed =
-            Date.now() - lastUpdated.getTime();
-
-          if (elapsed >= CONFIG.refreshInterval) {
-            loadData();
-          }
-        }
-      }
-    );
-  }
-
-  /* ==========================================================
-     21. INICIALIZAÇÃO
-     ========================================================== */
 
   function init() {
-    formatToday();
+    if (elements.today) {
+      elements.today.textContent = new Intl.DateTimeFormat(
+        "pt-PT",
+        { dateStyle: "long" }
+      ).format(new Date());
+    }
 
     bindEvents();
-
     loadData();
 
-    startAutoRefresh();
+    window.setInterval(() => {
+      if (document.visibilityState === "visible") {
+        loadData();
+      }
+    }, CONFIG.refreshInterval);
 
-    console.info(
-      "TRANSFER MARKET — Transfer Radar iniciado."
-    );
-
-    console.info(
-      "Atualização automática: 60 segundos."
-    );
+    console.info("TRANSFER MARKET — Radar V4 iniciado.");
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener(
-      "DOMContentLoaded",
-      init
-    );
+    document.addEventListener("DOMContentLoaded", init);
   } else {
     init();
   }
