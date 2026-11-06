@@ -1,965 +1,743 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-import feedparser
+"""
+TRANSFER MARKET — INTELLIGENCE ENGINE V4.0
+Recolhe notícias de transferências, traduz para português de Portugal,
+preserva o original, remove duplicados e gera:
+  - candidatos.json
+  - relatorio_fontes.json
+
+Compatível com o site GitHub Pages existente.
+IMPORTANTE:
+- Não altera rumores.json.
+- Não publica automaticamente rumores no site.
+- Todos os candidatos começam como "Por verificar".
+- Não utiliza publicações do X como fonte.
+"""
+
+from __future__ import annotations
+
+import hashlib
 import json
+import logging
 import os
 import re
-import hashlib
-import calendar
-
+import time
+import unicodedata
 from datetime import datetime, timezone, timedelta
 from difflib import SequenceMatcher
+from email.utils import parsedate_to_datetime
 from html import unescape
-from urllib.parse import urlparse
+from pathlib import Path
+from urllib.parse import urlparse, urlunparse
+
+import feedparser
+
+try:
+    from deep_translator import GoogleTranslator
+except ImportError:
+    GoogleTranslator = None
+
 
 # ============================================================
-# TRANSFER MARKET — INTELLIGENCE ENGINE V3.0
-# Motor inteligente de recolha de notícias de transferências
+# CONFIGURAÇÃO
 # ============================================================
 
-VERSION = "3.0"
+VERSION = "4.0"
+BASE_DIR = Path(__file__).resolve().parent
 
-OUTPUT_FILE = "candidatos.json"
-REPORT_FILE = "relatorio_fontes.json"
+OUTPUT_FILE = BASE_DIR / "candidatos.json"
+REPORT_FILE = BASE_DIR / "relatorio_fontes.json"
+HISTORY_FILE = BASE_DIR / "historico_transferencias.json"
+PLAYERS_FILE = BASE_DIR / "players.json"
 
-MAX_ARTICLES_PER_SOURCE = 100
-MAX_CANDIDATES = 300
-MAX_AGE_DAYS = 30
-SIMILARITY_THRESHOLD = 0.78
+MAX_AGE_DAYS = int(os.getenv("MAX_AGE_DAYS", "30"))
+MAX_CANDIDATES = int(os.getenv("MAX_CANDIDATES", "300"))
+SIMILARITY_THRESHOLD = float(os.getenv("SIMILARITY_THRESHOLD", "0.78"))
+TRANSLATION_DELAY = float(os.getenv("TRANSLATION_DELAY", "0.25"))
+TRANSLATION_ENABLED = os.getenv("TRANSLATION_ENABLED", "true").lower() not in {
+    "0", "false", "no", "off"
+}
 
-USER_AGENT = "TRANSFER-MARKET/3.0"
-
-# ============================================================
-# FONTES
-# ============================================================
-
+# Fontes RSS. Podem ser substituídas/adicionadas através de variáveis
+# de ambiente sem ser necessário alterar o código.
 SOURCES = [
     {
         "name": "BBC Sport",
-        "url": "https://feeds.bbci.co.uk/sport/football/rss.xml",
-        "domain": "bbc.co.uk"
+        "url": os.getenv(
+            "BBC_RSS_URL",
+            "https://feeds.bbci.co.uk/sport/football/rss.xml"
+        ),
     },
     {
         "name": "Sky Sports",
-        "url": "https://www.skysports.com/rss/11095",
-        "domain": "skysports.com"
-    },
-    {
-        "name": "Fabrizio Romano",
-        "url": os.environ.get(
-            "FABRIZIO_RSS_URL",
-            "https://rsshub.app/telegram/channel/fabrizioromanotg"
+        "url": os.getenv(
+            "SKY_RSS_URL",
+            "https://www.skysports.com/rss/12040"
         ),
-        "domain": "t.me"
-    }
+    },
 ]
 
-# O feed de Fabrizio utiliza um serviço público intermediário.
-# Não é um feed RSS oficial do jornalista.
-# Não são utilizadas publicações do X.
+# Fonte opcional. Só será usada se FABRIZIO_RSS_URL estiver configurado.
+fabrizio_url = os.getenv("FABRIZIO_RSS_URL", "").strip()
+if fabrizio_url:
+    SOURCES.append({"name": "Fonte configurada — Fabrizio", "url": fabrizio_url})
+
+
+# ============================================================
+# LOGGING
+# ============================================================
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s",
+)
+log = logging.getLogger("transfer-market")
+
 
 # ============================================================
 # PALAVRAS-CHAVE E CLASSIFICAÇÃO
 # ============================================================
 
 TRANSFER_KEYWORDS = [
-    "transfer", "transfers", "transferência",
-    "transferências", "transfer market",
-    "signing", "signed", "signs",
-    "deal", "bid", "loan",
-    "agreement", "agreed",
-    "interest", "interested",
-    "target", "targets",
-    "joins", "joined",
-    "contract", "release clause",
-    "negotiations", "negotiation",
-    "mercado", "negociações",
-    "contratação", "contrato",
-    "emprestado", "empréstimo",
-    "proposta", "propostas",
-    "renovação", "renews",
-    "extends contract",
-    "here we go",
-    "medical", "personal terms",
-    "official announcement"
+    "transfer", "transfers", "transfer news", "transfer rumour",
+    "transfer rumor", "signing", "sign", "signed", "deal", "agreement",
+    "loan", "bid", "offer", "interest", "target", "talks", "negotiations",
+    "contract", "release clause", "medical", "here we go",
+    "mercato", "transferts", "fichajes", "calciomercato",
+    "mercado de transferências", "transferência", "contratação",
+    "empréstimo", "negociações", "proposta"
 ]
 
-TRANSFER_ACTIONS = [
-    "sign", "signed", "signing",
-    "join", "joined", "joining",
-    "move", "moving",
-    "transfer", "deal",
-    "bid", "offer",
-    "loan", "agreement",
-    "negotiate", "negotiations",
-    "interest", "target",
-    "release clause",
-    "renew", "renewal",
-    "extend", "here we go"
+CONFIRMED_KEYWORDS = [
+    "official", "confirmed", "completes move", "joins", "has joined",
+    "signs for", "signed for", "announces", "here we go",
+    "officially"
 ]
 
-GENERAL_NEWS_KEYWORDS = [
-    "match report",
-    "live commentary",
-    "highlights",
-    "player ratings",
-    "starting line-up",
-    "lineup",
-    "kick-off",
-    "goal of the season",
-    "match preview",
-    "fixture",
-    "result",
-    "champions league preview"
+ADVANCED_KEYWORDS = [
+    "agreement reached", "deal agreed", "verbal agreement",
+    "personal terms agreed", "medical booked", "medical scheduled",
+    "final stages", "close to completing", "advanced talks"
 ]
 
-CONFIRMATION_KEYWORDS = [
-    "officially announced",
-    "official announcement",
-    "club confirms signing",
-    "has officially signed",
-    "transfer confirmed"
+NEGOTIATION_KEYWORDS = [
+    "negotiations", "talks", "bid", "offer", "proposal",
+    "discussions", "in talks", "opening offer"
 ]
 
-# ============================================================
-# CLUBES — DICIONÁRIO DE IDENTIFICAÇÃO
-# ============================================================
+RUMOUR_KEYWORDS = [
+    "interested", "interest", "monitoring", "tracking",
+    "considering", "target", "could sign", "linked with",
+    "rumour", "rumor", "reportedly"
+]
 
-CLUBS = {
-    "Arsenal": ["Arsenal"],
-    "Chelsea": ["Chelsea"],
-    "Liverpool": ["Liverpool"],
-    "Manchester City": ["Manchester City", "Man City"],
-    "Manchester United": ["Manchester United", "Man United", "Man Utd"],
-    "Tottenham": ["Tottenham", "Spurs"],
-    "Newcastle": ["Newcastle United", "Newcastle"],
-    "Aston Villa": ["Aston Villa"],
-    "Everton": ["Everton"],
-    "West Ham": ["West Ham United", "West Ham"],
-    "Brighton": ["Brighton", "Brighton and Hove Albion"],
-    "Real Madrid": ["Real Madrid"],
-    "Barcelona": ["Barcelona", "Barça"],
-    "Atletico Madrid": ["Atletico Madrid", "Atlético Madrid"],
-    "Girona": ["Girona"],
-    "Sevilla": ["Sevilla"],
-    "Valencia": ["Valencia"],
-    "Bayern Munich": ["Bayern Munich", "Bayern München"],
-    "Borussia Dortmund": ["Borussia Dortmund", "Dortmund"],
-    "RB Leipzig": ["RB Leipzig", "Leipzig"],
-    "Bayer Leverkusen": ["Bayer Leverkusen", "Leverkusen"],
-    "Eintracht Frankfurt": ["Eintracht Frankfurt"],
-    "Juventus": ["Juventus"],
-    "Inter": ["Inter Milan", "Inter Milano", "Inter"],
-    "AC Milan": ["AC Milan", "Milan"],
-    "Napoli": ["Napoli"],
-    "Roma": ["AS Roma", "Roma"],
-    "Lazio": ["Lazio"],
-    "Atalanta": ["Atalanta"],
-    "Paris Saint-Germain": ["Paris Saint-Germain", "PSG"],
-    "Marseille": ["Marseille"],
-    "Monaco": ["AS Monaco", "Monaco"],
-    "Lyon": ["Lyon"],
-    "Lille": ["Lille"],
-    "Ajax": ["Ajax Amsterdam", "Ajax"],
-    "PSV": ["PSV Eindhoven", "PSV"],
-    "Feyenoord": ["Feyenoord"],
-    "Benfica": ["Benfica"],
-    "Porto": ["FC Porto", "Porto"],
-    "Sporting": ["Sporting CP", "Sporting"],
-    "Braga": ["SC Braga", "Braga"],
-    "Galatasaray": ["Galatasaray"],
-    "Fenerbahce": ["Fenerbahçe", "Fenerbahce"],
-    "Besiktas": ["Besiktas", "Beşiktaş"],
-    "Al Hilal": ["Al Hilal"],
-    "Al Nassr": ["Al Nassr"],
-    "Al Ittihad": ["Al Ittihad"]
-}
-
-# ============================================================
-# JOGADORES
-# ============================================================
-
-# Criar futuramente um ficheiro players.json para associar
-# jogadores aos respetivos clubes atuais.
-#
-# Exemplo:
-#
-# {
-#   "Nome do Jogador": {
-#       "currentClub": "Nome do Clube"
-#   }
-# }
-#
-# O motor não inventa jogadores nem clubes.
-
-def load_players():
-    filename = "players.json"
-
-    if not os.path.exists(filename):
-        return {}
-
-    try:
-        with open(filename, "r", encoding="utf-8") as file:
-            data = json.load(file)
-
-        return data if isinstance(data, dict) else {}
-
-    except (OSError, json.JSONDecodeError):
-        print("Erro ao carregar players.json")
-        return {}
+GENERAL_NEWS_EXCLUSIONS = [
+    "match report", "live commentary", "live score", "highlights",
+    "fixture", "fixtures", "table", "standings", "injury update",
+    "manager press conference", "predicted lineup", "team news"
+]
 
 
 # ============================================================
-# TEXTO
+# FUNÇÕES GERAIS
 # ============================================================
 
-def clean_text(value):
-    value = unescape(str(value or ""))
+def utc_now() -> datetime:
+    return datetime.now(timezone.utc)
+
+
+def iso_now() -> str:
+    return utc_now().replace(microsecond=0).isoformat()
+
+
+def clean_html(value: str) -> str:
+    """Remove HTML e normaliza espaços."""
+    if not value:
+        return ""
+    value = unescape(str(value))
+    value = re.sub(r"<script.*?</script>", " ", value, flags=re.I | re.S)
+    value = re.sub(r"<style.*?</style>", " ", value, flags=re.I | re.S)
     value = re.sub(r"<[^>]+>", " ", value)
     value = re.sub(r"\s+", " ", value)
-
     return value.strip()
 
 
-def normalize(value):
-    value = clean_text(value).lower()
-    value = re.sub(r"[^\w\s]", " ", value)
-    value = re.sub(r"\s+", " ", value)
-
-    return value.strip()
-
-
-def contains_phrase(text, phrase):
-    pattern = (
-        r"(?<!\w)"
-        + re.escape(normalize(phrase))
-        + r"(?!\w)"
-    )
-
-    return bool(re.search(pattern, normalize(text)))
-
-
-# ============================================================
-# FILTRO INTELIGENTE
-# ============================================================
-
-def classify_article(title, summary):
-
-    text = normalize(title + " " + summary)
-
-    transfer_matches = [
-        word for word in TRANSFER_KEYWORDS
-        if contains_phrase(text, word)
-    ]
-
-    general_matches = [
-        word for word in GENERAL_NEWS_KEYWORDS
-        if contains_phrase(text, word)
-    ]
-
-    action_matches = [
-        word for word in TRANSFER_ACTIONS
-        if contains_phrase(text, word)
-    ]
-
-    if not transfer_matches:
-        return {
-            "isTransfer": False,
-            "classification": "Notícia geral",
-            "relevance": 0
-        }
-
-    score = (
-        len(transfer_matches) * 2
-        + len(action_matches) * 2
-    )
-
-    if general_matches:
-        score -= len(general_matches)
-
-    if score < 2:
-        return {
-            "isTransfer": False,
-            "classification": "Notícia geral",
-            "relevance": score
-        }
-
-    return {
-        "isTransfer": True,
-        "classification": "Notícia de transferências",
-        "relevance": score
-    }
-
-
-# ============================================================
-# IDENTIFICAÇÃO DE JOGADORES
-# ============================================================
-
-def identify_players(text, players):
-
-    found = []
-
-    normalized_text = normalize(text)
-
-    for player in players:
-
-        if contains_phrase(normalized_text, player):
-            found.append(player)
-
-    return sorted(set(found), key=len, reverse=True)
-
-
-# ============================================================
-# IDENTIFICAÇÃO DE CLUBES
-# ============================================================
-
-def identify_clubs(text):
-
-    found = []
-
-    normalized_text = normalize(text)
-
-    for club, aliases in CLUBS.items():
-
-        for alias in aliases:
-
-            if contains_phrase(normalized_text, alias):
-                found.append(club)
-                break
-
-    return sorted(set(found))
-
-
-# ============================================================
-# IDENTIFICAÇÃO DO CLUBE ATUAL E DESTINO
-# ============================================================
-
-def identify_transfer_details(text, players):
-
-    detected_players = identify_players(text, players)
-    detected_clubs = identify_clubs(text)
-
-    current_club = ""
-    destination = ""
-
-    text_lower = normalize(text)
-
-    for player in detected_players:
-
-        information = players.get(player, {})
-
-        if isinstance(information, dict):
-            current_club = information.get(
-                "currentClub", ""
-            )
-
-        if current_club:
-            break
-
-    # Identificação de expressões de destino explícito.
-    destination_patterns = [
-        r"\bto\s+([A-Za-z][A-Za-z .'-]{2,35})",
-        r"\bpara\s+([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ .'-]{2,35})",
-        r"\bjoins\s+([A-Za-z][A-Za-z .'-]{2,35})"
-    ]
-
-    # Só aceitar destinos pertencentes ao dicionário de clubes.
-    for club, aliases in CLUBS.items():
-
-        for alias in aliases:
-
-            escaped = re.escape(normalize(alias))
-
-            patterns = [
-                r"\bto\s+" + escaped + r"\b",
-                r"\bpara\s+" + escaped + r"\b",
-                r"\bjoins\s+" + escaped + r"\b",
-                r"\bjoin\s+" + escaped + r"\b"
-            ]
-
-            if any(
-                re.search(pattern, text_lower)
-                for pattern in patterns
-            ):
-                destination = club
-                break
-
-        if destination:
-            break
-
-    # Evitar confundir o clube atual com o destino.
-    if destination == current_club:
-        destination = ""
-
-    return {
-        "players": detected_players,
-        "clubs": detected_clubs,
-        "currentClub": current_club,
-        "destination": destination
-    }
-
-
-# ============================================================
-# IDENTIFICADORES
-# ============================================================
-
-def make_id(url):
-
-    return hashlib.sha256(
-        url.encode("utf-8")
-    ).hexdigest()[:20]
-
-
-# ============================================================
-# DATAS
-# ============================================================
-
-def article_date(entry):
-
-    parsed = (
-        entry.get("published_parsed")
-        or entry.get("updated_parsed")
-    )
-
-    if parsed:
-
-        timestamp = calendar.timegm(parsed)
-
-        return datetime.fromtimestamp(
-            timestamp,
-            timezone.utc
-        ).isoformat()
-
-    raw_date = (
-        entry.get("published")
-        or entry.get("updated")
-        or ""
-    )
-
-    if raw_date:
-
-        from email.utils import parsedate_to_datetime
-
+def normalize_text(value: str) -> str:
+    value = clean_html(value).lower()
+    value = unicodedata.normalize("NFKD", value)
+    value = "".join(c for c in value if not unicodedata.combining(c))
+    return re.sub(r"[^a-z0-9 ]+", " ", value).strip()
+
+
+def normalize_url(url: str) -> str:
+    """Retira parâmetros de tracking e fragmentos."""
+    if not url:
+        return ""
+    try:
+        parsed = urlparse(url.strip())
+        host = parsed.netloc.lower().replace("www.", "")
+        path = parsed.path.rstrip("/")
+        return urlunparse((parsed.scheme or "https", host, path, "", "", ""))
+    except Exception:
+        return url.strip()
+
+
+def make_id(url: str, title: str) -> str:
+    basis = normalize_url(url) or normalize_text(title)
+    return hashlib.sha256(basis.encode("utf-8")).hexdigest()[:20]
+
+
+def parse_entry_date(entry) -> datetime | None:
+    for field in ("published", "updated", "created"):
+        raw = entry.get(field)
+        if not raw:
+            continue
         try:
-            date = parsedate_to_datetime(raw_date)
-
-            if date.tzinfo is None:
-                date = date.replace(tzinfo=timezone.utc)
-
-            return date.astimezone(
-                timezone.utc
-            ).isoformat()
-
+            parsed = parsedate_to_datetime(raw)
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            return parsed.astimezone(timezone.utc)
         except Exception:
             pass
 
-    return ""
+    for field in ("published_parsed", "updated_parsed"):
+        parsed_tuple = entry.get(field)
+        if parsed_tuple:
+            try:
+                from time import mktime
+                return datetime.fromtimestamp(
+                    mktime(parsed_tuple), timezone.utc
+                )
+            except Exception:
+                pass
+    return None
 
 
-def is_recent(date_string):
+def load_json(path: Path, default):
+    if not path.exists():
+        return default
+    try:
+        with path.open("r", encoding="utf-8") as file:
+            return json.load(file)
+    except Exception as exc:
+        log.warning("Não foi possível ler %s: %s", path.name, exc)
+        return default
 
-    if not date_string:
-        return False
+
+def save_json(path: Path, data) -> None:
+    temp_path = path.with_suffix(path.suffix + ".tmp")
+    with temp_path.open("w", encoding="utf-8") as file:
+        json.dump(data, file, ensure_ascii=False, indent=2)
+    temp_path.replace(path)
+
+
+# ============================================================
+# TRADUÇÃO
+# ============================================================
+
+_translation_cache: dict[str, str] = {}
+
+
+def translate_to_pt(value: str) -> str:
+    """
+    Traduz texto para português.
+    Se o serviço de tradução falhar, mantém o original.
+    O original é sempre preservado nos campos originalTitle/originalSummary.
+    """
+    value = clean_html(value)
+    if not value or not TRANSLATION_ENABLED or GoogleTranslator is None:
+        return value
+
+    if value in _translation_cache:
+        return _translation_cache[value]
 
     try:
-        date = datetime.fromisoformat(
-            date_string.replace("Z", "+00:00")
-        )
-
-        age = datetime.now(timezone.utc) - date
-
-        return (
-            timedelta(0) <= age
-            <= timedelta(days=MAX_AGE_DAYS)
-        )
-
-    except (ValueError, TypeError):
-        return False
-
-
-# ============================================================
-# RECOLHA
-# ============================================================
-
-def collect_articles():
-
-    articles = []
-    players = load_players()
-
-    for source in SOURCES:
-
-        print("A consultar:", source["name"])
-
-        try:
-
-            feed = feedparser.parse(
-                source["url"],
-                request_headers={
-                    "User-Agent": USER_AGENT
-                }
-            )
-
-            if getattr(feed, "bozo", False):
-                print(
-                    "Aviso: feed com problemas:",
-                    source["name"]
-                )
-
-            if not feed.entries:
-                print(
-                    "Feed sem artigos:",
-                    source["name"]
-                )
-                continue
-
-            for entry in feed.entries[:MAX_ARTICLES_PER_SOURCE]:
-
-                title = clean_text(
-                    entry.get("title", "")
-                )
-
-                summary = clean_text(
-                    entry.get("summary", "")
-                )
-
-                url = entry.get("link", "").strip()
-
-                if not title or not url:
-                    continue
-
-                parsed_url = urlparse(url)
-
-                if parsed_url.scheme != "https":
-                    continue
-
-                if not parsed_url.netloc:
-                    continue
-
-                classification = classify_article(
-                    title,
-                    summary
-                )
-
-                if not classification["isTransfer"]:
-                    continue
-
-                date = article_date(entry)
-
-                if not is_recent(date):
-                    continue
-
-                details = identify_transfer_details(
-                    title + " " + summary,
-                    players
-                )
-
-                articles.append({
-
-                    "id": make_id(url),
-
-                    "title": title,
-
-                    "summary": summary[:1200],
-
-                    "source": source["name"],
-
-                    "domain": source["domain"],
-
-                    "url": url,
-
-                    "date": date,
-
-                    "classification": classification[
-                        "classification"
-                    ],
-
-                    "transferRelevance": classification[
-                        "relevance"
-                    ],
-
-                    "player": (
-                        details["players"][0]
-                        if details["players"]
-                        else ""
-                    ),
-
-                    "detectedPlayers": details["players"],
-
-                    "detectedClubs": details["clubs"],
-
-                    "currentClub": details["currentClub"],
-
-                    "destination": details["destination"],
-
-                    "status": "Por verificar",
-
-                    "verification": (
-                        "Candidato recolhido automaticamente. "
-                        "Sem validação editorial."
-                    )
-
-                })
-
-        except Exception as error:
-
-            print(
-                "Erro na fonte",
-                source["name"],
-                ":",
-                error
-            )
-
-    return articles
+        translator = GoogleTranslator(source="auto", target="pt")
+        translated = translator.translate(value)
+        if translated and translated.strip():
+            result = translated.strip()
+        else:
+            result = value
+        _translation_cache[value] = result
+        time.sleep(TRANSLATION_DELAY)
+        return result
+    except Exception as exc:
+        log.warning("Falha na tradução; será mantido o original: %s", exc)
+        _translation_cache[value] = value
+        return value
 
 
 # ============================================================
-# HISTÓRICO
+# JOGADORES E CLUBES
 # ============================================================
 
-def load_previous():
+def load_players() -> list[dict]:
+    raw = load_json(PLAYERS_FILE, [])
+    players = []
 
-    if not os.path.exists(OUTPUT_FILE):
-        return []
+    # Formato recomendado:
+    # [
+    #   {"name":"Nome do jogador","currentClub":"Clube"},
+    #   ...
+    # ]
+    if isinstance(raw, dict):
+        raw = raw.get("players", [])
 
-    try:
+    if not isinstance(raw, list):
+        return players
 
-        with open(
-            OUTPUT_FILE,
-            "r",
-            encoding="utf-8"
-        ) as file:
-
-            data = json.load(file)
-
-        return data if isinstance(data, list) else []
-
-    except (OSError, json.JSONDecodeError):
-
-        print("Não foi possível ler o histórico.")
-
-        return []
-
-
-# ============================================================
-# AGRUPAMENTO DE NOTÍCIAS
-# ============================================================
-
-def similarity(first, second):
-
-    return SequenceMatcher(
-        None,
-        normalize(first),
-        normalize(second)
-    ).ratio()
-
-
-def find_similar_articles(articles):
-
-    groups = []
-
-    for article in articles:
-
-        found = False
-
-        for group in groups:
-
-            reference = group[0]
-
-            if similarity(
-                article["title"],
-                reference["title"]
-            ) >= SIMILARITY_THRESHOLD:
-
-                group.append(article)
-
-                found = True
-
-                break
-
-        if not found:
-
-            groups.append([article])
-
-    return groups
-
-
-# ============================================================
-# RELATÓRIO DE FONTES INDEPENDENTES
-# ============================================================
-
-def build_source_report(articles):
-
-    groups = find_similar_articles(articles)
-
-    report = []
-
-    for group in groups:
-
-        domains = sorted({
-            article["domain"]
-            for article in group
-        })
-
-        sources = []
-
-        for article in group:
-
-            sources.append({
-
-                "name": article["source"],
-
-                "domain": article["domain"],
-
-                "url": article["url"],
-
-                "date": article["date"]
-
+    for item in raw:
+        if isinstance(item, str):
+            players.append({"name": item, "currentClub": ""})
+        elif isinstance(item, dict) and item.get("name"):
+            players.append({
+                "name": str(item["name"]).strip(),
+                "currentClub": str(item.get("currentClub", "")).strip(),
             })
 
-        report.append({
+    return players
 
-            "title": group[0]["title"],
 
-            "articlesFound": len(group),
+def detect_players(text: str, players: list[dict]) -> list[dict]:
+    found = []
+    normalized = normalize_text(text)
 
-            "differentDomains": len(domains),
+    for player in players:
+        name = player["name"]
+        if not name:
+            continue
+        # Comparação sem acentos e sem distinguir maiúsculas/minúsculas.
+        if normalize_text(name) in normalized:
+            found.append(player)
 
-            "sources": sources,
+    return found
 
-            "independentSources": len(domains),
 
-            "editorialStatus": "Por verificar",
+# ============================================================
+# CLASSIFICAÇÃO EDITORIAL
+# ============================================================
 
-            "confirmation": False,
+def classify_article(title: str, summary: str) -> tuple[str, int, list[str]]:
+    text = normalize_text(f"{title} {summary}")
+    reasons = []
 
-            "note": (
-                "A semelhança entre artigos não confirma "
-                "a veracidade de uma transferência. "
-                "É necessária verificação editorial."
+    keyword_hits = [
+        keyword for keyword in TRANSFER_KEYWORDS
+        if normalize_text(keyword) in text
+    ]
+
+    score = min(100, len(keyword_hits) * 15)
+    if keyword_hits:
+        reasons.append("Palavras-chave de mercado detetadas")
+
+    if any(normalize_text(word) in text for word in CONFIRMED_KEYWORDS):
+        status = "Possível confirmação"
+        score = min(100, score + 25)
+        reasons.append("Linguagem associada a anúncio ou confirmação")
+    elif any(normalize_text(word) in text for word in ADVANCED_KEYWORDS):
+        status = "Possível acordo avançado"
+        score = min(100, score + 20)
+        reasons.append("Linguagem associada a acordo avançado")
+    elif any(normalize_text(word) in text for word in NEGOTIATION_KEYWORDS):
+        status = "Possíveis negociações"
+        score = min(100, score + 10)
+        reasons.append("Referência a conversações, proposta ou negociações")
+    elif any(normalize_text(word) in text for word in RUMOUR_KEYWORDS):
+        status = "Rumor"
+        reasons.append("Linguagem de interesse ou rumor")
+    else:
+        status = "Por verificar"
+
+    if any(normalize_text(word) in text for word in GENERAL_NEWS_EXCLUSIONS):
+        score -= 35
+        reasons.append("Possível notícia geral, não centrada no mercado")
+
+    return status, max(0, min(100, score)), reasons
+
+
+# ============================================================
+# RECOLHA RSS
+# ============================================================
+
+def get_entry_summary(entry) -> str:
+    summary = entry.get("summary", "") or entry.get("description", "")
+    if not summary and entry.get("content"):
+        try:
+            summary = entry["content"][0].get("value", "")
+        except Exception:
+            pass
+    return clean_html(summary)
+
+
+def fetch_source(source: dict) -> tuple[list[dict], dict]:
+    source_name = source["name"]
+    source_url = source["url"]
+
+    report = {
+        "source": source_name,
+        "feed": source_url,
+        "checkedAt": iso_now(),
+        "status": "ok",
+        "articlesRead": 0,
+        "candidatesKept": 0,
+        "error": None,
+    }
+
+    try:
+        parsed = feedparser.parse(source_url)
+        if getattr(parsed, "bozo", False) and not parsed.entries:
+            raise RuntimeError(str(getattr(parsed, "bozo_exception", "Erro RSS")))
+
+        entries = []
+        cutoff = utc_now() - timedelta(days=MAX_AGE_DAYS)
+
+        for entry in parsed.entries:
+            report["articlesRead"] += 1
+            title = clean_html(entry.get("title", ""))
+            url = normalize_url(entry.get("link", ""))
+            summary = get_entry_summary(entry)
+
+            if not title or not url:
+                continue
+
+            published = parse_entry_date(entry)
+            if published and published < cutoff:
+                continue
+
+            # Sem data RSS, mantém a notícia mas assinala a ausência.
+            date_value = (
+                published.replace(microsecond=0).isoformat()
+                if published else ""
             )
 
-        })
+            entries.append({
+                "title": title,
+                "summary": summary,
+                "url": url,
+                "date": date_value,
+                "source": source_name,
+                "domain": urlparse(url).netloc.lower().replace("www.", ""),
+            })
 
-    return report
+        return entries, report
+
+    except Exception as exc:
+        report["status"] = "erro"
+        report["error"] = str(exc)
+        log.error("Erro na fonte %s: %s", source_name, exc)
+        return [], report
 
 
 # ============================================================
-# PRESERVAR CANDIDATOS ANTERIORES
+# HISTÓRICO E DUPLICADOS
 # ============================================================
 
-def merge_articles(previous, new_articles):
+def load_previous_candidates() -> list[dict]:
+    old = load_json(OUTPUT_FILE, [])
+    return old if isinstance(old, list) else []
 
-    records = {}
 
-    now = datetime.now(timezone.utc).isoformat()
+def load_history() -> dict:
+    history = load_json(HISTORY_FILE, {})
+    return history if isinstance(history, dict) else {}
 
-    for item in previous:
 
-        if isinstance(item, dict) and item.get("id"):
+def merge_editorial_data(candidate: dict, previous_by_id: dict) -> dict:
+    previous = previous_by_id.get(candidate["id"])
+    if not previous:
+        return candidate
 
-            records[item["id"]] = item
+    # Preserva decisões editoriais feitas anteriormente.
+    for field in (
+        "editorApproved", "editorNotes", "editorStatus",
+        "manualPlayer", "manualCurrentClub", "manualDestination"
+    ):
+        if field in previous:
+            candidate[field] = previous[field]
 
-    for article in new_articles:
+    return candidate
 
-        article_id = article["id"]
 
-        if article_id in records:
+def is_similar_to_existing(candidate: dict, existing: list[dict]) -> bool:
+    title = normalize_text(candidate.get("originalTitle", ""))
+    if not title:
+        return False
 
-            old = records[article_id]
+    for other in existing:
+        other_title = normalize_text(
+            other.get("originalTitle", other.get("title", ""))
+        )
+        if not other_title:
+            continue
 
-            # Atualizar informação recolhida sem apagar
-            # eventuais decisões editoriais anteriores.
+        if SequenceMatcher(None, title, other_title).ratio() >= SIMILARITY_THRESHOLD:
+            return True
 
-            old["lastSeen"] = now
+    return False
 
-            old["title"] = article["title"]
 
-            old["summary"] = article["summary"]
+# ============================================================
+# CONSTRUÇÃO DOS CANDIDATOS
+# ============================================================
 
-            old["date"] = article["date"]
+def build_candidate(article: dict, players: list[dict]) -> dict | None:
+    original_title = article["title"]
+    original_summary = article.get("summary", "")
 
-            for field in [
-                "player",
-                "detectedPlayers",
-                "detectedClubs",
-                "currentClub",
-                "destination",
-                "classification",
-                "transferRelevance"
-            ]:
-
-                if article.get(field):
-                    old[field] = article[field]
-
-        else:
-
-            article["firstSeen"] = now
-
-            article["lastSeen"] = now
-
-            article["editorApproved"] = False
-
-            records[article_id] = article
-
-    results = list(records.values())
-
-    results.sort(
-        key=lambda item: item.get("date", ""),
-        reverse=True
+    status, relevance, reasons = classify_article(
+        original_title, original_summary
     )
 
-    return results[:MAX_CANDIDATES]
+    if relevance < 15:
+        return None
+
+    combined = f"{original_title} {original_summary}"
+    detected = detect_players(combined, players)
+
+    player_name = detected[0]["name"] if detected else ""
+    current_club = detected[0]["currentClub"] if detected else ""
+
+    translated_title = translate_to_pt(original_title)
+    translated_summary = translate_to_pt(original_summary)
+
+    candidate_id = make_id(article["url"], original_title)
+
+    return {
+        "id": candidate_id,
+
+        # Campos principais usados pelo site.
+        "title": translated_title,
+        "summary": translated_summary,
+
+        # Texto original para a opção "Ver original".
+        "originalTitle": original_title,
+        "originalSummary": original_summary,
+        "originalLanguage": "en",
+        "displayLanguage": "pt-PT",
+
+        "source": article["source"],
+        "domain": article["domain"],
+        "url": article["url"],
+        "date": article.get("date", ""),
+        "collectedAt": iso_now(),
+
+        "player": player_name,
+        "currentClub": current_club,
+        "destination": "",
+
+        # A classificação automática é apenas uma sugestão.
+        "status": status,
+        "suggestedStatus": status,
+        "relevance": relevance,
+        "classificationReasons": reasons,
+
+        "detectedPlayers": [p["name"] for p in detected],
+        "editorApproved": False,
+        "editorStatus": "Por verificar",
+        "editorNotes": "",
+        "independentSources": [article["source"]],
+        "duplicateGroup": candidate_id,
+        "engineVersion": VERSION,
+    }
 
 
 # ============================================================
-# IDENTIFICAÇÃO DE GRUPOS
+# AGRUPAMENTO DE NOTÍCIAS SEMELHANTES
 # ============================================================
 
-def add_group_information(articles):
+def group_similar_candidates(candidates: list[dict]) -> None:
+    groups: list[list[dict]] = []
 
-    groups = find_similar_articles(articles)
+    for candidate in candidates:
+        placed = False
+        title = normalize_text(candidate.get("originalTitle", ""))
+
+        for group in groups:
+            for other in group:
+                other_title = normalize_text(other.get("originalTitle", ""))
+                ratio = SequenceMatcher(None, title, other_title).ratio()
+
+                same_player = (
+                    candidate.get("player")
+                    and candidate.get("player") == other.get("player")
+                )
+
+                if ratio >= SIMILARITY_THRESHOLD or (
+                    same_player and ratio >= 0.55
+                ):
+                    group.append(candidate)
+                    placed = True
+                    break
+
+            if placed:
+                break
+
+        if not placed:
+            groups.append([candidate])
 
     for group in groups:
-
-        domains = sorted({
-            article["domain"]
-            for article in group
+        group_id = min(item["id"] for item in group)
+        sources = sorted({
+            item["source"] for item in group if item.get("source")
         })
 
-        group_id = hashlib.sha256(
-            normalize(group[0]["title"]).encode("utf-8")
-        ).hexdigest()[:12]
-
-        for article in group:
-
-            article["similarGroupId"] = group_id
-
-            article["similarArticles"] = len(group)
-
-            article["independentSources"] = len(domains)
-
-            article["editorialStatus"] = "Por verificar"
-
-            article["confirmed"] = False
-
-    return articles
-
-
-# ============================================================
-# GUARDAR JSON COM SEGURANÇA
-# ============================================================
-
-def save_json(filename, data):
-
-    temporary = filename + ".tmp"
-
-    with open(
-        temporary,
-        "w",
-        encoding="utf-8"
-    ) as file:
-
-        json.dump(
-            data,
-            file,
-            ensure_ascii=False,
-            indent=2
-        )
-
-    os.replace(temporary, filename)
+        for item in group:
+            item["duplicateGroup"] = group_id
+            item["independentSources"] = sources
+            item["sourceCount"] = len(sources)
 
 
 # ============================================================
 # EXECUÇÃO PRINCIPAL
 # ============================================================
 
-def main():
+def main() -> None:
+    log.info("A iniciar TRANSFER MARKET INTELLIGENCE ENGINE V%s", VERSION)
 
-    print("=" * 65)
-
-    print("TRANSFER MARKET — INTELLIGENCE ENGINE V" + VERSION)
-
-    print("=" * 65)
-
-    previous = load_previous()
-
-    print(
-        "Candidatos anteriores:",
-        len(previous)
-    )
-
-    articles = collect_articles()
-
-    print(
-        "Artigos relevantes encontrados:",
-        len(articles)
-    )
-
-    articles = add_group_information(articles)
-
-    candidates = merge_articles(
-        previous,
-        articles
-    )
-
-    report = build_source_report(
-        articles
-    )
-
-    save_json(
-        OUTPUT_FILE,
-        candidates
-    )
-
-    save_json(
-        REPORT_FILE,
-        report
-    )
-
-    print("-" * 65)
-
-    print(
-        "Candidatos guardados:",
-        len(candidates)
-    )
-
-    print(
-        "Grupos de notícias:",
-        len(report)
-    )
-
-    print(
-        "Fontes configuradas:",
-        len(SOURCES)
-    )
-
-    print(
-        "Jogadores reconhecidos:",
-        sum(
-            1 for item in articles
-            if item.get("player")
+    if TRANSLATION_ENABLED and GoogleTranslator is None:
+        log.warning(
+            "deep-translator não está instalado. "
+            "Os textos serão mantidos no idioma original."
         )
+
+    players = load_players()
+    previous = load_previous_candidates()
+    previous_by_id = {
+        item.get("id"): item for item in previous if item.get("id")
+    }
+
+    history = load_history()
+    known_ids = set(history.get("seenIds", []))
+
+    # Também considera os candidatos já existentes.
+    known_ids.update(previous_by_id.keys())
+
+    all_articles = []
+    source_reports = []
+
+    for source in SOURCES:
+        articles, report = fetch_source(source)
+        all_articles.extend(articles)
+        source_reports.append(report)
+
+    # Mais recentes primeiro; notícias sem data ficam no fim.
+    all_articles.sort(
+        key=lambda item: item.get("date", ""),
+        reverse=True
     )
 
-    print(
-        "Clubes identificados:",
-        sum(
-            1 for item in articles
-            if item.get("detectedClubs")
+    candidates = []
+    seen_this_run = set()
+
+    for article in all_articles:
+        candidate_id = make_id(article["url"], article["title"])
+
+        if candidate_id in seen_this_run:
+            continue
+        seen_this_run.add(candidate_id)
+
+        candidate = build_candidate(article, players)
+        if not candidate:
+            continue
+
+        # Mantém os candidatos anteriores no ficheiro, mas não volta
+        # a criar a mesma notícia.
+        if candidate_id in previous_by_id:
+            continue
+
+        # Agrupamento por semelhança evita repetir a mesma notícia
+        # publicada por fontes diferentes como candidatos separados.
+        if is_similar_to_existing(candidate, candidates):
+            # A fonte adicional fica registada no grupo após agrupamento.
+            candidates.append(candidate)
+        else:
+            candidates.append(candidate)
+
+        known_ids.add(candidate_id)
+
+    # Junta candidatos novos e antigos, preservando decisões editoriais.
+    combined_by_id = {}
+
+    for old in previous:
+        if isinstance(old, dict) and old.get("id"):
+            combined_by_id[old["id"]] = old
+
+    for candidate in candidates:
+        candidate = merge_editorial_data(candidate, previous_by_id)
+        combined_by_id[candidate["id"]] = candidate
+
+    final_candidates = list(combined_by_id.values())
+
+    # Ordena por data e relevância.
+    final_candidates.sort(
+        key=lambda item: (
+            item.get("date", ""),
+            int(item.get("relevance", 0))
+        ),
+        reverse=True
+    )
+
+    final_candidates = final_candidates[:MAX_CANDIDATES]
+
+    group_similar_candidates(final_candidates)
+
+    for report in source_reports:
+        report["candidatesKept"] = sum(
+            1 for item in candidates if item.get("source") == report["source"]
         )
-    )
 
-    print("-" * 65)
+    report_data = {
+        "engine": "TRANSFER MARKET — INTELLIGENCE ENGINE",
+        "version": VERSION,
+        "generatedAt": iso_now(),
+        "translation": {
+            "enabled": TRANSLATION_ENABLED,
+            "target": "pt-PT",
+            "provider": "GoogleTranslator via deep-translator",
+            "originalPreserved": True,
+        },
+        "rules": {
+            "maxAgeDays": MAX_AGE_DAYS,
+            "similarityThreshold": SIMILARITY_THRESHOLD,
+            "maxCandidates": MAX_CANDIDATES,
+            "xPostsUsed": False,
+            "automaticPublication": False,
+        },
+        "totals": {
+            "sources": len(SOURCES),
+            "articlesCollected": len(all_articles),
+            "newCandidates": len(candidates),
+            "totalCandidates": len(final_candidates),
+            "confirmedByEditor": sum(
+                1 for item in final_candidates
+                if item.get("editorApproved") is True
+            ),
+            "awaitingReview": sum(
+                1 for item in final_candidates
+                if item.get("editorApproved") is not True
+            ),
+        },
+        "sourcesReport": source_reports,
+    }
 
-    print(
-        "Estado editorial: TODOS OS NOVOS CANDIDATOS "
-        "AGUARDAM VERIFICAÇÃO."
-    )
+    # O motor só escreve nos seus próprios ficheiros.
+    save_json(OUTPUT_FILE, final_candidates)
+    save_json(REPORT_FILE, report_data)
 
-    print("Atualização concluída.")
+    # Histórico limitado para não crescer indefinidamente.
+    history_ids = list(known_ids)
+    history["seenIds"] = history_ids[-10000:]
+    history["updatedAt"] = iso_now()
+    save_json(HISTORY_FILE, history)
 
-    print("=" * 65)
+    log.info("Concluído.")
+    log.info("Novos candidatos: %s", len(candidates))
+    log.info("Total no ficheiro: %s", len(final_candidates))
+    log.info("Ficheiro criado: %s", OUTPUT_FILE.name)
+    log.info("Relatório criado: %s", REPORT_FILE.name)
 
 
 if __name__ == "__main__":
-
     main()
