@@ -5,8 +5,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080d12">
+
 <title>TRANSFER MARKET | O mercado não dorme</title>
-<meta name="description" content="As últimas notícias, rumores e confirmações do mercado de transferências de futebol europeu.">
+
+<meta name="description" content="Notícias, rumores, transferências e classificações do futebol europeu.">
 
 <style>
 :root {
@@ -18,23 +20,36 @@
   --muted: #91a0ac;
   --border: #26343e;
 }
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   background: var(--bg);
   color: var(--white);
   font-family: Arial, Helvetica, sans-serif;
 }
-a { color: inherit; text-decoration: none; }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 header {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: rgba(8,13,18,.96);
+  background: rgba(8,13,18,.97);
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(12px);
 }
+
 .nav {
   max-width: 1200px;
   margin: auto;
@@ -44,25 +59,43 @@ header {
   justify-content: space-between;
   gap: 20px;
 }
+
 .logo {
   font-size: 23px;
   font-weight: 900;
   letter-spacing: -1px;
+  white-space: nowrap;
 }
-.logo span { color: var(--green); }
-nav { display: flex; gap: 25px; }
+
+.logo span {
+  color: var(--green);
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 nav a {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: bold;
+  transition: .2s;
 }
-nav a:hover { color: var(--green); }
+
+nav a:hover {
+  color: var(--green);
+}
+
 .live {
   color: var(--green);
   font-size: 11px;
   font-weight: bold;
   letter-spacing: 1px;
 }
+
 .live::before {
   content: "";
   display: inline-block;
@@ -72,42 +105,76 @@ nav a:hover { color: var(--green); }
   border-radius: 50%;
   margin-right: 7px;
 }
-.container { max-width: 1200px; margin: auto; padding: 0 22px; }
-.hero { padding: 65px 0 45px; }
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 22px;
+}
+
+.hero {
+  padding: 75px 0 55px;
+}
+
 .eyebrow {
   color: var(--green);
   font-size: 11px;
   font-weight: bold;
   letter-spacing: 2px;
 }
+
 .hero h1 {
   font-size: clamp(42px, 7vw, 76px);
   line-height: .98;
   letter-spacing: -4px;
-  max-width: 780px;
+  max-width: 850px;
   margin: 18px 0;
 }
-.hero h1 span { color: var(--green); }
+
+.hero h1 span {
+  color: var(--green);
+}
+
 .hero p {
   color: var(--muted);
   max-width: 580px;
   line-height: 1.7;
+  font-size: 15px;
 }
-.hero-actions { display: flex; gap: 12px; margin-top: 27px; flex-wrap: wrap; }
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 27px;
+  flex-wrap: wrap;
+}
+
 .btn {
+  display: inline-block;
   padding: 14px 20px;
   background: var(--green);
   color: #10170a;
   border-radius: 5px;
   font-size: 13px;
   font-weight: 900;
+  transition: .2s;
 }
+
+.btn:hover {
+  transform: translateY(-2px);
+  opacity: .9;
+}
+
 .btn.secondary {
   background: var(--panel);
   border: 1px solid var(--border);
   color: var(--white);
 }
-.section { padding: 35px 0; }
+
+.section {
+  padding: 38px 0;
+}
+
 .section-heading {
   display: flex;
   align-items: center;
@@ -115,21 +182,40 @@ nav a:hover { color: var(--green); }
   gap: 15px;
   margin-bottom: 22px;
 }
-.section-heading h2 { font-size: 25px; margin: 0; letter-spacing: -1px; }
-.section-heading span { color: var(--green); font-size: 11px; font-weight: bold; }
+
+.section-heading h2 {
+  font-size: 25px;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.section-heading span {
+  color: var(--green);
+  font-size: 11px;
+  font-weight: bold;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 17px;
 }
+
 .card {
+  display: block;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 9px;
   padding: 23px;
   min-height: 185px;
+  transition: .2s;
 }
-.card:hover { border-color: var(--green); }
+
+.card:hover {
+  border-color: var(--green);
+  transform: translateY(-3px);
+}
+
 .tag {
   display: inline-block;
   padding: 6px 9px;
@@ -140,20 +226,33 @@ nav a:hover { color: var(--green); }
   font-weight: bold;
   text-transform: uppercase;
 }
-.card h3 { font-size: 19px; line-height: 1.35; margin: 17px 0 10px; }
-.card p { color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+.card h3 {
+  font-size: 19px;
+  line-height: 1.35;
+  margin: 17px 0 10px;
+}
+
+.card p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
 .placeholder {
   color: var(--muted);
   font-size: 12px;
   font-style: italic;
   margin-top: 20px;
 }
+
 .radar {
   background: linear-gradient(120deg, #17232c, #101820);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 28px;
 }
+
 .radar-top {
   display: flex;
   align-items: center;
@@ -161,9 +260,25 @@ nav a:hover { color: var(--green); }
   gap: 15px;
   flex-wrap: wrap;
 }
-.radar h2 { font-size: 27px; margin: 0; }
-.radar-intro { color: var(--muted); font-size: 13px; line-height: 1.6; }
-.filters { display: flex; gap: 8px; flex-wrap: wrap; margin: 22px 0; }
+
+.radar h2 {
+  font-size: 27px;
+  margin: 0;
+}
+
+.radar-intro {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 22px 0;
+}
+
 .filter {
   border: 1px solid var(--border);
   background: var(--panel);
@@ -174,11 +289,14 @@ nav a:hover { color: var(--green); }
   font-weight: bold;
   font-size: 11px;
 }
-.filter.active, .filter:hover {
+
+.filter.active,
+.filter:hover {
   background: var(--green);
   color: #10170a;
   border-color: var(--green);
 }
+
 .empty {
   text-align: center;
   border: 1px dashed #40505b;
@@ -188,21 +306,38 @@ nav a:hover { color: var(--green); }
   font-size: 13px;
   line-height: 1.7;
 }
-.empty strong { display: block; color: var(--white); margin-bottom: 8px; }
+
+.empty strong {
+  display: block;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
 .status-grid {
   display: grid;
   grid-template-columns: repeat(3,1fr);
   gap: 15px;
   margin-top: 20px;
 }
+
 .status {
   background: var(--panel);
   padding: 20px;
   border-radius: 7px;
   border: 1px solid var(--border);
 }
-.status strong { display: block; font-size: 22px; margin-bottom: 7px; }
-.status span { color: var(--muted); font-size: 12px; }
+
+.status strong {
+  display: block;
+  font-size: 22px;
+  margin-bottom: 7px;
+}
+
+.status span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
 footer {
   margin-top: 60px;
   border-top: 1px solid var(--border);
@@ -210,19 +345,48 @@ footer {
   color: var(--muted);
   font-size: 12px;
 }
+
 .footer-content {
   display: flex;
   justify-content: space-between;
   gap: 15px;
   flex-wrap: wrap;
 }
+
 @media(max-width:750px) {
-  nav { gap: 12px; flex-wrap: wrap; }
-  nav a { font-size: 11px; }
-  .grid { grid-template-columns: 1fr; }
-  .status-grid { grid-template-columns: 1fr; }
-  .hero { padding-top: 45px; }
-  .hero h1 { letter-spacing: -2px; }
+  .nav {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  nav {
+    gap: 13px;
+  }
+
+  nav a {
+    font-size: 11px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding-top: 45px;
+  }
+
+  .hero h1 {
+    letter-spacing: -2px;
+  }
+
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 </style>
 </head>
@@ -231,144 +395,265 @@ footer {
 
 <header>
   <div class="nav">
-    <a href="#" class="logo">TRANSFER<span>MARKET</span></a>
+
+    <a href="index.html" class="logo">
+      TRANSFER<span>MARKET</span>
+    </a>
+
     <nav>
       <a href="#inicio">INÍCIO</a>
       <a href="#radar">RADAR</a>
-      <a href="#rumores">RUMORES</a>
+      <a href="rumores.html">RUMORES</a>
+      <a href="classificacoes.html">CLASSIFICAÇÕES</a>
       <a href="#sobre">SOBRE</a>
     </nav>
+
   </div>
 </header>
 
 <main>
+
 <section class="hero container" id="inicio">
-  <div class="eyebrow">O FUTEBOL NUNCA PARA</div>
-  <h1>O MERCADO<br>ESTÁ SEMPRE <span>EM MOVIMENTO.</span></h1>
+
+  <div class="eyebrow">
+    O FUTEBOL NUNCA PARA
+  </div>
+
+  <h1>
+    O MERCADO<br>
+    ESTÁ SEMPRE <span>EM MOVIMENTO.</span>
+  </h1>
+
   <p>
     As últimas movimentações do futebol europeu.
-    Notícias, negociações, rumores e confirmações,
-    num único lugar.
+    Notícias, negociações, rumores, confirmações
+    e classificações dos principais campeonatos.
   </p>
+
   <div class="hero-actions">
     <a href="#radar" class="btn">EXPLORAR O RADAR ↗</a>
-    <a href="#rumores" class="btn secondary">VER RUMORES</a>
+    <a href="classificacoes.html" class="btn secondary">
+      VER CLASSIFICAÇÕES
+    </a>
   </div>
+
 </section>
 
 <section class="container section" id="rumores">
+
   <div class="section-heading">
     <h2>Mercado em destaque</h2>
     <span>TRANSFER MARKET</span>
   </div>
+
   <div class="grid">
+
     <article class="card">
       <span class="tag">Últimas notícias</span>
       <h3>As movimentações do futebol europeu</h3>
-      <p>Acompanha as novidades mais importantes do mercado de transferências.</p>
-      <div class="placeholder">A aguardar notícias verificadas.</div>
+      <p>
+        Acompanha as novidades mais importantes
+        do mercado de transferências.
+      </p>
+      <div class="placeholder">
+        Consulta o nosso radar para acompanhar as notícias.
+      </div>
     </article>
+
     <article class="card">
       <span class="tag">Rumores</span>
       <h3>Quem poderá mudar de clube?</h3>
-      <p>Negociações, interesses e possíveis destinos dos jogadores.</p>
-      <div class="placeholder">A aguardar informações verificadas.</div>
+      <p>
+        Negociações, interesses e possíveis destinos
+        dos jogadores.
+      </p>
+      <a href="rumores.html" class="placeholder">
+        Consultar rumores →
+      </a>
     </article>
-    <article class="card">
-      <span class="tag">Oficial</span>
-      <h3>Transferências confirmadas</h3>
-      <p>As mudanças de clube que já foram oficialmente anunciadas.</p>
-      <div class="placeholder">A aguardar comunicados oficiais.</div>
-    </article>
+
+    <a href="classificacoes.html" class="card">
+      <span class="tag">Classificações</span>
+      <h3>O futebol europeu em números</h3>
+      <p>
+        Consulta as tabelas classificativas das
+        primeiras divisões europeias e das ligas portuguesas.
+      </p>
+      <div class="placeholder">
+        EXPLORAR CLASSIFICAÇÕES →
+      </div>
+    </a>
+
   </div>
+
 </section>
 
 <section class="container section" id="radar">
+
   <div class="radar">
+
     <div class="radar-top">
-      <h2><span style="color:var(--green)">●</span> TRANSFER RADAR</h2>
-      <span class="live">RADAR DE TRANSFERÊNCIAS</span>
+      <h2>
+        <span style="color:var(--green)">●</span>
+        TRANSFER RADAR
+      </h2>
+
+      <span class="live">
+        RADAR DE TRANSFERÊNCIAS
+      </span>
     </div>
+
     <p class="radar-intro">
       O centro de acompanhamento do mercado europeu.
       Informação organizada por estado e credibilidade.
     </p>
+
     <div class="filters">
-      <button class="filter active" data-filter="all">TODAS</button>
-      <button class="filter" data-filter="rumor">RUMORES</button>
-      <button class="filter" data-filter="negotiation">NEGOCIAÇÕES</button>
-      <button class="filter" data-filter="official">OFICIAIS</button>
+
+      <button class="filter active" data-filter="all">
+        TODAS
+      </button>
+
+      <button class="filter" data-filter="rumor">
+        RUMORES
+      </button>
+
+      <button class="filter" data-filter="negotiation">
+        NEGOCIAÇÕES
+      </button>
+
+      <button class="filter" data-filter="official">
+        OFICIAIS
+      </button>
+
     </div>
+
     <div id="radar-content">
+
       <div class="empty">
         <strong>O radar está preparado.</strong>
-        Ainda não existem notícias verificadas nesta edição.
-        As informações serão publicadas após verificação das fontes.
+        Consulta a página de rumores para acompanhar
+        as informações recolhidas e verificadas.
       </div>
+
     </div>
+
+    <div style="margin-top:20px">
+      <a href="rumores.html" class="btn secondary">
+        ABRIR TRANSFER RADAR ↗
+      </a>
+    </div>
+
   </div>
+
 </section>
 
 <section class="container section">
+
   <div class="section-heading">
     <h2>O nosso compromisso</h2>
     <span>INFORMAÇÃO COM CRITÉRIO</span>
   </div>
+
   <div class="status-grid">
+
     <div class="status">
       <strong>Rumor</strong>
-      <span>Informação ainda não confirmada.</span>
+      <span>
+        Informação ainda não confirmada.
+      </span>
     </div>
+
     <div class="status">
       <strong>Negociação</strong>
-      <span>Conversações ou contactos entre as partes.</span>
+      <span>
+        Conversações ou contactos entre as partes.
+      </span>
     </div>
+
     <div class="status">
       <strong>Oficial</strong>
-      <span>Transferência anunciada oficialmente.</span>
+      <span>
+        Transferência anunciada oficialmente.
+      </span>
     </div>
+
   </div>
+
 </section>
 
 <section class="container section" id="sobre">
+
   <div class="section-heading">
     <h2>Sobre o projeto</h2>
   </div>
+
   <p style="color:var(--muted);line-height:1.8;max-width:700px;font-size:14px">
-    O TRANSFER MARKET é um projeto independente dedicado
-    ao mercado de transferências do futebol europeu.
+    O TRANSFER MARKET é um projeto independente
+    dedicado ao mercado de transferências do futebol europeu.
     O nosso objetivo é reunir informação clara, organizada
     e credível, distinguindo sempre os rumores das notícias oficiais.
+    Queremos também disponibilizar classificações de vários
+    campeonatos europeus.
   </p>
+
 </section>
+
 </main>
 
 <footer>
+
   <div class="container footer-content">
-    <div><strong>TRANSFER<span style="color:var(--green)">MARKET</span></strong><br><br>O mercado não dorme.</div>
-    <div>Projeto independente · 2026</div>
+
+    <div>
+      <strong>
+        TRANSFER<span style="color:var(--green)">MARKET</span>
+      </strong>
+      <br><br>
+      O mercado não dorme.
+    </div>
+
+    <div>
+      Projeto independente · 2026
+    </div>
+
   </div>
+
 </footer>
 
 <script>
 const filters = document.querySelectorAll(".filter");
 
 filters.forEach(button => {
+
   button.addEventListener("click", () => {
-    filters.forEach(item => item.classList.remove("active"));
+
+    filters.forEach(item =>
+      item.classList.remove("active")
+    );
+
     button.classList.add("active");
 
     const type = button.dataset.filter;
     const content = document.getElementById("radar-content");
 
+    const titles = {
+      all: "Todas as movimentações",
+      rumor: "Rumores",
+      negotiation: "Negociações",
+      official: "Transferências oficiais"
+    };
+
     content.innerHTML = `
       <div class="empty">
-        <strong>${type === "all" ? "Todas as movimentações" :
-          type === "rumor" ? "Rumores" :
-          type === "negotiation" ? "Negociações" : "Transferências oficiais"}</strong>
-        Ainda não existem notícias verificadas nesta categoria.
-      </div>`;
+        <strong>${titles[type]}</strong>
+        Consulta a página de rumores para ver
+        as informações disponíveis nesta categoria.
+      </div>
+    `;
+
   });
+
 });
 </script>
 
