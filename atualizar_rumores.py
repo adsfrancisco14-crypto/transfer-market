@@ -1,369 +1,426 @@
+
 import feedparser
 import json
 import os
 import re
+import hashlib
+
 from datetime import datetime, timezone
-from difflib import SequenceMatcher
 from email.utils import parsedate_to_datetime
+from difflib import SequenceMatcher
+from html import unescape
 
-# ==================================================
-# TRANSFER MARKET — MOTOR DE RECOLHA DE NOTÍCIAS
-# ==================================================
+# =====================================================
+# TRANSFER MARKET — MOTOR DE RECOLHA V2.0
+# =====================================================
 
-FICHEIRO_SAIDA = "candidatos.json"
+OUTPUT_FILE = "candidatos.json"
+MAX_ARTICLES_PER_SOURCE = 100
+MAX_CANDIDATES = 300
+MAX_AGE_DAYS = 30
 
-FONTES = [
+SOURCES = [
     {
-        "nome": "BBC Sport",
+        "name": "BBC Sport",
         "url": "https://feeds.bbci.co.uk/sport/football/rss.xml",
-        "dominio": "bbc.co.uk"
+        "domain": "bbc.co.uk"
     },
     {
-        "nome": "Sky Sports",
+        "name": "Sky Sports",
         "url": "https://www.skysports.com/rss/11095",
-        "dominio": "skysports.com"
+        "domain": "skysports.com"
     }
 ]
 
-PALAVRAS_TRANSFERENCIAS = [
-    "transfer",
-    "transfers",
-    "transferência",
-    "transferencias",
-    "transferências",
-    "signing",
-    "signs",
-    "signed",
-    "deal",
-    "bid",
-    "loan",
-    "loan move",
-    "agreed",
-    "agreement",
-    "interest",
-    "interested",
-    "target",
-    "targets",
-    "move",
-    "move to",
-    "joins",
-    "join",
-    "contract",
-    "release clause",
-    "mercado",
-    "negociações"
+KEYWORDS = [
+    "transfer", "transfers", "transferência",
+    "transferências", "signing", "signed",
+    "signs", "deal", "bid", "loan",
+    "agreement", "agreed", "interest",
+    "interested", "target", "targets",
+    "joins", "contract", "release clause",
+    "negotiations", "mercado", "negociações"
 ]
 
-MAX_ARTIGOS_POR_FONTE = 100
-LIMITE_CANDIDATOS = 200
-SIMILARIDADE_MINIMA = 0.55
+# =====================================================
+# FUNÇÕES DE TEXTO
+# =====================================================
+
+def clean_text(value):
+    value = unescape(str(value or ""))
+    value = re.sub(r"<[^>]+>", " ", value)
+    value = re.sub(r"\s+", " ", value)
+    return value.strip()
 
 
-# ==================================================
-# FUNÇÕES AUXILIARES
-# ==================================================
-
-def texto_limpo(texto):
-    texto = str(texto or "")
-    texto = re.sub(r"<[^>]+>", " ", texto)
-    texto = re.sub(r"\s+", " ", texto)
-    return texto.strip()
+def normalize(value):
+    value = clean_text(value).lower()
+    value = re.sub(r"[^\w\s]", " ", value)
+    value = re.sub(r"\s+", " ", value)
+    return value.strip()
 
 
-def normalizar(texto):
-    texto = texto.lower()
-    texto = re.sub(r"[^a-z0-9áéíóúàèìòùãõç ]", " ", texto)
-    texto = re.sub(r"\s+", " ", texto)
-    return texto.strip()
+def is_transfer_article(title, summary):
+    text = normalize(title + " " + summary)
+
+    for keyword in KEYWORDS:
+        pattern = r"(?<!\w)" + re.escape(
+            normalize(keyword)
+        ) + r"(?!\w)"
+
+        if re.search(pattern, text):
+            return True
+
+    return False
 
 
-def e_noticia_de_transferencia(titulo, resumo):
-    texto = normalizar(titulo + " " + resumo)
-
-    return any(
-        palavra in texto
-        for palavra in PALAVRAS_TRANSFERENCIAS
-    )
+def make_id(url):
+    return hashlib.sha256(
+        url.encode("utf-8")
+    ).hexdigest()[:20]
 
 
-def converter_data(entry):
-    data = (
+# =====================================================
+# DATAS
+# =====================================================
+
+def article_date(entry):
+    parsed = entry.get("published_parsed")
+
+    if not parsed:
+        parsed = entry.get("updated_parsed")
+
+    if parsed:
+        from time import mktime
+        timestamp = mktime(parsed)
+
+        return datetime.fromtimestamp(
+            timestamp,
+            timezone.utc
+        ).isoformat()
+
+    raw_date = (
         entry.get("published")
         or entry.get("updated")
         or ""
     )
 
-    if not data:
-        return datetime.now(timezone.utc).isoformat()
+    if raw_date:
+        try:
+            date = parsedate_to_datetime(raw_date)
 
+            if date.tzinfo is None:
+                date = date.replace(
+                    tzinfo=timezone.utc
+                )
+
+            return date.astimezone(
+                timezone.utc
+            ).isoformat()
+
+        except Exception:
+            pass
+
+    return datetime.now(timezone.utc).isoformat()
+
+
+def is_recent(date_string):
     try:
-        data_convertida = parsedate_to_datetime(data)
+        date = datetime.fromisoformat(
+            date_string.replace("Z", "+00:00")
+        )
 
-        if data_convertida.tzinfo is None:
-            data_convertida = data_convertida.replace(
-                tzinfo=timezone.utc
-            )
+        age = datetime.now(timezone.utc) - date
 
-        return data_convertida.astimezone(
-            timezone.utc
-        ).isoformat()
+        return age.total_seconds() >= 0 and (
+            age.days <= MAX_AGE_DAYS
+        )
 
     except Exception:
-        return datetime.now(timezone.utc).isoformat()
+        return False
 
 
-def semelhante(texto1, texto2):
-    texto1 = normalizar(texto1)
-    texto2 = normalizar(texto2)
+# =====================================================
+# RECOLHA DE NOTÍCIAS
+# =====================================================
 
-    return SequenceMatcher(
-        None,
-        texto1,
-        texto2
-    ).ratio()
+def collect_articles():
+    articles = []
 
-
-# ==================================================
-# LER NOTÍCIAS DOS FEEDS
-# ==================================================
-
-def recolher_noticias():
-    noticias = []
-
-    for fonte in FONTES:
-        print(f"A consultar: {fonte['nome']}")
+    for source in SOURCES:
+        print("A consultar:", source["name"])
 
         try:
             feed = feedparser.parse(
-                fonte["url"],
+                source["url"],
                 request_headers={
-                    "User-Agent": "TransferMarketBot/1.0"
+                    "User-Agent": "TransferMarket/2.0"
                 }
             )
 
-            if feed.bozo and not feed.entries:
-                print(
-                    f"Feed indisponível: {fonte['nome']}"
-                )
+            if not feed.entries:
+                print("Feed sem artigos:", source["name"])
                 continue
 
-            for artigo in feed.entries[:MAX_ARTIGOS_POR_FONTE]:
-
-                titulo = texto_limpo(
-                    artigo.get("title", "")
+            for entry in feed.entries[:MAX_ARTICLES_PER_SOURCE]:
+                title = clean_text(
+                    entry.get("title", "")
                 )
 
-                resumo = texto_limpo(
-                    artigo.get("summary", "")
+                summary = clean_text(
+                    entry.get("summary", "")
                 )
 
-                link = artigo.get("link", "")
+                url = entry.get("link", "").strip()
 
-                if not titulo or not link:
+                if not title or not url:
                     continue
 
-                if not e_noticia_de_transferencia(
-                    titulo,
-                    resumo
-                ):
+                if not url.startswith("https://"):
                     continue
 
-                noticia = {
-                    "title": titulo,
-                    "summary": resumo[:1000],
-                    "source": fonte["nome"],
-                    "domain": fonte["dominio"],
-                    "url": link,
-                    "date": converter_data(artigo),
-                }
+                if not is_transfer_article(title, summary):
+                    continue
 
-                noticias.append(noticia)
+                date = article_date(entry)
 
-        except Exception as erro:
+                if not is_recent(date):
+                    continue
+
+                articles.append({
+                    "id": make_id(url),
+                    "title": title,
+                    "summary": summary[:1200],
+                    "source": source["name"],
+                    "domain": source["domain"],
+                    "url": url,
+                    "date": date
+                })
+
+        except Exception as error:
             print(
-                f"Erro na fonte {fonte['nome']}: {erro}"
+                "Erro na fonte",
+                source["name"],
+                ":",
+                error
             )
 
-    return noticias
+    return articles
 
 
-# ==================================================
-# COMPARAR FONTES INDEPENDENTES
-# ==================================================
+# =====================================================
+# HISTÓRICO E DUPLICADOS
+# =====================================================
 
-def agrupar_noticias(noticias):
-    grupos = []
+def load_previous():
+    if not os.path.exists(OUTPUT_FILE):
+        return []
 
-    noticias = sorted(
-        noticias,
-        key=lambda item: item["date"],
-        reverse=True
-    )
+    try:
+        with open(
+            OUTPUT_FILE,
+            "r",
+            encoding="utf-8"
+        ) as file:
+            data = json.load(file)
 
-    for noticia in noticias:
-        grupo_encontrado = None
+        return data if isinstance(data, list) else []
 
-        for grupo in grupos:
-            titulo_referencia = grupo[0]["title"]
+    except (OSError, json.JSONDecodeError):
+        print("Não foi possível ler o histórico.")
+        return []
 
-            if semelhante(
-                noticia["title"],
-                titulo_referencia
-            ) >= SIMILARIDADE_MINIMA:
 
-                grupo_encontrado = grupo
-                break
+def merge_articles(previous, new_articles):
+    records = {}
 
-        if grupo_encontrado is None:
-            grupos.append([noticia])
+    for item in previous:
+        if isinstance(item, dict) and item.get("id"):
+            records[item["id"]] = item
+
+    now = datetime.now(timezone.utc).isoformat()
+
+    for article in new_articles:
+        article_id = article["id"]
+
+        if article_id in records:
+            old = records[article_id]
+
+            old["lastSeen"] = now
+            old["summary"] = article["summary"]
+            old["title"] = article["title"]
+
         else:
-            dominios = {
-                item["domain"]
-                for item in grupo_encontrado
-            }
+            article["firstSeen"] = now
+            article["lastSeen"] = now
 
-            if noticia["domain"] not in dominios:
-                grupo_encontrado.append(noticia)
+            article["status"] = "Por verificar"
 
-    return grupos
+            article["verification"] = (
+                "Artigo recolhido automaticamente. "
+                "Ainda não foi verificado editorialmente."
+            )
 
+            article["player"] = ""
+            article["currentClub"] = ""
+            article["destination"] = ""
 
-# ==================================================
-# CRIAR CANDIDATOS
-# ==================================================
+            records[article_id] = article
 
-def criar_candidatos(grupos):
-    candidatos = []
+    results = list(records.values())
 
-    for grupo in grupos:
-
-        fontes = sorted({
-            artigo["source"]
-            for artigo in grupo
-        })
-
-        dominios = sorted({
-            artigo["domain"]
-            for artigo in grupo
-        })
-
-        if len(dominios) < 2:
-            continue
-
-        principal = sorted(
-            grupo,
-            key=lambda item: item["date"],
-            reverse=True
-        )[0]
-
-        candidato = {
-            "title": principal["title"],
-            "summary": principal["summary"],
-            "status": "Por verificar",
-            "verification": (
-                "Duas fontes encontraram títulos semelhantes. "
-                "É necessária verificação editorial."
-            ),
-            "sourcesCount": len(dominios),
-            "sources": [
-                {
-                    "name": artigo["source"],
-                    "url": artigo["url"],
-                    "date": artigo["date"]
-                }
-                for artigo in grupo
-            ],
-            "date": principal["date"],
-            "player": "",
-            "currentClub": "",
-            "destination": "",
-            "league": "Europa",
-            "url": principal["url"]
-        }
-
-        candidatos.append(candidato)
-
-    return candidatos
-
-
-# ==================================================
-# GUARDAR RESULTADOS
-# ==================================================
-
-def guardar_candidatos(novos):
-    antigos = []
-
-    if os.path.exists(FICHEIRO_SAIDA):
-        try:
-            with open(
-                FICHEIRO_SAIDA,
-                "r",
-                encoding="utf-8"
-            ) as ficheiro:
-                antigos = json.load(ficheiro)
-
-        except Exception:
-            antigos = []
-
-    mapa = {}
-
-    for candidato in antigos + novos:
-        chave = normalizar(
-            candidato.get("title", "")
-        )
-
-        if chave:
-            mapa[chave] = candidato
-
-    resultados = sorted(
-        mapa.values(),
+    results.sort(
         key=lambda item: item.get("date", ""),
         reverse=True
     )
 
-    resultados = resultados[:LIMITE_CANDIDATOS]
+    return results[:MAX_CANDIDATES]
+
+
+# =====================================================
+# IDENTIFICAÇÃO DE ARTIGOS SEMELHANTES
+# =====================================================
+
+def similarity(first, second):
+    return SequenceMatcher(
+        None,
+        normalize(first),
+        normalize(second)
+    ).ratio()
+
+
+def find_similar_articles(articles):
+    groups = []
+
+    for article in articles:
+        found = False
+
+        for group in groups:
+            reference = group[0]
+
+            if similarity(
+                article["title"],
+                reference["title"]
+            ) >= 0.82:
+
+                group.append(article)
+                found = True
+                break
+
+        if not found:
+            groups.append([article])
+
+    return groups
+
+
+# =====================================================
+# RELATÓRIO DE FONTES
+# =====================================================
+
+def build_source_report(articles):
+    groups = find_similar_articles(articles)
+
+    report = []
+
+    for group in groups:
+        domains = sorted({
+            article["domain"]
+            for article in group
+        })
+
+        report.append({
+            "title": group[0]["title"],
+            "articlesFound": len(group),
+            "differentDomains": len(domains),
+            "sources": [
+                {
+                    "name": article["source"],
+                    "url": article["url"],
+                    "date": article["date"]
+                }
+                for article in group
+            ],
+            "editorialStatus": "Por verificar"
+        })
+
+    return report
+
+
+# =====================================================
+# GUARDAR RESULTADOS
+# =====================================================
+
+def save_json(filename, data):
+    temporary = filename + ".tmp"
 
     with open(
-        FICHEIRO_SAIDA,
+        temporary,
         "w",
         encoding="utf-8"
-    ) as ficheiro:
-
+    ) as file:
         json.dump(
-            resultados,
-            ficheiro,
+            data,
+            file,
             ensure_ascii=False,
             indent=2
         )
 
-    print(
-        f"Foram guardados {len(resultados)} candidatos."
-    )
+    os.replace(temporary, filename)
 
 
-# ==================================================
+# =====================================================
 # EXECUÇÃO PRINCIPAL
-# ==================================================
+# =====================================================
 
 def main():
-    print("=" * 50)
-    print("TRANSFER MARKET — ATUALIZAÇÃO AUTOMÁTICA")
-    print("=" * 50)
+    print("=" * 55)
+    print("TRANSFER MARKET — MOTOR V2.0")
+    print("=" * 55)
 
-    noticias = recolher_noticias()
+    previous = load_previous()
 
     print(
-        f"Artigos de transferências encontrados: "
-        f"{len(noticias)}"
+        "Artigos no histórico:",
+        len(previous)
     )
 
-    grupos = agrupar_noticias(noticias)
+    articles = collect_articles()
 
-    candidatos = criar_candidatos(grupos)
+    print(
+        "Novos artigos recolhidos:",
+        len(articles)
+    )
 
-    guardar_candidatos(candidatos)
+    candidates = merge_articles(
+        previous,
+        articles
+    )
 
-    print("Atualização terminada.")
+    report = build_source_report(
+        articles
+    )
+
+    save_json(
+        OUTPUT_FILE,
+        candidates
+    )
+
+    save_json(
+        "relatorio_fontes.json",
+        report
+    )
+
+    print(
+        "Candidatos guardados:",
+        len(candidates)
+    )
+
+    print(
+        "Grupos de artigos encontrados:",
+        len(report)
+    )
+
+    print("Atualização concluída.")
 
 
 if __name__ == "__main__":
