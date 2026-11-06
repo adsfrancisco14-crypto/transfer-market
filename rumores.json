@@ -1,0 +1,24 @@
+[
+  {
+    "player": "Exemplo de jogador",
+    "currentClub": "Clube atual",
+    "destination": "Possível destino",
+    "status": "Rumor",
+    "league": "Europa",
+    "summary": "Este é um cartão demonstrativo para mostrar o formato de uma notícia. Não corresponde a uma informação real do mercado.",
+    "source": "Exemplo — substituir por fonte real",
+    "date": "Demonstração",
+    "url": "#"
+  },
+  {
+    "player": "Outro exemplo",
+    "currentClub": "Clube de origem",
+    "destination": "Clube interessado",
+    "status": "Negociações",
+    "league": "Inglaterra",
+    "summary": "Os dados reais só devem ser publicados depois de verificados e acompanhados de uma ligação para a fonte original.",
+    "source": "Exemplo — substituir por fonte real",
+    "date": "Demonstração",
+    "url": "#"
+  }
+]

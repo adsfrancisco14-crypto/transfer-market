@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Transfer Radar — acompanha rumores, negociações e transferências do futebol europeu.">
+  <title>Transfer Radar | TRANSFER MARKET</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="index.html"><span class="brand-mark">TM</span><span>TRANSFER<span class="accent"> MARKET</span></span></a>
+  <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+  <nav class="main-nav"><a href="index.html">Início</a><a class="active" href="rumores.html">Transfer Radar</a><a href="index.html#sobre">Sobre</a></nav>
+  <a class="header-cta" href="index.html">Página inicial <span>↗</span></a>
+</header>
+<main class="radar-page">
+  <section class="radar-intro">
+    <p class="eyebrow"><span class="live-dot"></span> TRANSFER MARKET / RADAR</p>
+    <h1>TRANSFER<br><span class="accent">RADAR.</span></h1>
+    <p>Todos os movimentos. Uma visão clara do mercado.</p>
+    <div class="radar-meta"><span>FUTEBOL EUROPEU</span><span>•</span><span id="today-label">EDIÇÃO</span></div>
+  </section>
+
+  <section class="radar-layout">
+    <aside class="filter-panel">
+      <p class="eyebrow">AFINAR RESULTADOS</p>
+      <label for="search">Pesquisar</label>
+      <input id="search" type="search" placeholder="Jogador, clube ou destino…">
+      <label for="status-filter">Estado</label>
+      <select id="status-filter">
+        <option value="all">Todos os estados</option>
+        <option value="Interesse">Interesse</option>
+        <option value="Rumor">Rumor</option>
+        <option value="Negociações">Negociações</option>
+        <option value="Acordo próximo">Acordo próximo</option>
+        <option value="Confirmada">Confirmada</option>
+      </select>
+      <label for="league-filter">Competição / região</label>
+      <select id="league-filter"><option value="all">Todas</option><option value="Inglaterra">Inglaterra</option><option value="Espanha">Espanha</option><option value="Itália">Itália</option><option value="Alemanha">Alemanha</option><option value="França">França</option><option value="Portugal">Portugal</option><option value="Europa">Europa</option></select>
+      <button id="clear-filters" class="btn btn-outline full-width">Limpar filtros</button>
+      <div class="source-note"><strong>POLÍTICA DE FONTES</strong><p>Fontes identificadas e links originais. Publicações do X não são utilizadas como fonte.</p></div>
+    </aside>
+
+    <section class="feed-section">
+      <div class="feed-top"><div><p class="eyebrow">ACOMPANHAMENTO</p><h2>ÚLTIMAS MOVIMENTAÇÕES</h2></div><span class="result-count" id="result-count">A carregar…</span></div>
+      <div class="demo-alert"><strong>Pré-visualização:</strong> ainda não existem notícias reais ligadas ao site. Os exemplos abaixo são demonstrativos e não representam rumores verdadeiros.</div>
+      <div id="rumour-feed" class="rumour-feed" aria-live="polite"></div>
+      <div id="empty-state" class="empty-state" hidden><strong>Não encontrámos resultados.</strong><p>Experimenta alterar a pesquisa ou os filtros.</p></div>
+    </section>
+  </section>
+</main>
+<footer class="footer"><a class="brand" href="index.html"><span class="brand-mark">TM</span><span>TRANSFER<span class="accent"> MARKET</span></span></a><span>O mercado em movimento.</span><span>© <span id="year"></span> TRANSFER MARKET</span></footer>
+<script src="script.js"></script>
+<script src="radar.js"></script>
+</body>
+</html>
