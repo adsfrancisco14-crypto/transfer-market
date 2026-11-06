@@ -1,1 +1,49 @@
+name: Atualizar radar de transferências
 
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: transfer-market-update
+  cancel-in-progress: false
+
+jobs:
+  atualizar-rumores:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Obter o repositório
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install feedparser
+
+      - name: Procurar notícias de transferências
+        run: python atualizar_rumores.py
+
+      - name: Guardar novos candidatos
+        run: |
+          git config user.name "Transfer Market Bot"
+          git config user.email "actions@users.noreply.github.com"
+
+          git add candidatos.json
+
+          if ! git diff --cached --quiet; then
+            git commit -m "Atualização automática de candidatos"
+            git push
+          else
+            echo "Não existem alterações."
+          fi
