@@ -1,52 +1,31 @@
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
 ============================================================
-TRANSFER MARKET — INTELLIGENCE ENGINE V4.0
+TRANSFER MARKET — INTELLIGENCE ENGINE V5.0
 ============================================================
-- Pesquisa notícias de transferências.
-- Traduz títulos e resumos para português.
-- Guarda os textos originais em inglês.
-- Identifica rumores e negociações.
-- Deteta notícias repetidas.
-- Identifica jogadores através de players.json.
-- Guarda candidatos em candidatos.json.
-- Cria relatório de fontes.
+- Recolha automática de notícias.
+- Tradução para português de Portugal.
+- Preservação dos textos originais.
+- Compatibilidade com o formato antigo do site.
+- Identificação de jogadores e clubes.
+- Deteção de notícias repetidas.
+- Preservação das decisões editoriais.
+- Ordenação das notícias mais recentes.
+- Relatórios de fontes e histórico.
 - Não altera rumores.json.
 ============================================================
 """
-
-# ============================================================
-# INSTALAÇÃO AUTOMÁTICA
-# ============================================================
-
-import importlib.util
-import subprocess
-import sys
-
-def instalar(modulo, pacote):
-    if importlib.util.find_spec(modulo) is None:
-        print("A instalar:", pacote)
-        subprocess.check_call([
-            sys.executable, "-m", "pip",
-            "install", "--disable-pip-version-check", pacote
-        ])
-
-instalar("feedparser", "feedparser")
-instalar("deep_translator", "deep-translator")
-
-# ============================================================
-# IMPORTAÇÕES
-# ============================================================
 
 import os
 import re
 import json
 import hashlib
 import logging
-import unicodedata
 import time
+import unicodedata
 
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
@@ -58,11 +37,12 @@ from html import unescape
 import feedparser
 from deep_translator import GoogleTranslator
 
+
 # ============================================================
 # CONFIGURAÇÕES
 # ============================================================
 
-VERSAO = "4.0"
+VERSAO = "5.0"
 
 PASTA = Path(__file__).resolve().parent
 
@@ -73,7 +53,7 @@ FICHEIRO_JOGADORES = PASTA / "players.json"
 
 IDADE_MAXIMA = 30
 MAXIMO_CANDIDATOS = 300
-SIMILARIDADE = 0.78
+SIMILARIDADE = 0.82
 
 logging.basicConfig(
     level=logging.INFO,
@@ -81,6 +61,7 @@ logging.basicConfig(
 )
 
 log = logging.getLogger("TRANSFER MARKET")
+
 
 # ============================================================
 # FONTES RSS
@@ -97,12 +78,12 @@ FONTES = [
     }
 ]
 
-# Fonte adicional opcional
 if os.getenv("FABRIZIO_RSS_URL"):
     FONTES.append({
         "nome": "Fonte adicional",
         "url": os.getenv("FABRIZIO_RSS_URL")
     })
+
 
 # ============================================================
 # PALAVRAS-CHAVE
@@ -111,23 +92,27 @@ if os.getenv("FABRIZIO_RSS_URL"):
 PALAVRAS_MERCADO = [
     "transfer", "transfers", "transfer news",
     "transfer rumour", "transfer rumor",
-    "signing", "signed", "signs for",
-    "deal", "agreement", "loan",
-    "bid", "offer", "interest",
-    "target", "talks", "negotiations",
-    "contract", "release clause",
-    "medical", "here we go",
-    "mercato", "fichajes",
+    "transfermarkt", "signing", "signed",
+    "signs for", "deal", "agreement",
+    "loan move", "loan deal", "bid",
+    "offer", "interest from", "transfer target",
+    "talks over", "negotiations",
+    "release clause", "medical",
+    "here we go", "fichajes", "mercato",
     "transferência", "contratação",
     "empréstimo", "negociações",
-    "proposta"
+    "proposta de transferência"
 ]
 
 PALAVRAS_CONFIRMADAS = [
-    "official", "confirmed",
-    "completes move", "has joined",
-    "joins", "signed for",
-    "announces", "officially"
+    "officially announced",
+    "official announcement",
+    "confirmed the signing",
+    "completes move",
+    "has joined",
+    "joins",
+    "signed for",
+    "official"
 ]
 
 PALAVRAS_AVANCADAS = [
@@ -136,6 +121,7 @@ PALAVRAS_AVANCADAS = [
     "verbal agreement",
     "personal terms agreed",
     "medical booked",
+    "medical scheduled",
     "final stages",
     "advanced talks"
 ]
@@ -171,8 +157,13 @@ EXCLUSOES = [
     "fixtures",
     "standings",
     "injury update",
-    "predicted lineup"
+    "predicted lineup",
+    "player ratings",
+    "match reaction",
+    "post-match",
+    "champions league result"
 ]
+
 
 # ============================================================
 # FUNÇÕES GERAIS
@@ -208,7 +199,6 @@ def limpar_texto(texto):
     )
 
     texto = re.sub(r"<[^>]+>", " ", texto)
-
     texto = re.sub(r"\s+", " ", texto)
 
     return texto.strip()
@@ -225,7 +215,11 @@ def normalizar(texto):
         if not unicodedata.combining(c)
     )
 
-    return re.sub(r"[^a-z0-9 ]+", " ", texto).strip()
+    return re.sub(
+        r"[^a-z0-9 ]+",
+        " ",
+        texto
+    ).strip()
 
 
 def normalizar_url(url):
@@ -294,7 +288,7 @@ def guardar_json(ficheiro, dados):
 
 
 # ============================================================
-# TRADUÇÃO AUTOMÁTICA
+# TRADUÇÃO
 # ============================================================
 
 CACHE_TRADUCAO = {}
@@ -312,29 +306,43 @@ def traduzir(texto):
 
     try:
 
-        resultado = GoogleTranslator(
+        tradutor = GoogleTranslator(
             source="auto",
             target="pt"
-        ).translate(texto)
+        )
 
-        if resultado:
-            resultado = resultado.strip()
-        else:
-            resultado = texto
+        # Evitar enviar textos demasiado grandes de uma só vez.
+        partes = [
+            texto[i:i + 4000]
+            for i in range(0, len(texto), 4000)
+        ]
 
-        CACHE_TRADUCAO[texto] = resultado
+        resultado = []
 
-        time.sleep(0.25)
+        for parte in partes:
 
-        return resultado
+            traducao = tradutor.translate(parte)
+
+            resultado.append(
+                traducao if traducao else parte
+            )
+
+            time.sleep(0.3)
+
+        texto_final = " ".join(resultado).strip()
+
+        CACHE_TRADUCAO[texto] = texto_final
+
+        return texto_final
 
     except Exception as erro:
 
         log.warning(
-            "Erro na tradução: %s",
+            "Não foi possível traduzir: %s",
             erro
         )
 
+        # Se a tradução falhar, conserva o original.
         return texto
 
 
@@ -370,10 +378,10 @@ def obter_data(entry):
 
             try:
 
-                from time import mktime
+                from calendar import timegm
 
                 return datetime.fromtimestamp(
-                    mktime(valor),
+                    timegm(valor),
                     timezone.utc
                 )
 
@@ -384,7 +392,7 @@ def obter_data(entry):
 
 
 # ============================================================
-# CLASSIFICAÇÃO DAS NOTÍCIAS
+# CLASSIFICAÇÃO
 # ============================================================
 
 def classificar(titulo, resumo):
@@ -392,7 +400,6 @@ def classificar(titulo, resumo):
     texto = normalizar(titulo + " " + resumo)
 
     pontuacao = 0
-
     motivos = []
 
     palavras_encontradas = [
@@ -403,11 +410,13 @@ def classificar(titulo, resumo):
 
     pontuacao += min(
         60,
-        len(palavras_encontradas) * 15
+        len(palavras_encontradas) * 20
     )
 
     if palavras_encontradas:
-        motivos.append("Palavras-chave de transferências")
+        motivos.append(
+            "Palavras-chave relacionadas com transferências"
+        )
 
     if any(
         normalizar(p) in texto
@@ -415,9 +424,7 @@ def classificar(titulo, resumo):
     ):
 
         estado = "Possível confirmação"
-
         pontuacao += 25
-
         motivos.append("Linguagem de confirmação")
 
     elif any(
@@ -426,10 +433,8 @@ def classificar(titulo, resumo):
     ):
 
         estado = "Possível acordo avançado"
-
         pontuacao += 20
-
-        motivos.append("Acordo avançado")
+        motivos.append("Possível acordo avançado")
 
     elif any(
         normalizar(p) in texto
@@ -437,9 +442,7 @@ def classificar(titulo, resumo):
     ):
 
         estado = "Negociações"
-
         pontuacao += 15
-
         motivos.append("Possíveis negociações")
 
     elif any(
@@ -448,9 +451,7 @@ def classificar(titulo, resumo):
     ):
 
         estado = "Rumor"
-
         pontuacao += 10
-
         motivos.append("Possível rumor")
 
     else:
@@ -462,9 +463,8 @@ def classificar(titulo, resumo):
         for p in EXCLUSOES
     ):
 
-        pontuacao -= 35
-
-        motivos.append("Possível notícia geral")
+        pontuacao -= 50
+        motivos.append("Notícia aparentemente não relacionada")
 
     return (
         estado,
@@ -513,7 +513,7 @@ def carregar_jogadores():
 
 def encontrar_jogadores(texto, jogadores):
 
-    texto = normalizar(texto)
+    texto_normalizado = normalizar(texto)
 
     encontrados = []
 
@@ -521,7 +521,12 @@ def encontrar_jogadores(texto, jogadores):
 
         nome = jogador["name"]
 
-        if normalizar(nome) in texto:
+        nome_normalizado = normalizar(nome)
+
+        if nome_normalizado and re.search(
+            r"\b" + re.escape(nome_normalizado) + r"\b",
+            texto_normalizado
+        ):
 
             encontrados.append(jogador)
 
@@ -529,7 +534,7 @@ def encontrar_jogadores(texto, jogadores):
 
 
 # ============================================================
-# RECOLHA DE NOTÍCIAS
+# RECOLHA RSS
 # ============================================================
 
 def recolher_fonte(fonte):
@@ -551,7 +556,6 @@ def recolher_fonte(fonte):
         feed = feedparser.parse(fonte["url"])
 
         if getattr(feed, "bozo", False) and not feed.entries:
-
             raise Exception("Feed RSS indisponível")
 
         limite = agora() - timedelta(
@@ -591,9 +595,7 @@ def recolher_fonte(fonte):
             noticias.append({
 
                 "title": titulo,
-
                 "summary": resumo,
-
                 "url": url,
 
                 "date": (
@@ -612,7 +614,6 @@ def recolher_fonte(fonte):
     except Exception as erro:
 
         relatorio["status"] = "erro"
-
         relatorio["error"] = str(erro)
 
         log.error(
@@ -631,7 +632,6 @@ def recolher_fonte(fonte):
 def criar_candidato(noticia, jogadores):
 
     titulo_original = noticia["title"]
-
     resumo_original = noticia["summary"]
 
     estado, pontuacao, motivos = classificar(
@@ -639,7 +639,8 @@ def criar_candidato(noticia, jogadores):
         resumo_original
     )
 
-    if pontuacao < 15:
+    # Filtro para reduzir notícias sem relação com transferências.
+    if pontuacao < 25:
         return None
 
     encontrados = encontrar_jogadores(
@@ -648,17 +649,14 @@ def criar_candidato(noticia, jogadores):
     )
 
     jogador = ""
-
     clube = ""
 
     if encontrados:
 
         jogador = encontrados[0]["name"]
-
         clube = encontrados[0]["currentClub"]
 
     titulo_pt = traduzir(titulo_original)
-
     resumo_pt = traduzir(resumo_original)
 
     identificador = criar_id(
@@ -666,63 +664,110 @@ def criar_candidato(noticia, jogadores):
         titulo_original
     )
 
+    data = noticia["date"]
+
     return {
 
+        # Identificação
         "id": identificador,
 
+        # Campos utilizados pelo site antigo
         "title": titulo_pt,
-
         "summary": resumo_pt,
-
-        "originalTitle": titulo_original,
-
-        "originalSummary": resumo_original,
-
-        "originalLanguage": "en",
-
-        "displayLanguage": "pt-PT",
-
         "source": noticia["source"],
-
         "domain": noticia["domain"],
-
         "url": noticia["url"],
-
-        "date": noticia["date"],
-
-        "collectedAt": data_atual(),
-
-        "player": jogador,
-
-        "currentClub": clube,
-
-        "destination": "",
-
+        "date": data,
+        "firstSeen": data_atual(),
+        "lastSeen": data_atual(),
         "status": estado,
+        "verification": "Artigo recolhido automaticamente. Aguarda verificação editorial.",
+        "player": jogador,
+        "currentClub": clube,
+        "destination": "",
+        "detectedClubs": [clube] if clube else [],
+        "classification": "Notícia de transferências",
+        "transferRelevance": pontuacao,
 
+        # Campos novos da versão V5
+        "originalTitle": titulo_original,
+        "originalSummary": resumo_original,
+        "originalLanguage": "en",
+        "displayLanguage": "pt-PT",
+        "collectedAt": data_atual(),
         "suggestedStatus": estado,
-
         "relevance": pontuacao,
-
         "classificationReasons": motivos,
-
         "detectedPlayers": [
             j["name"] for j in encontrados
         ],
-
         "editorApproved": False,
-
         "editorStatus": "Por verificar",
-
         "editorNotes": "",
-
-        "independentSources": [
-            noticia["source"]
-        ],
-
+        "independentSources": [noticia["source"]],
+        "sourceCount": 1,
         "engineVersion": VERSAO
-
     }
+
+
+# ============================================================
+# ATUALIZAR CANDIDATOS ANTIGOS
+# ============================================================
+
+def atualizar_candidato_antigo(candidato):
+
+    if not isinstance(candidato, dict):
+        return candidato
+
+    titulo = limpar_texto(
+        candidato.get("originalTitle")
+        or candidato.get("title", "")
+    )
+
+    resumo = limpar_texto(
+        candidato.get("originalSummary")
+        or candidato.get("summary", "")
+    )
+
+    if not titulo:
+        return candidato
+
+    # Guardar o título original antes da tradução.
+    candidato["originalTitle"] = titulo
+    candidato["originalSummary"] = resumo
+
+    # Traduzir apenas quando ainda não está marcado como português.
+    if candidato.get("displayLanguage") != "pt-PT":
+
+        candidato["title"] = traduzir(titulo)
+        candidato["summary"] = traduzir(resumo)
+
+        candidato["originalLanguage"] = candidato.get(
+            "originalLanguage",
+            "en"
+        )
+
+        candidato["displayLanguage"] = "pt-PT"
+
+    # Preservar os campos antigos.
+    candidato.setdefault("firstSeen", data_atual())
+    candidato.setdefault("lastSeen", data_atual())
+    candidato.setdefault("verification", "Aguarda verificação editorial.")
+    candidato.setdefault("classification", "Notícia de transferências")
+    candidato.setdefault("transferRelevance", candidato.get("relevance", 0))
+    candidato.setdefault("detectedClubs", [])
+    candidato.setdefault("destination", "")
+    candidato.setdefault("player", "")
+    candidato.setdefault("currentClub", "")
+
+    # Preservar decisões editoriais.
+    candidato.setdefault("editorApproved", False)
+    candidato.setdefault("editorStatus", "Por verificar")
+    candidato.setdefault("editorNotes", "")
+
+    candidato["engineVersion"] = VERSAO
+
+    return candidato
 
 
 # ============================================================
@@ -767,13 +812,10 @@ def agrupar_duplicados(candidatos):
             ):
 
                 grupo.append(candidato)
-
                 encontrado = True
-
                 break
 
         if not encontrado:
-
             grupos.append([candidato])
 
     resultado = []
@@ -783,12 +825,12 @@ def agrupar_duplicados(candidatos):
         principal = grupo[0]
 
         fontes = sorted(set(
-            item["source"]
+            item.get("source", "")
             for item in grupo
+            if item.get("source")
         ))
 
         principal["independentSources"] = fontes
-
         principal["sourceCount"] = len(fontes)
 
         resultado.append(principal)
@@ -802,10 +844,7 @@ def agrupar_duplicados(candidatos):
 
 def executar():
 
-    log.info(
-        "A iniciar TRANSFER MARKET V%s",
-        VERSAO
-    )
+    log.info("A iniciar TRANSFER MARKET V%s", VERSAO)
 
     jogadores = carregar_jogadores()
 
@@ -817,36 +856,36 @@ def executar():
     if not isinstance(anteriores, list):
         anteriores = []
 
-    anteriores_por_id = {
-        item["id"]: item
-        for item in anteriores
-        if isinstance(item, dict) and item.get("id")
-    }
+    # Migrar e preservar os candidatos antigos.
+    anteriores_por_id = {}
+
+    for item in anteriores:
+
+        if not isinstance(item, dict):
+            continue
+
+        if not item.get("id"):
+            continue
+
+        item = atualizar_candidato_antigo(item)
+
+        anteriores_por_id[item["id"]] = item
 
     noticias = []
-
     relatorios = []
 
     # --------------------------------------------------------
-    # RECOLHER TODAS AS FONTES
+    # RECOLHER FONTES
     # --------------------------------------------------------
 
     for fonte in FONTES:
 
-        log.info(
-            "A pesquisar: %s",
-            fonte["nome"]
-        )
+        log.info("A pesquisar: %s", fonte["nome"])
 
-        resultados, relatorio = recolher_fonte(
-            fonte
-        )
+        resultados, relatorio = recolher_fonte(fonte)
 
         noticias.extend(resultados)
-
         relatorios.append(relatorio)
-
-    # Mais recentes primeiro
 
     noticias.sort(
         key=lambda n: n.get("date", ""),
@@ -854,7 +893,6 @@ def executar():
     )
 
     novos = []
-
     ids_processados = set()
 
     # --------------------------------------------------------
@@ -874,6 +912,8 @@ def executar():
         ids_processados.add(identificador)
 
         if identificador in anteriores_por_id:
+
+            anteriores_por_id[identificador]["lastSeen"] = data_atual()
             continue
 
         candidato = criar_candidato(
@@ -882,28 +922,19 @@ def executar():
         )
 
         if candidato:
-
             novos.append(candidato)
 
     # --------------------------------------------------------
-    # AGRUPAR DUPLICADOS
+    # DUPLICADOS
     # --------------------------------------------------------
 
     novos = agrupar_duplicados(novos)
 
     # --------------------------------------------------------
-    # PRESERVAR HISTÓRICO E DECISÕES EDITORIAIS
+    # PRESERVAR CANDIDATOS E DECISÕES
     # --------------------------------------------------------
 
-    todos = {}
-
-    for antigo in anteriores:
-
-        if not isinstance(antigo, dict):
-            continue
-
-        if antigo.get("id"):
-            todos[antigo["id"]] = antigo
+    todos = dict(anteriores_por_id)
 
     for novo in novos:
 
@@ -920,23 +951,22 @@ def executar():
             "editorStatus",
             "manualPlayer",
             "manualCurrentClub",
-            "manualDestination"
+            "manualDestination",
+            "status",
+            "verification"
         ]:
 
             if campo in antigo:
-
                 novo[campo] = antigo[campo]
 
         todos[identificador] = novo
 
     candidatos = list(todos.values())
 
-    # Ordenação
-
     candidatos.sort(
         key=lambda n: (
             n.get("date", ""),
-            n.get("relevance", 0)
+            n.get("relevance", n.get("transferRelevance", 0))
         ),
         reverse=True
     )
@@ -944,74 +974,49 @@ def executar():
     candidatos = candidatos[:MAXIMO_CANDIDATOS]
 
     # --------------------------------------------------------
-    # RELATÓRIO DAS FONTES
+    # RELATÓRIO
     # --------------------------------------------------------
 
     for relatorio in relatorios:
 
         relatorio["candidatesKept"] = sum(
             1 for n in novos
-            if n["source"] == relatorio["source"]
+            if n.get("source") == relatorio["source"]
         )
 
     relatorio_final = {
 
         "engine": "TRANSFER MARKET",
-
         "version": VERSAO,
-
         "generatedAt": data_atual(),
 
         "translation": {
-
             "enabled": True,
-
             "target": "pt-PT",
-
             "provider": "GoogleTranslator",
-
             "originalPreserved": True
-
         },
 
         "automaticPublication": False,
-
         "xPostsUsed": False,
 
         "totals": {
-
             "sources": len(FONTES),
-
             "articlesCollected": len(noticias),
-
             "newCandidates": len(novos),
-
             "totalCandidates": len(candidatos),
-
             "awaitingReview": sum(
                 1 for n in candidatos
                 if not n.get("editorApproved", False)
             )
-
         },
 
         "sourcesReport": relatorios
-
     }
 
     # --------------------------------------------------------
-    # GUARDAR FICHEIROS
+    # HISTÓRICO
     # --------------------------------------------------------
-
-    guardar_json(
-        FICHEIRO_SAIDA,
-        candidatos
-    )
-
-    guardar_json(
-        FICHEIRO_RELATORIO,
-        relatorio_final
-    )
 
     historico = carregar_json(
         FICHEIRO_HISTORICO,
@@ -1032,6 +1037,21 @@ def executar():
     )[-10000:]
 
     historico["updatedAt"] = data_atual()
+    historico["engineVersion"] = VERSAO
+
+    # --------------------------------------------------------
+    # GUARDAR
+    # --------------------------------------------------------
+
+    guardar_json(
+        FICHEIRO_SAIDA,
+        candidatos
+    )
+
+    guardar_json(
+        FICHEIRO_RELATORIO,
+        relatorio_final
+    )
 
     guardar_json(
         FICHEIRO_HISTORICO,
@@ -1043,38 +1063,23 @@ def executar():
     # --------------------------------------------------------
 
     log.info("--------------------------------")
-
     log.info("TRANSFER MARKET concluído!")
-
-    log.info(
-        "Novos candidatos: %s",
-        len(novos)
-    )
-
-    log.info(
-        "Total de candidatos: %s",
-        len(candidatos)
-    )
-
-    log.info(
-        "Ficheiro: candidatos.json"
-    )
-
-    log.info(
-        "Relatório: relatorio_fontes.json"
-    )
-
+    log.info("Versão: %s", VERSAO)
+    log.info("Novos candidatos: %s", len(novos))
+    log.info("Total de candidatos: %s", len(candidatos))
+    log.info("Tradução: português")
+    log.info("Ficheiro: candidatos.json")
+    log.info("Relatório: relatorio_fontes.json")
     log.info("--------------------------------")
 
 
 # ============================================================
-# INICIAR MOTOR
+# INICIAR
 # ============================================================
 
 if __name__ == "__main__":
 
     try:
-
         executar()
 
     except Exception as erro:
