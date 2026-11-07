@@ -1330,3 +1330,1335 @@ h2 {
     transform: rotate(90deg);
   }
 }
+
+/* ==========================================================
+   TRANSFER MARKET — DESIGN SYSTEM
+   Versão 2.0 | Folha de estilos completa
+   ========================================================== */
+
+/* ----------------------------------------------------------
+   1. VARIÁVEIS E CONFIGURAÇÕES
+   ---------------------------------------------------------- */
+
+:root {
+  --background: #080b10;
+  --background-soft: #0d121a;
+  --surface: #111923;
+  --surface-light: #172331;
+  --surface-hover: #1c2a3a;
+
+  --text: #f4f7fb;
+  --text-soft: #a6b1bf;
+  --text-muted: #748295;
+
+  --accent: #b7f34a;
+  --accent-dark: #8fca28;
+
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  --green: #b7f34a;
+  --blue: #54a8ff;
+  --orange: #ffb454;
+  --yellow: #f1d45b;
+  --red: #ff6e72;
+  --purple: #b69cff;
+
+  --radius-small: 8px;
+  --radius-medium: 14px;
+  --radius-large: 22px;
+
+  --shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+
+  --font-main: "Inter", Arial, sans-serif;
+  --font-heading: "Barlow Condensed", Impact, sans-serif;
+
+  --container: 1240px;
+
+  color-scheme: dark;
+}
+
+/* ----------------------------------------------------------
+   2. RESET
+   ---------------------------------------------------------- */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      ellipse at 75% 0%,
+      rgba(183, 243, 74, 0.055),
+      transparent 35%
+    ),
+    var(--background);
+  color: var(--text);
+  font-family: var(--font-main);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button,
+a,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--accent);
+  color: #10150b;
+}
+
+/* ----------------------------------------------------------
+   3. TIPOGRAFIA
+   ---------------------------------------------------------- */
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--text);
+  line-height: 1.1;
+}
+
+h1,
+h2 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: 0.015em;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.eyebrow {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* ----------------------------------------------------------
+   4. CABEÇALHO
+   ---------------------------------------------------------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 76px;
+  padding: 0 max(5%, calc((100% - var(--container)) / 2));
+  background: rgba(8, 11, 16, 0.92);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.brand-mark {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  background: var(--accent);
+  border-radius: 10px;
+  color: #10150b;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 34px;
+}
+
+.main-nav a {
+  position: relative;
+  padding: 27px 0;
+  color: var(--text-soft);
+  font-size: 12px;
+  font-weight: 700;
+  transition: color 0.2s ease;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+  color: var(--accent);
+}
+
+.main-nav a.active::after {
+  position: absolute;
+  right: 0;
+  bottom: 17px;
+  left: 0;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 5px;
+  content: "";
+}
+
+.header-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-small);
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 800;
+  transition: 0.2s ease;
+}
+
+.header-cta:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #10150b;
+}
+
+.menu-toggle {
+  display: none;
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  color: var(--text);
+  font-size: 20px;
+}
+
+/* ----------------------------------------------------------
+   5. PÁGINA DO RADAR
+   ---------------------------------------------------------- */
+
+.radar-page {
+  width: min(100% - 40px, var(--container));
+  margin: 0 auto;
+}
+
+/* ----------------------------------------------------------
+   6. INTRODUÇÃO
+   ---------------------------------------------------------- */
+
+.radar-intro {
+  position: relative;
+  overflow: hidden;
+  padding: 95px 0 65px;
+  border-bottom: 1px solid var(--border);
+}
+
+.radar-intro::after {
+  position: absolute;
+  top: 0;
+  right: 4%;
+  width: 310px;
+  height: 310px;
+  background: radial-gradient(
+    circle,
+    rgba(183, 243, 74, 0.09),
+    transparent 70%
+  );
+  pointer-events: none;
+  content: "";
+}
+
+.radar-intro .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  color: var(--accent);
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(183, 243, 74, 0.7);
+  animation: livePulse 2s infinite;
+}
+
+.radar-intro h1 {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 20px;
+  font-size: clamp(68px, 10vw, 116px);
+  letter-spacing: -0.025em;
+  line-height: 0.82;
+}
+
+.radar-intro > p:not(.eyebrow) {
+  margin-top: 27px;
+  color: var(--text-soft);
+  font-size: 16px;
+}
+
+.radar-meta {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-top: 28px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+/* ----------------------------------------------------------
+   7. LAYOUT PRINCIPAL
+   ---------------------------------------------------------- */
+
+.radar-layout {
+  display: grid;
+  grid-template-columns: 275px minmax(0, 1fr);
+  align-items: start;
+  gap: 35px;
+  padding: 55px 0 100px;
+}
+
+/* ----------------------------------------------------------
+   8. PAINEL DE FILTROS
+   ---------------------------------------------------------- */
+
+.filter-panel {
+  position: sticky;
+  top: 105px;
+  padding: 25px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
+}
+
+.filter-panel > .eyebrow {
+  margin-bottom: 26px;
+  color: var(--accent);
+}
+
+.filter-panel label {
+  display: block;
+  margin: 19px 0 8px;
+  color: var(--text-soft);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.filter-panel input,
+.filter-panel select {
+  width: 100%;
+  min-height: 45px;
+  padding: 0 13px;
+  background: var(--background-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  outline: none;
+  color: var(--text);
+  font-size: 12px;
+  transition: border-color 0.2s ease;
+}
+
+.filter-panel input::placeholder {
+  color: var(--text-muted);
+}
+
+.filter-panel input:focus,
+.filter-panel select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(183, 243, 74, 0.08);
+}
+
+.filter-panel select {
+  cursor: pointer;
+}
+
+.filter-panel option {
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* ----------------------------------------------------------
+   9. BOTÕES
+   ---------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 43px;
+  padding: 10px 17px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-small);
+  font-size: 11px;
+  font-weight: 800;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.btn-outline:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #10150b;
+}
+
+.full-width {
+  width: 100%;
+  margin-top: 22px;
+}
+
+/* ----------------------------------------------------------
+   10. POLÍTICA DE FONTES
+   ---------------------------------------------------------- */
+
+.source-note {
+  margin-top: 30px;
+  padding: 17px;
+  background: rgba(183, 243, 74, 0.045);
+  border: 1px solid rgba(183, 243, 74, 0.15);
+  border-radius: var(--radius-medium);
+}
+
+.source-note strong {
+  color: var(--accent);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+.source-note p {
+  margin-top: 9px;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+/* ----------------------------------------------------------
+   11. ÁREA DAS NOTÍCIAS
+   ---------------------------------------------------------- */
+
+.feed-section {
+  min-width: 0;
+}
+
+.feed-top {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.feed-top .eyebrow {
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+
+.feed-top h2 {
+  font-size: clamp(27px, 3vw, 37px);
+}
+
+.result-count {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  color: var(--text-soft);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* ----------------------------------------------------------
+   12. AVISO DE DEMONSTRAÇÃO
+   ---------------------------------------------------------- */
+
+.demo-alert {
+  margin-bottom: 22px;
+  padding: 15px 18px;
+  background: rgba(255, 180, 84, 0.07);
+  border: 1px solid rgba(255, 180, 84, 0.2);
+  border-radius: var(--radius-medium);
+  color: var(--text-soft);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.demo-alert strong {
+  color: var(--orange);
+}
+
+/* ----------------------------------------------------------
+   13. ESTATÍSTICAS
+   ---------------------------------------------------------- */
+
+.radar-statistics {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  padding: 16px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-medium);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-strong);
+}
+
+.stat-number {
+  color: var(--text);
+  font-family: var(--font-heading);
+  font-size: 31px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.stat-label {
+  color: var(--text-muted);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.stat-rumour .stat-number {
+  color: var(--orange);
+}
+
+.stat-negotiation .stat-number {
+  color: var(--blue);
+}
+
+.stat-close .stat-number {
+  color: var(--purple);
+}
+
+.stat-confirmed .stat-number {
+  color: var(--accent);
+}
+
+/* ----------------------------------------------------------
+   14. ORDENAÇÃO
+   ---------------------------------------------------------- */
+
+.radar-sort-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin: -7px 0 20px;
+}
+
+.radar-sort-wrapper label {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.radar-sort {
+  min-height: 37px;
+  padding: 0 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  color: var(--text);
+  font-size: 10px;
+  outline: none;
+}
+
+.radar-sort:focus {
+  border-color: var(--accent);
+}
+
+/* ----------------------------------------------------------
+   15. LISTA DE NOTÍCIAS
+   ---------------------------------------------------------- */
+
+.rumour-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rumour-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 23px;
+  background:
+    linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0.018),
+      transparent 55%
+    ),
+    var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  animation: cardAppear 0.35s ease both;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.rumour-card:hover {
+  transform: translateY(-3px);
+  background-color: var(--surface-light);
+  border-color: var(--border-strong);
+}
+
+.rumour-card::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  background: var(--text-muted);
+  content: "";
+}
+
+.rumour-card.status-border-interesse::before {
+  background: var(--blue);
+}
+
+.rumour-card.status-border-rumor::before {
+  background: var(--orange);
+}
+
+.rumour-card.status-border-negociacoes::before {
+  background: var(--blue);
+}
+
+.rumour-card.status-border-acordo-proximo::before {
+  background: var(--purple);
+}
+
+.rumour-card.status-border-confirmada::before {
+  background: var(--accent);
+}
+
+.rumour-main {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* ----------------------------------------------------------
+   16. CABEÇALHO DOS CARTÕES
+   ---------------------------------------------------------- */
+
+.rumour-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.player-area {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.player-name {
+  font-family: var(--font-heading);
+  font-size: 29px;
+  font-weight: 700;
+  letter-spacing: 0.015em;
+}
+
+.league-label {
+  color: var(--text-muted);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+/* ----------------------------------------------------------
+   17. ESTADOS DAS TRANSFERÊNCIAS
+   ---------------------------------------------------------- */
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 7px 11px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  color: var(--text-soft);
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.status-interesse {
+  background: rgba(84, 168, 255, 0.09);
+  border-color: rgba(84, 168, 255, 0.23);
+  color: var(--blue);
+}
+
+.status-rumor {
+  background: rgba(255, 180, 84, 0.09);
+  border-color: rgba(255, 180, 84, 0.23);
+  color: var(--orange);
+}
+
+.status-negociacoes {
+  background: rgba(84, 168, 255, 0.09);
+  border-color: rgba(84, 168, 255, 0.23);
+  color: var(--blue);
+}
+
+.status-acordo-proximo {
+  background: rgba(182, 156, 255, 0.09);
+  border-color: rgba(182, 156, 255, 0.23);
+  color: var(--purple);
+}
+
+.status-confirmada {
+  background: rgba(183, 243, 74, 0.09);
+  border-color: rgba(183, 243, 74, 0.23);
+  color: var(--accent);
+}
+
+/* ----------------------------------------------------------
+   18. PERCURSO DA TRANSFERÊNCIA
+   ---------------------------------------------------------- */
+
+.transfer-route {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(0, 0, 0, 0.17);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-medium);
+}
+
+.route-club {
+  color: var(--text-soft);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.route-destination {
+  color: var(--accent);
+}
+
+.route-arrow {
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+/* ----------------------------------------------------------
+   19. DESCRIÇÃO
+   ---------------------------------------------------------- */
+
+.rumour-summary {
+  color: var(--text-soft);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+/* ----------------------------------------------------------
+   20. METADADOS
+   ---------------------------------------------------------- */
+
+.rumour-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 13px 24px;
+  padding-top: 13px;
+  border-top: 1px solid var(--border);
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 90px;
+}
+
+.meta-label {
+  color: var(--text-muted);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.meta-value {
+  color: var(--text-soft);
+  font-size: 10px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* ----------------------------------------------------------
+   21. CREDIBILIDADE
+   ---------------------------------------------------------- */
+
+.credibility-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-medium);
+}
+
+.credibility-label {
+  color: var(--text-soft);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.credibility-bar {
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+
+.credibility-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: inherit;
+  transition: width 0.4s ease;
+}
+
+.credibility-reason {
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+/* ----------------------------------------------------------
+   22. ETIQUETAS
+   ---------------------------------------------------------- */
+
+.rumour-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.rumour-tag {
+  padding: 5px 9px;
+  background: rgba(183, 243, 74, 0.06);
+  border: 1px solid rgba(183, 243, 74, 0.14);
+  border-radius: 30px;
+  color: var(--accent);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+/* ----------------------------------------------------------
+   23. RODAPÉ DO CARTÃO
+   ---------------------------------------------------------- */
+
+.rumour-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+  padding-top: 15px;
+  border-top: 1px solid var(--border);
+}
+
+.status-description {
+  color: var(--text-muted);
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.source-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 800;
+  transition: color 0.2s ease;
+}
+
+.source-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* ----------------------------------------------------------
+   24. ESTADO VAZIO
+   ---------------------------------------------------------- */
+
+.empty-state {
+  padding: 55px 25px;
+  background: var(--surface);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-large);
+  text-align: center;
+}
+
+.empty-state[hidden] {
+  display: none;
+}
+
+.empty-state strong {
+  color: var(--text);
+  font-size: 15px;
+}
+
+.empty-state p {
+  margin-top: 8px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+/* ----------------------------------------------------------
+   25. ERROS
+   ---------------------------------------------------------- */
+
+.radar-error {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 25px;
+  background: rgba(255, 110, 114, 0.06);
+  border: 1px solid rgba(255, 110, 114, 0.2);
+  border-radius: var(--radius-large);
+}
+
+.radar-error strong {
+  color: var(--red);
+  font-size: 14px;
+}
+
+.radar-error p {
+  color: var(--text-soft);
+  font-size: 11px;
+}
+
+.radar-error .btn {
+  margin-top: 5px;
+}
+
+/* ----------------------------------------------------------
+   26. RODAPÉ DO SITE
+   ---------------------------------------------------------- */
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  min-height: 100px;
+  padding: 25px max(5%, calc((100% - var(--container)) / 2));
+  background: #06090d;
+  border-top: 1px solid var(--border);
+}
+
+.footer > span {
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.footer .brand {
+  font-size: 12px;
+}
+
+.footer .brand-mark {
+  width: 32px;
+  height: 32px;
+  font-size: 11px;
+}
+
+/* ----------------------------------------------------------
+   27. ANIMAÇÕES
+   ---------------------------------------------------------- */
+
+@keyframes livePulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 12px rgba(183, 243, 74, 0.7);
+  }
+
+  50% {
+    opacity: 0.45;
+    box-shadow: 0 0 3px rgba(183, 243, 74, 0.2);
+  }
+}
+
+@keyframes cardAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----------------------------------------------------------
+   28. ACESSIBILIDADE
+   ---------------------------------------------------------- */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ----------------------------------------------------------
+   29. TABLETS
+   ---------------------------------------------------------- */
+
+@media (max-width: 1000px) {
+  .radar-layout {
+    grid-template-columns: 235px minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  .filter-panel {
+    padding: 19px;
+  }
+
+  .radar-statistics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .radar-intro h1 {
+    font-size: clamp(65px, 10vw, 95px);
+  }
+}
+
+/* ----------------------------------------------------------
+   30. MENU E ECRÃS MÉDIOS
+   ---------------------------------------------------------- */
+
+@media (max-width: 760px) {
+  .site-header {
+    min-height: 68px;
+    padding: 0 20px;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .header-cta {
+    display: none;
+  }
+
+  .main-nav {
+    position: absolute;
+    top: 68px;
+    right: 0;
+    left: 0;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 10px 20px 18px;
+    background: #0b1017;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .main-nav.open {
+    display: flex;
+  }
+
+  .main-nav a {
+    padding: 14px 5px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .main-nav a.active::after {
+    display: none;
+  }
+
+  .radar-page {
+    width: min(100% - 32px, var(--container));
+  }
+
+  .radar-intro {
+    padding: 70px 0 45px;
+  }
+
+  .radar-layout {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-top: 30px;
+  }
+
+  .filter-panel {
+    position: static;
+  }
+
+  .filter-panel .source-note {
+    margin-top: 22px;
+  }
+
+  .feed-top {
+    align-items: flex-start;
+  }
+
+  .footer {
+    padding: 25px 20px;
+  }
+}
+
+/* ----------------------------------------------------------
+   31. TELEMÓVEIS
+   ---------------------------------------------------------- */
+
+@media (max-width: 520px) {
+  body {
+    font-size: 14px;
+  }
+
+  .brand {
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .brand-mark {
+    width: 34px;
+    height: 34px;
+  }
+
+  .radar-page {
+    width: min(100% - 26px, var(--container));
+  }
+
+  .radar-intro {
+    padding: 55px 0 35px;
+  }
+
+  .radar-intro h1 {
+    font-size: clamp(59px, 17vw, 80px);
+  }
+
+  .radar-intro > p:not(.eyebrow) {
+    font-size: 13px;
+  }
+
+  .radar-meta {
+    flex-wrap: wrap;
+    font-size: 8px;
+  }
+
+  .filter-panel {
+    padding: 19px;
+    border-radius: var(--radius-medium);
+  }
+
+  .feed-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .feed-top h2 {
+    font-size: 29px;
+  }
+
+  .radar-statistics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stat-card {
+    padding: 13px;
+  }
+
+  .stat-number {
+    font-size: 27px;
+  }
+
+  .radar-sort-wrapper {
+    justify-content: space-between;
+  }
+
+  .radar-sort {
+    max-width: 60%;
+  }
+
+  .rumour-card {
+    padding: 17px;
+    border-radius: var(--radius-medium);
+  }
+
+  .player-name {
+    font-size: 25px;
+  }
+
+  .rumour-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .status {
+    font-size: 8px;
+  }
+
+  .transfer-route {
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .route-club {
+    font-size: 10px;
+  }
+
+  .route-arrow {
+    font-size: 15px;
+  }
+
+  .rumour-summary {
+    font-size: 11px;
+  }
+
+  .rumour-meta {
+    gap: 12px;
+  }
+
+  .meta-item {
+    min-width: calc(50% - 12px);
+  }
+
+  .rumour-card-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 13px;
+  }
+}
+
+/* ----------------------------------------------------------
+   32. ECRÃS MUITO PEQUENOS
+   ---------------------------------------------------------- */
+
+@media (max-width: 350px) {
+  .radar-page {
+    width: calc(100% - 20px);
+  }
+
+  .radar-intro h1 {
+    font-size: 54px;
+  }
+
+  .radar-statistics {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .rumour-card {
+    padding: 13px;
+  }
+
+  .transfer-route {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .route-arrow {
+    transform: rotate(90deg);
+  }
+}
