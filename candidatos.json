@@ -202,6 +202,38 @@
     "transferRelevance": 2
   },
   {
+    "id": "1e7964e49eb2589b05a5",
+    "title": "Preston sign ex-Charlton captain Docherty",
+    "summary": "Preston North End sign experienced midfielder Greg Docherty on a deal until the end of the season.",
+    "originalTitle": "Preston sign ex-Charlton captain Docherty",
+    "originalSummary": "Preston North End sign experienced midfielder Greg Docherty on a deal until the end of the season.",
+    "originalLanguage": "en",
+    "displayLanguage": "pt-PT",
+    "source": "BBC Sport",
+    "domain": "bbc.co.uk",
+    "url": "https://bbc.co.uk/sport/football/articles/cq8ezzx6pz6yo",
+    "date": "2026-11-06T12:02:35+00:00",
+    "collectedAt": "2026-11-07T08:50:24+00:00",
+    "player": "",
+    "currentClub": "",
+    "destination": "",
+    "status": "Por verificar",
+    "suggestedStatus": "Por verificar",
+    "relevance": 15,
+    "classificationReasons": [
+      "Palavras-chave de transferências"
+    ],
+    "detectedPlayers": [],
+    "editorApproved": false,
+    "editorStatus": "Por verificar",
+    "editorNotes": "",
+    "independentSources": [
+      "BBC Sport"
+    ],
+    "engineVersion": "4.0",
+    "sourceCount": 1
+  },
+  {
     "id": "90280ff2ecb3ec4212fc",
     "title": "Goodwin keen but realistic over Cameron move - gossip",
     "summary": "Dundee United manager addresses possibility of formalising move for loan player as Dundee set for stadium public consultation.",
