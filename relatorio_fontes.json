@@ -1,7 +1,7 @@
 {
   "engine": "TRANSFER MARKET",
   "version": "4.0",
-  "generatedAt": "2026-11-07T00:24:39+00:00",
+  "generatedAt": "2026-11-07T01:32:42+00:00",
   "translation": {
     "enabled": true,
     "target": "pt-PT",
@@ -13,7 +13,7 @@
   "totals": {
     "sources": 3,
     "articlesCollected": 90,
-    "newCandidates": 1,
+    "newCandidates": 0,
     "totalCandidates": 19,
     "awaitingReview": 19
   },
@@ -21,7 +21,7 @@
     {
       "source": "BBC Sport",
       "feed": "https://feeds.bbci.co.uk/sport/football/rss.xml",
-      "checkedAt": "2026-11-07T00:24:37+00:00",
+      "checkedAt": "2026-11-07T01:32:41+00:00",
       "status": "ok",
       "articlesRead": 82,
       "candidatesKept": 0,
@@ -30,16 +30,16 @@
     {
       "source": "Sky Sports",
       "feed": "https://www.skysports.com/rss/12040",
-      "checkedAt": "2026-11-07T00:24:37+00:00",
+      "checkedAt": "2026-11-07T01:32:41+00:00",
       "status": "ok",
       "articlesRead": 20,
-      "candidatesKept": 1,
+      "candidatesKept": 0,
       "error": null
     },
     {
       "source": "Fonte adicional",
       "feed": "https://rsshub.app/telegram/channel/fabrizioromanotg",
-      "checkedAt": "2026-11-07T00:24:38+00:00",
+      "checkedAt": "2026-11-07T01:32:42+00:00",
       "status": "erro",
       "articlesRead": 0,
       "candidatesKept": 0,
