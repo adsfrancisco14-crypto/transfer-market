@@ -1,9 +1,9 @@
-
-name: Atualizar radar de transferências
+name: TRANSFER MARKET - Atualização automática
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/15 * * * *"
+
   workflow_dispatch:
 
 permissions:
@@ -14,35 +14,39 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  atualizar-rumores:
+  atualizar:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Obter o repositório
+      - name: Obter repositório
         uses: actions/checkout@v4
 
-      - name: Preparar Python
+      - name: Instalar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
 
-      - name: Instalar dependências
+      - name: Instalar bibliotecas
         run: |
           python -m pip install --upgrade pip
-          pip install feedparser deep-translator
+          pip install -r requirements.txt
 
-      - name: Procurar notícias de transferências
-        env:
-          FABRIZIO_RSS_URL: ${{ secrets.FABRIZIO_RSS_URL || 'https://rsshub.app/telegram/channel/fabrizioromanotg' }}
+      - name: Executar motor V7.2
         run: python atualizar_rumores.py
 
-      - name: Guardar novos candidatos e relatório
+      - name: Guardar notícias atualizadas
         run: |
-          git config user.name "Transfer Market Bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add candidatos.json relatorio_fontes.json historico_transferencias.json
+          git config user.name "TRANSFER MARKET Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add candidatos.json
+          git add historico_transferencias.json
+          git add relatorio_fontes.json
+
           if ! git diff --cached --quiet; then
-            git commit -m "Atualização automática do Transfer Market"
+            git commit -m "Atualização automática das notícias"
             git push
           else
             echo "Não existem alterações."
