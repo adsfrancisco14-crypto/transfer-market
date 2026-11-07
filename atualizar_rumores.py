@@ -4,18 +4,18 @@
 
 """
 ============================================================
-TRANSFER MARKET — INTELLIGENCE ENGINE V5.0
+TRANSFER MARKET — INTELLIGENCE ENGINE V6.0
 ============================================================
-- Recolha automática de notícias.
-- Tradução para português de Portugal.
+- Recolha automática de notícias RSS.
+- Tradução para português.
 - Preservação dos textos originais.
-- Compatibilidade com o formato antigo do site.
-- Identificação de jogadores e clubes.
-- Deteção de notícias repetidas.
+- Correção da tradução de candidatos antigos.
+- Classificação mais rigorosa.
+- Redução de notícias irrelevantes.
+- Deteção de duplicados.
 - Preservação das decisões editoriais.
-- Ordenação das notícias mais recentes.
-- Relatórios de fontes e histórico.
-- Não altera rumores.json.
+- Ordenação cronológica.
+- Separação dos dados de transferências oficiais.
 ============================================================
 """
 
@@ -42,7 +42,7 @@ from deep_translator import GoogleTranslator
 # CONFIGURAÇÕES
 # ============================================================
 
-VERSAO = "5.0"
+VERSAO = "6.0"
 
 PASTA = Path(__file__).resolve().parent
 
@@ -50,10 +50,13 @@ FICHEIRO_SAIDA = PASTA / "candidatos.json"
 FICHEIRO_RELATORIO = PASTA / "relatorio_fontes.json"
 FICHEIRO_HISTORICO = PASTA / "historico_transferencias.json"
 FICHEIRO_JOGADORES = PASTA / "players.json"
+FICHEIRO_OFICIAIS = PASTA / "oficiais.json"
 
 IDADE_MAXIMA = 30
-MAXIMO_CANDIDATOS = 300
-SIMILARIDADE = 0.82
+MAXIMO_CANDIDATOS = 500
+SIMILARIDADE = 0.84
+
+PAUSA_TRADUCAO = 0.3
 
 logging.basicConfig(
     level=logging.INFO,
@@ -89,65 +92,103 @@ if os.getenv("FABRIZIO_RSS_URL"):
 # PALAVRAS-CHAVE
 # ============================================================
 
-PALAVRAS_MERCADO = [
-    "transfer", "transfers", "transfer news",
-    "transfer rumour", "transfer rumor",
-    "transfermarkt", "signing", "signed",
-    "signs for", "deal", "agreement",
-    "loan move", "loan deal", "bid",
-    "offer", "interest from", "transfer target",
-    "talks over", "negotiations",
-    "release clause", "medical",
-    "here we go", "fichajes", "mercato",
-    "transferência", "contratação",
-    "empréstimo", "negociações",
-    "proposta de transferência"
-]
-
-PALAVRAS_CONFIRMADAS = [
-    "officially announced",
-    "official announcement",
-    "confirmed the signing",
-    "completes move",
-    "has joined",
-    "joins",
+# Expressões específicas de transferências.
+SINAIS_TRANSFERENCIA = [
+    "transfer news",
+    "transfer window",
+    "transfer target",
+    "transfer interest",
+    "transfer move",
+    "transfer deal",
+    "transfer talks",
+    "transfer agreement",
+    "transfer fee",
+    "transfer bid",
+    "loan move",
+    "loan deal",
+    "loan signing",
+    "signs for",
     "signed for",
-    "official"
+    "signing for",
+    "joins on loan",
+    "joins permanently",
+    "set to join",
+    "set to sign",
+    "agrees to join",
+    "agrees terms",
+    "personal terms",
+    "medical booked",
+    "medical scheduled",
+    "agreement reached",
+    "deal agreed",
+    "bid submitted",
+    "bid rejected",
+    "club interested",
+    "interested in signing",
+    "fichajes",
+    "mercato",
+    "transferência",
+    "transferências",
+    "mercado de transferências",
+    "contratação",
+    "contratado por",
+    "assina por",
+    "assinar por",
+    "empréstimo",
+    "proposta de transferência",
+    "negociações por"
 ]
 
-PALAVRAS_AVANCADAS = [
+SINAIS_RUMOR = [
+    "interested in",
+    "interest in",
+    "monitoring",
+    "tracking",
+    "considering a move",
+    "could sign",
+    "could join",
+    "linked with",
+    "linked to",
+    "reportedly wants",
+    "transfer target",
+    "transfer pursuit",
+    "rumour",
+    "rumor",
+    "gossip",
+    "keen on signing",
+    "wants to sign"
+]
+
+SINAIS_NEGOCIACAO = [
+    "negotiations",
+    "talks over a move",
+    "talks over a deal",
+    "talks with",
+    "bid submitted",
+    "bid rejected",
+    "offer submitted",
+    "offer rejected",
+    "formal offer",
+    "proposal submitted",
+    "discussions over a move"
+]
+
+SINAIS_ACORDO = [
     "agreement reached",
     "deal agreed",
     "verbal agreement",
     "personal terms agreed",
     "medical booked",
     "medical scheduled",
-    "final stages",
-    "advanced talks"
+    "final stages of the deal",
+    "advanced talks",
+    "set to complete",
+    "close to signing"
 ]
 
-PALAVRAS_NEGOCIACOES = [
-    "negotiations",
-    "talks",
-    "bid",
-    "offer",
-    "proposal",
-    "discussions"
-]
-
-PALAVRAS_RUMORES = [
-    "interested",
-    "interest",
-    "monitoring",
-    "tracking",
-    "considering",
-    "target",
-    "could sign",
-    "linked with",
-    "rumour",
-    "rumor",
-    "reportedly"
-]
+# Não basta encontrar estas expressões para confirmar
+# uma transferência. A confirmação oficial é verificada
+# separadamente, através de um anúncio do clube.
 
 EXCLUSOES = [
     "match report",
@@ -161,7 +202,18 @@ EXCLUSOES = [
     "player ratings",
     "match reaction",
     "post-match",
-    "champions league result"
+    "champions league result",
+    "premier league result",
+    "race meeting",
+    "horse racing",
+    "november handicap",
+    "doncaster races",
+    "southwell",
+    "uttoxeter",
+    "cricket",
+    "tennis",
+    "rugby",
+    "golf"
 ]
 
 
@@ -228,6 +280,9 @@ def normalizar_url(url):
 
         p = urlparse(url)
 
+        if not p.netloc:
+            return ""
+
         return urlunparse((
             p.scheme or "https",
             p.netloc.lower().replace("www.", ""),
@@ -287,6 +342,36 @@ def guardar_json(ficheiro, dados):
     temporario.replace(ficheiro)
 
 
+def converter_data(valor):
+
+    if not valor:
+        return None
+
+    try:
+
+        data = datetime.fromisoformat(
+            str(valor).replace("Z", "+00:00")
+        )
+
+        if data.tzinfo is None:
+            data = data.replace(tzinfo=timezone.utc)
+
+        return data.astimezone(timezone.utc)
+
+    except Exception:
+        return None
+
+
+def chave_data(item):
+
+    data = converter_data(item.get("date", ""))
+
+    if data:
+        return data.timestamp()
+
+    return 0
+
+
 # ============================================================
 # TRADUÇÃO
 # ============================================================
@@ -311,7 +396,6 @@ def traduzir(texto):
             target="pt"
         )
 
-        # Evitar enviar textos demasiado grandes de uma só vez.
         partes = [
             texto[i:i + 4000]
             for i in range(0, len(texto), 4000)
@@ -323,13 +407,17 @@ def traduzir(texto):
 
             traducao = tradutor.translate(parte)
 
-            resultado.append(
-                traducao if traducao else parte
-            )
+            if traducao:
+                resultado.append(traducao)
+            else:
+                resultado.append(parte)
 
-            time.sleep(0.3)
+            time.sleep(PAUSA_TRADUCAO)
 
         texto_final = " ".join(resultado).strip()
+
+        if not texto_final:
+            return texto
 
         CACHE_TRADUCAO[texto] = texto_final
 
@@ -338,16 +426,15 @@ def traduzir(texto):
     except Exception as erro:
 
         log.warning(
-            "Não foi possível traduzir: %s",
+            "Erro de tradução: %s",
             erro
         )
 
-        # Se a tradução falhar, conserva o original.
         return texto
 
 
 # ============================================================
-# DATAS
+# DATAS RSS
 # ============================================================
 
 def obter_data(entry):
@@ -395,80 +482,87 @@ def obter_data(entry):
 # CLASSIFICAÇÃO
 # ============================================================
 
-def classificar(titulo, resumo):
+def contem_expressao(texto, expressoes):
 
-    texto = normalizar(titulo + " " + resumo)
-
-    pontuacao = 0
-    motivos = []
-
-    palavras_encontradas = [
-        palavra
-        for palavra in PALAVRAS_MERCADO
-        if normalizar(palavra) in texto
-    ]
-
-    pontuacao += min(
-        60,
-        len(palavras_encontradas) * 20
+    return any(
+        normalizar(expressao) in texto
+        for expressao in expressoes
     )
 
-    if palavras_encontradas:
-        motivos.append(
-            "Palavras-chave relacionadas com transferências"
+
+def classificar(titulo, resumo):
+
+    texto_original = normalizar(titulo + " " + resumo)
+
+    motivos = []
+
+    exclusao = contem_expressao(
+        texto_original,
+        EXCLUSOES
+    )
+
+    if exclusao:
+
+        return (
+            "Por verificar",
+            0,
+            ["Notícia excluída por não parecer relacionada com transferências"]
         )
 
-    if any(
-        normalizar(p) in texto
-        for p in PALAVRAS_CONFIRMADAS
-    ):
+    sinais = [
+        sinal
+        for sinal in SINAIS_TRANSFERENCIA
+        if normalizar(sinal) in texto_original
+    ]
 
-        estado = "Possível confirmação"
+    if not sinais:
+
+        return (
+            "Por verificar",
+            0,
+            ["Não foram encontrados sinais suficientes de transferência"]
+        )
+
+    pontuacao = min(60, len(sinais) * 20)
+
+    motivos.append(
+        "Expressões relacionadas com transferências"
+    )
+
+    if contem_expressao(texto_original, SINAIS_ACORDO):
+
+        estado = "Acordo próximo"
         pontuacao += 25
-        motivos.append("Linguagem de confirmação")
 
-    elif any(
-        normalizar(p) in texto
-        for p in PALAVRAS_AVANCADAS
-    ):
+        motivos.append(
+            "Indícios de acordo avançado"
+        )
 
-        estado = "Possível acordo avançado"
-        pontuacao += 20
-        motivos.append("Possível acordo avançado")
-
-    elif any(
-        normalizar(p) in texto
-        for p in PALAVRAS_NEGOCIACOES
-    ):
+    elif contem_expressao(texto_original, SINAIS_NEGOCIACAO):
 
         estado = "Negociações"
-        pontuacao += 15
-        motivos.append("Possíveis negociações")
+        pontuacao += 20
 
-    elif any(
-        normalizar(p) in texto
-        for p in PALAVRAS_RUMORES
-    ):
+        motivos.append(
+            "Indícios de negociações"
+        )
+
+    elif contem_expressao(texto_original, SINAIS_RUMOR):
 
         estado = "Rumor"
-        pontuacao += 10
-        motivos.append("Possível rumor")
+        pontuacao += 15
+
+        motivos.append(
+            "Indícios de interesse ou rumor"
+        )
 
     else:
 
         estado = "Por verificar"
 
-    if any(
-        normalizar(p) in texto
-        for p in EXCLUSOES
-    ):
-
-        pontuacao -= 50
-        motivos.append("Notícia aparentemente não relacionada")
-
     return (
         estado,
-        max(0, min(100, pontuacao)),
+        min(100, pontuacao),
         motivos
     )
 
@@ -519,12 +613,13 @@ def encontrar_jogadores(texto, jogadores):
 
     for jogador in jogadores:
 
-        nome = jogador["name"]
+        nome = normalizar(jogador["name"])
 
-        nome_normalizado = normalizar(nome)
+        if not nome or len(nome) < 4:
+            continue
 
-        if nome_normalizado and re.search(
-            r"\b" + re.escape(nome_normalizado) + r"\b",
+        if re.search(
+            r"\b" + re.escape(nome) + r"\b",
             texto_normalizado
         ):
 
@@ -639,8 +734,8 @@ def criar_candidato(noticia, jogadores):
         resumo_original
     )
 
-    # Filtro para reduzir notícias sem relação com transferências.
-    if pontuacao < 25:
+    # Evitar guardar notícias sem relevância suficiente.
+    if pontuacao < 20:
         return None
 
     encontrados = encontrar_jogadores(
@@ -668,44 +763,60 @@ def criar_candidato(noticia, jogadores):
 
     return {
 
-        # Identificação
         "id": identificador,
 
-        # Campos utilizados pelo site antigo
+        # Campos do site
         "title": titulo_pt,
         "summary": resumo_pt,
         "source": noticia["source"],
         "domain": noticia["domain"],
         "url": noticia["url"],
         "date": data,
+
         "firstSeen": data_atual(),
         "lastSeen": data_atual(),
+
         "status": estado,
-        "verification": "Artigo recolhido automaticamente. Aguarda verificação editorial.",
+
+        "verification": (
+            "Artigo recolhido automaticamente. "
+            "Aguarda verificação editorial."
+        ),
+
         "player": jogador,
         "currentClub": clube,
         "destination": "",
+
         "detectedClubs": [clube] if clube else [],
+
         "classification": "Notícia de transferências",
         "transferRelevance": pontuacao,
 
-        # Campos novos da versão V5
+        # Texto original
         "originalTitle": titulo_original,
         "originalSummary": resumo_original,
-        "originalLanguage": "en",
+
+        "originalLanguage": "auto",
         "displayLanguage": "pt-PT",
+
+        # Dados do motor
         "collectedAt": data_atual(),
         "suggestedStatus": estado,
         "relevance": pontuacao,
         "classificationReasons": motivos,
+
         "detectedPlayers": [
             j["name"] for j in encontrados
         ],
+
+        # Decisões editoriais
         "editorApproved": False,
         "editorStatus": "Por verificar",
         "editorNotes": "",
+
         "independentSources": [noticia["source"]],
         "sourceCount": 1,
+
         "engineVersion": VERSAO
     }
 
@@ -719,51 +830,67 @@ def atualizar_candidato_antigo(candidato):
     if not isinstance(candidato, dict):
         return candidato
 
-    titulo = limpar_texto(
+    titulo_original = limpar_texto(
         candidato.get("originalTitle")
         or candidato.get("title", "")
     )
 
-    resumo = limpar_texto(
+    resumo_original = limpar_texto(
         candidato.get("originalSummary")
         or candidato.get("summary", "")
     )
 
-    if not titulo:
+    if not titulo_original:
         return candidato
 
-    # Guardar o título original antes da tradução.
-    candidato["originalTitle"] = titulo
-    candidato["originalSummary"] = resumo
+    candidato["originalTitle"] = titulo_original
+    candidato["originalSummary"] = resumo_original
 
-    # Traduzir apenas quando ainda não está marcado como português.
-    if candidato.get("displayLanguage") != "pt-PT":
+    # Recriar a tradução a partir do texto original.
+    # Isto corrige registos anteriormente marcados
+    # como pt-PT sem terem sido traduzidos.
 
-        candidato["title"] = traduzir(titulo)
-        candidato["summary"] = traduzir(resumo)
+    candidato["title"] = traduzir(titulo_original)
+    candidato["summary"] = traduzir(resumo_original)
 
-        candidato["originalLanguage"] = candidato.get(
-            "originalLanguage",
-            "en"
-        )
+    candidato["originalLanguage"] = candidato.get(
+        "originalLanguage",
+        "auto"
+    )
 
-        candidato["displayLanguage"] = "pt-PT"
+    candidato["displayLanguage"] = "pt-PT"
 
-    # Preservar os campos antigos.
     candidato.setdefault("firstSeen", data_atual())
     candidato.setdefault("lastSeen", data_atual())
-    candidato.setdefault("verification", "Aguarda verificação editorial.")
-    candidato.setdefault("classification", "Notícia de transferências")
-    candidato.setdefault("transferRelevance", candidato.get("relevance", 0))
+
+    candidato.setdefault(
+        "verification",
+        "Aguarda verificação editorial."
+    )
+
+    candidato.setdefault(
+        "classification",
+        "Notícia de transferências"
+    )
+
+    candidato.setdefault(
+        "transferRelevance",
+        candidato.get("relevance", 0)
+    )
+
     candidato.setdefault("detectedClubs", [])
     candidato.setdefault("destination", "")
     candidato.setdefault("player", "")
     candidato.setdefault("currentClub", "")
 
-    # Preservar decisões editoriais.
     candidato.setdefault("editorApproved", False)
     candidato.setdefault("editorStatus", "Por verificar")
     candidato.setdefault("editorNotes", "")
+
+    candidato.setdefault(
+        "relevance",
+        candidato.get("transferRelevance", 0)
+    )
 
     candidato["engineVersion"] = VERSAO
 
@@ -777,11 +904,11 @@ def atualizar_candidato_antigo(candidato):
 def sao_duplicados(a, b):
 
     titulo_a = normalizar(
-        a.get("originalTitle", a.get("title", ""))
+        a.get("originalTitle") or a.get("title", "")
     )
 
     titulo_b = normalizar(
-        b.get("originalTitle", b.get("title", ""))
+        b.get("originalTitle") or b.get("title", "")
     )
 
     if not titulo_a or not titulo_b:
@@ -793,7 +920,24 @@ def sao_duplicados(a, b):
         titulo_b
     ).ratio()
 
-    return semelhanca >= SIMILARIDADE
+    if semelhanca >= SIMILARIDADE:
+        return True
+
+    # Comparação adicional através dos nomes dos jogadores.
+    jogador_a = normalizar(a.get("player", ""))
+    jogador_b = normalizar(b.get("player", ""))
+
+    if jogador_a and jogador_a == jogador_b:
+
+        palavras_a = set(titulo_a.split())
+        palavras_b = set(titulo_b.split())
+
+        comuns = palavras_a.intersection(palavras_b)
+
+        if len(comuns) >= 5:
+            return True
+
+    return False
 
 
 def agrupar_duplicados(candidatos):
@@ -822,6 +966,15 @@ def agrupar_duplicados(candidatos):
 
     for grupo in grupos:
 
+        # Preferir a notícia com mais informação.
+        grupo.sort(
+            key=lambda item: (
+                len(item.get("summary", "")),
+                chave_data(item)
+            ),
+            reverse=True
+        )
+
         principal = grupo[0]
 
         fontes = sorted(set(
@@ -839,12 +992,54 @@ def agrupar_duplicados(candidatos):
 
 
 # ============================================================
+# TRANSFERÊNCIAS OFICIAIS
+# ============================================================
+
+def carregar_oficiais():
+
+    dados = carregar_json(
+        FICHEIRO_OFICIAIS,
+        []
+    )
+
+    if not isinstance(dados, list):
+        dados = []
+
+    # Não criar confirmações automaticamente a partir
+    # de notícias da BBC ou da Sky.
+    #
+    # Este ficheiro fica separado dos rumores.
+    # Só devem ser adicionados registos com anúncio
+    # oficial verificável do clube.
+
+    dados = [
+        item for item in dados
+        if isinstance(item, dict)
+    ]
+
+    dados.sort(
+        key=chave_data,
+        reverse=True
+    )
+
+    guardar_json(
+        FICHEIRO_OFICIAIS,
+        dados
+    )
+
+    return dados
+
+
+# ============================================================
 # EXECUÇÃO PRINCIPAL
 # ============================================================
 
 def executar():
 
-    log.info("A iniciar TRANSFER MARKET V%s", VERSAO)
+    log.info(
+        "A iniciar TRANSFER MARKET V%s",
+        VERSAO
+    )
 
     jogadores = carregar_jogadores()
 
@@ -856,9 +1051,9 @@ def executar():
     if not isinstance(anteriores, list):
         anteriores = []
 
-    # Migrar e preservar os candidatos antigos.
     anteriores_por_id = {}
 
+    # Migrar e preservar candidatos antigos.
     for item in anteriores:
 
         if not isinstance(item, dict):
@@ -880,7 +1075,10 @@ def executar():
 
     for fonte in FONTES:
 
-        log.info("A pesquisar: %s", fonte["nome"])
+        log.info(
+            "A pesquisar: %s",
+            fonte["nome"]
+        )
 
         resultados, relatorio = recolher_fonte(fonte)
 
@@ -888,7 +1086,10 @@ def executar():
         relatorios.append(relatorio)
 
     noticias.sort(
-        key=lambda n: n.get("date", ""),
+        key=lambda n: (
+            converter_data(n.get("date", ""))
+            or datetime.min.replace(tzinfo=timezone.utc)
+        ),
         reverse=True
     )
 
@@ -913,7 +1114,10 @@ def executar():
 
         if identificador in anteriores_por_id:
 
-            anteriores_por_id[identificador]["lastSeen"] = data_atual()
+            antigos = anteriores_por_id[identificador]
+
+            antigos["lastSeen"] = data_atual()
+
             continue
 
         candidato = criar_candidato(
@@ -963,11 +1167,9 @@ def executar():
 
     candidatos = list(todos.values())
 
+    # Ordenação pela data de publicação.
     candidatos.sort(
-        key=lambda n: (
-            n.get("date", ""),
-            n.get("relevance", n.get("transferRelevance", 0))
-        ),
+        key=chave_data,
         reverse=True
     )
 
@@ -1005,6 +1207,7 @@ def executar():
             "articlesCollected": len(noticias),
             "newCandidates": len(novos),
             "totalCandidates": len(candidatos),
+
             "awaitingReview": sum(
                 1 for n in candidatos
                 if not n.get("editorApproved", False)
@@ -1040,6 +1243,12 @@ def executar():
     historico["engineVersion"] = VERSAO
 
     # --------------------------------------------------------
+    # OFICIAIS
+    # --------------------------------------------------------
+
+    oficiais = carregar_oficiais()
+
+    # --------------------------------------------------------
     # GUARDAR
     # --------------------------------------------------------
 
@@ -1067,9 +1276,10 @@ def executar():
     log.info("Versão: %s", VERSAO)
     log.info("Novos candidatos: %s", len(novos))
     log.info("Total de candidatos: %s", len(candidatos))
+    log.info("Transferências oficiais: %s", len(oficiais))
     log.info("Tradução: português")
-    log.info("Ficheiro: candidatos.json")
-    log.info("Relatório: relatorio_fontes.json")
+    log.info("Rumores: candidatos.json")
+    log.info("Oficiais: oficiais.json")
     log.info("--------------------------------")
 
 
@@ -1080,6 +1290,7 @@ def executar():
 if __name__ == "__main__":
 
     try:
+
         executar()
 
     except Exception as erro:
