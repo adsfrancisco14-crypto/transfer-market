@@ -1,413 +1,753 @@
 
 /* ==========================================================
    TRANSFER MARKET — TRANSFER RADAR
-   Versão 4.0 — Notícias reais
-   Fonte principal: candidatos.json
-   Atualização automática: 1 minuto
+   VERSÃO 5.0
    ========================================================== */
 
 (() => {
   "use strict";
 
   const CONFIG = {
-    dataUrl: "./candidatos.json",
+    rumoursUrl: "./candidatos.json",
+    officialUrl: "./oficiais.json",
     refreshInterval: 60 * 1000,
-    language: "pt-PT"
+    maxRumours: 500,
+    maxOfficials: 500
   };
 
   const elements = {
-    feed: document.getElementById("rumour-feed"),
     search: document.getElementById("search"),
     status: document.getElementById("status-filter"),
     league: document.getElementById("league-filter"),
-    count: document.getElementById("result-count"),
-    empty: document.getElementById("empty-state"),
-    today: document.getElementById("today-label"),
-    clear: document.getElementById("clear-filters"),
-    demoAlert: document.querySelector(".demo-alert")
+    rumourFeed: document.getElementById("rumour-feed"),
+    emptyState: document.getElementById("empty-state"),
+    resultCount: document.getElementById("result-count"),
+    todayLabel: document.getElementById("today-label")
   };
 
-  let allItems = [];
-  let currentSort = "newest";
-  let loading = false;
-  let lastUpdated = null;
+  let rumores = [];
+  let oficiais = [];
 
-  function normalize(value) {
-    return String(value || "")
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .trim();
+  let ultimaAtualizacao = null;
+
+  // ========================================================
+  // FUNÇÕES GERAIS
+  // ========================================================
+
+  function texto(valor) {
+    return String(valor ?? "").trim();
   }
 
-  function createElement(tag, className, value) {
-    const element = document.createElement(tag);
-
-    if (className) element.className = className;
-    if (value !== undefined) element.textContent = value;
-
-    return element;
+  function escapar(valor) {
+    return texto(valor)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
-  function safeUrl(value) {
-    try {
-      const url = new URL(value);
+  function obterData(valor) {
+    if (!valor) return null;
 
-      if (!["https:", "http:"].includes(url.protocol)) {
-        return null;
-      }
+    const data = new Date(valor);
 
-      return url.href;
-    } catch {
-      return null;
-    }
+    return Number.isNaN(data.getTime()) ? null : data;
   }
 
-  function formatDate(value) {
-    if (!value) return "Data não indicada";
+  function formatarData(valor) {
+    const data = obterData(valor);
 
-    const date = new Date(value);
-
-    if (Number.isNaN(date.getTime())) {
-      return "Data não indicada";
-    }
+    if (!data) return "Data não disponível";
 
     return new Intl.DateTimeFormat("pt-PT", {
       day: "2-digit",
       month: "long",
-      year: "numeric"
-    }).format(date);
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(data);
   }
 
-  function getDateValue(item) {
-    const date = new Date(item.date);
-    return Number.isNaN(date.getTime()) ? 0 : date.getTime();
+  function normalizar(valor) {
+    return texto(valor)
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
   }
 
-  function validateData(data) {
-    if (!Array.isArray(data)) {
-      throw new Error("O ficheiro candidatos.json não contém uma lista válida.");
+  function obterUrl(valor) {
+    try {
+      const url = new URL(texto(valor));
+
+      if (!["http:", "https:"].includes(url.protocol)) {
+        return "";
+      }
+
+      return url.href;
+    } catch {
+      return "";
+    }
+  }
+
+  function ordenarPorData(lista) {
+    return [...lista].sort((a, b) => {
+      const dataA = obterData(a.date)?.getTime() || 0;
+      const dataB = obterData(b.date)?.getTime() || 0;
+
+      return dataB - dataA;
+    });
+  }
+
+  // ========================================================
+  // LIGAS
+  // ========================================================
+
+  const LIGAS = {
+    inglaterra: "Inglaterra",
+    premierleague: "Inglaterra",
+    espanha: "Espanha",
+    laliga: "Espanha",
+    italia: "Itália",
+    seriea: "Itália",
+    alemanha: "Alemanha",
+    bundesliga: "Alemanha",
+    franca: "França",
+    ligue1: "França",
+    portugal: "Portugal",
+    primeiraliga: "Portugal"
+  };
+
+  function obterLiga(item) {
+    const valor = normalizar(
+      item.league ||
+      item.country ||
+      item.competition ||
+      item.region ||
+      ""
+    ).replace(/[^a-z0-9]/g, "");
+
+    if (LIGAS[valor]) {
+      return LIGAS[valor];
     }
 
-    return data
-      .filter(item => item && typeof item === "object")
-      .map((item, index) => ({
-        id: item.id || `noticia-${index}`,
-        title: item.title || item.player || "Notícia de futebol",
-        summary: item.summary || "Não existe resumo disponível para este artigo.",
-        source: item.source || "Fonte não indicada",
-        url: safeUrl(item.url),
-        date: item.date || "",
-        status: item.status || "Por verificar",
-        league: item.league || "Europa",
-        player: item.player || "",
-        currentClub: item.currentClub || "",
-        destination: item.destination || "",
-        detectedClubs: Array.isArray(item.detectedClubs)
+    const clubes = normalizar(
+      [
+        item.currentClub,
+        item.destination,
+        item.oldClub,
+        item.newClub,
+        ...(Array.isArray(item.detectedClubs)
           ? item.detectedClubs
-          : [],
-        relevance: Number(item.transferRelevance) || 0,
-        verification: item.verification || "Artigo recolhido automaticamente. Ainda não foi verificado."
-      }))
-      .filter(item => item.url && item.source);
-  }
-
-  function addPendingStatusOption() {
-    if (!elements.status) return;
-
-    const exists = [...elements.status.options]
-      .some(option => option.value === "Por verificar");
-
-    if (!exists) {
-      const option = document.createElement("option");
-      option.value = "Por verificar";
-      option.textContent = "Por verificar";
-      elements.status.append(option);
-    }
-  }
-
-  function createSortControl() {
-    const section = elements.feed?.closest(".feed-section");
-    const top = section?.querySelector(".feed-top");
-
-    if (!top || document.getElementById("radar-sort")) return;
-
-    const wrapper = createElement("div", "radar-sort-wrapper");
-    const label = createElement("label", "", "Ordenar por");
-
-    label.htmlFor = "radar-sort";
-
-    const select = createElement("select", "radar-sort");
-    select.id = "radar-sort";
-
-    [
-      ["newest", "Mais recentes"],
-      ["oldest", "Mais antigas"],
-      ["relevance", "Relevância"]
-    ].forEach(([value, name]) => {
-      const option = createElement("option", "", name);
-      option.value = value;
-      select.append(option);
-    });
-
-    select.addEventListener("change", () => {
-      currentSort = select.value;
-      applyFilters();
-    });
-
-    wrapper.append(label, select);
-    top.insertAdjacentElement("afterend", wrapper);
-  }
-
-  function createMeta(label, value) {
-    const wrapper = createElement("div", "meta-item");
-    wrapper.append(
-      createElement("span", "meta-label", label),
-      createElement("span", "meta-value", value)
-    );
-    return wrapper;
-  }
-
-  function createCard(item) {
-    const card = createElement("article", "rumour-card");
-    card.dataset.status = item.status;
-    card.dataset.league = item.league;
-
-    const main = createElement("div", "rumour-main");
-    const header = createElement("div", "rumour-card-header");
-    const titleArea = createElement("div", "player-area");
-
-    titleArea.append(
-      createElement("h3", "player-name", item.title),
-      createElement("span", "league-label", item.league)
+          : [])
+      ].join(" ")
     );
 
-    const badge = createElement("span", "status status-por-verificar", item.status);
-    header.append(titleArea, badge);
+    const equipas = [
+      {
+        liga: "Portugal",
+        nomes: [
+          "benfica", "porto", "sporting",
+          "braga", "vitoria guimaraes",
+          "gil vicente", "moreirense",
+          "santa clara", "famalicao",
+          "estoril", "casa pia", "rio ave",
+          "nacional", "arouca", "farense",
+          "boavista", "avs"
+        ]
+      },
+      {
+        liga: "Inglaterra",
+        nomes: [
+          "manchester city", "manchester united",
+          "liverpool", "arsenal", "chelsea",
+          "tottenham", "newcastle",
+          "aston villa", "everton",
+          "west ham", "brighton",
+          "nottingham forest", "fulham",
+          "crystal palace", "wolves",
+          "brentford", "bournemouth",
+          "leeds united", "sunderland", "burnley"
+        ]
+      },
+      {
+        liga: "Espanha",
+        nomes: [
+          "real madrid", "barcelona",
+          "atletico madrid", "sevilla",
+          "valencia", "villarreal",
+          "real sociedad", "athletic bilbao",
+          "girona", "getafe", "osasuna",
+          "celta vigo", "mallorca"
+        ]
+      },
+      {
+        liga: "Itália",
+        nomes: [
+          "juventus", "inter milan",
+          "ac milan", "napoli",
+          "roma", "lazio", "atalanta",
+          "fiorentina", "bologna",
+          "torino", "genoa"
+        ]
+      },
+      {
+        liga: "Alemanha",
+        nomes: [
+          "bayern munich", "borussia dortmund",
+          "bayer leverkusen", "rb leipzig",
+          "eintracht frankfurt",
+          "stuttgart", "wolfsburg",
+          "freiburg", "hoffenheim"
+        ]
+      },
+      {
+        liga: "França",
+        nomes: [
+          "paris saint germain", "psg",
+          "marseille", "monaco",
+          "lyon", "lille", "nice",
+          "lens", "rennes", "strasbourg"
+        ]
+      }
+    ];
 
-    const summary = createElement("p", "rumour-summary", item.summary);
-
-    const meta = createElement("div", "rumour-meta");
-    meta.append(
-      createMeta("Publicado", formatDate(item.date)),
-      createMeta("Fonte", item.source)
-    );
-
-    if (item.detectedClubs.length) {
-      meta.append(
-        createMeta("Clubes mencionados", item.detectedClubs.join(", "))
-      );
+    for (const grupo of equipas) {
+      if (grupo.nomes.some(nome => clubes.includes(nome))) {
+        return grupo.liga;
+      }
     }
 
-    const verification = createElement(
-      "p",
-      "credibility-reason",
-      item.verification
+    return texto(item.league || item.country || "Europa");
+  }
+
+  // ========================================================
+  // NORMALIZAR RUMORES
+  // ========================================================
+
+  function normalizarRumor(item) {
+    if (!item || typeof item !== "object") return null;
+
+    const url = obterUrl(item.url);
+
+    if (!url) return null;
+
+    const titulo = texto(item.title);
+
+    if (!titulo) return null;
+
+    return {
+      ...item,
+      title: titulo,
+      summary: texto(item.summary),
+      originalTitle: texto(item.originalTitle),
+      originalSummary: texto(item.originalSummary),
+      source: texto(item.source) || "Fonte não identificada",
+      url,
+      date: texto(item.date),
+      status: texto(item.editorStatus || item.status || "Por verificar"),
+      relevance: Number(item.relevance ?? item.transferRelevance ?? 0),
+      league: obterLiga(item)
+    };
+  }
+
+  // ========================================================
+  // NORMALIZAR TRANSFERÊNCIAS OFICIAIS
+  // ========================================================
+
+  function normalizarOficial(item) {
+    if (!item || typeof item !== "object") return null;
+
+    const url = obterUrl(
+      item.officialUrl ||
+      item.announcementUrl ||
+      item.url
     );
 
-    const relevance = createElement(
-      "p",
-      "credibility-label",
-      `Relevância automática: ${item.relevance}/10`
+    if (!url) return null;
+
+    const jogador = texto(
+      item.player ||
+      item.playerName
     );
 
-    const footer = createElement("div", "rumour-card-footer");
-
-    footer.append(
-      createElement(
-        "span",
-        "status-description",
-        "Informação recolhida automaticamente — por verificar."
-      )
+    const clubeAntigo = texto(
+      item.oldClub ||
+      item.from ||
+      item.previousClub
     );
 
-    const link = createElement("a", "source-link", "Ver fonte original ↗");
-    link.href = item.url;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    footer.append(link);
+    const clubeNovo = texto(
+      item.newClub ||
+      item.to ||
+      item.destination
+    );
 
-    main.append(header, summary, meta, verification, relevance);
-    card.append(main, footer);
+    if (!jogador || (!clubeAntigo && !clubeNovo)) {
+      return null;
+    }
+
+    return {
+      ...item,
+      player: jogador,
+      oldClub: clubeAntigo || "Não indicado",
+      newClub: clubeNovo || "Não indicado",
+      transferType: texto(item.transferType || item.type || "Transferência"),
+      fee: texto(item.fee || item.amount || ""),
+      date: texto(item.date || item.announcementDate),
+      league: obterLiga(item),
+      url,
+      source: texto(item.source || "Anúncio oficial"),
+      verified: item.verified === true ||
+        item.official === true ||
+        item.verification === "official"
+    };
+  }
+
+  // ========================================================
+  // SECÇÃO DE TRANSFERÊNCIAS OFICIAIS
+  // ========================================================
+
+  function prepararSecaoOficial() {
+    let secao = document.getElementById("official-section");
+
+    if (secao) {
+      return secao;
+    }
+
+    secao = document.createElement("section");
+    secao.id = "official-section";
+    secao.className = "official-section";
+
+    secao.innerHTML = `
+      <div class="section-heading">
+        <h2>Transferências oficiais</h2>
+        <p>Movimentações confirmadas oficialmente</p>
+      </div>
+
+      <div id="official-feed" class="official-feed"></div>
+
+      <p id="official-empty" class="empty-state">
+        Ainda não existem transferências oficiais registadas.
+      </p>
+    `;
+
+    const feed = elements.rumourFeed;
+
+    if (feed && feed.parentElement) {
+      feed.parentElement.insertBefore(secao, feed);
+    } else {
+      document.body.appendChild(secao);
+    }
+
+    return secao;
+  }
+
+  // ========================================================
+  // FILTROS
+  // ========================================================
+
+  function obterFiltros() {
+    return {
+      pesquisa: normalizar(elements.search?.value || ""),
+      estado: texto(elements.status?.value || "all"),
+      liga: texto(elements.league?.value || "all")
+    };
+  }
+
+  function correspondeFiltro(item, filtros) {
+    const conteudo = normalizar([
+      item.title,
+      item.summary,
+      item.player,
+      item.currentClub,
+      item.destination,
+      item.oldClub,
+      item.newClub,
+      item.source
+    ].join(" "));
+
+    if (
+      filtros.pesquisa &&
+      !conteudo.includes(filtros.pesquisa)
+    ) {
+      return false;
+    }
+
+    if (
+      filtros.estado &&
+      filtros.estado !== "all" &&
+      normalizar(item.status) !== normalizar(filtros.estado)
+    ) {
+      return false;
+    }
+
+    if (
+      filtros.liga &&
+      filtros.liga !== "all" &&
+      normalizar(item.league) !== normalizar(filtros.liga)
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  // ========================================================
+  // CRIAR CARTÃO DE RUMOR
+  // ========================================================
+
+  function criarCartaoRumor(item) {
+    const card = document.createElement("article");
+
+    card.className = "rumour-card";
+
+    const titulo = escapar(item.title);
+    const resumo = escapar(item.summary);
+    const fonte = escapar(item.source);
+    const data = escapar(formatarData(item.date));
+    const estado = escapar(item.status);
+    const liga = escapar(item.league);
+
+    const jogador = escapar(item.player);
+    const clube = escapar(item.currentClub);
+    const destino = escapar(item.destination);
+
+    const link = obterUrl(item.url);
+
+    card.innerHTML = `
+      <div class="card-top">
+        <span class="card-league">${liga}</span>
+        <span class="card-status">${estado}</span>
+      </div>
+
+      <h3>${titulo}</h3>
+
+      ${resumo ? `<p class="card-summary">${resumo}</p>` : ""}
+
+      ${jogador ? `
+        <p class="card-player">
+          <strong>Jogador:</strong> ${jogador}
+        </p>
+      ` : ""}
+
+      ${clube ? `
+        <p class="card-club">
+          <strong>Clube atual:</strong> ${clube}
+        </p>
+      ` : ""}
+
+      ${destino ? `
+        <p class="card-destination">
+          <strong>Destino:</strong> ${destino}
+        </p>
+      ` : ""}
+
+      <div class="card-footer">
+        <span>${fonte}</span>
+        <span>${data}</span>
+      </div>
+
+      <div class="card-actions">
+        <a href="${escapar(link)}"
+           target="_blank"
+           rel="noopener noreferrer">
+          Ver notícia original ↗
+        </a>
+      </div>
+    `;
 
     return card;
   }
 
-  function render(items) {
-    if (!elements.feed) return;
+  // ========================================================
+  // CRIAR CARTÃO OFICIAL
+  // ========================================================
 
-    const fragment = document.createDocumentFragment();
+  function criarCartaoOficial(item) {
+    const card = document.createElement("article");
 
-    items.forEach(item => fragment.append(createCard(item)));
+    card.className = "official-card";
 
-    elements.feed.replaceChildren(fragment);
+    const jogador = escapar(item.player);
+    const antigo = escapar(item.oldClub);
+    const novo = escapar(item.newClub);
+    const tipo = escapar(item.transferType);
+    const liga = escapar(item.league);
+    const data = escapar(formatarData(item.date));
 
-    if (elements.count) {
-      elements.count.textContent =
-        `${items.length} ${items.length === 1 ? "resultado" : "resultados"}`;
-    }
+    const link = obterUrl(item.url);
 
-    if (elements.empty) {
-      elements.empty.hidden = items.length !== 0;
-    }
+    card.innerHTML = `
+      <div class="official-card-top">
+        <span class="card-league">${liga}</span>
+        <span class="official-label">Confirmada</span>
+      </div>
 
-    if (elements.demoAlert) {
-      elements.demoAlert.hidden = true;
-    }
+      <h3>${jogador}</h3>
+
+      <div class="official-movement">
+        <div>
+          <span>Clube anterior</span>
+          <strong>${antigo}</strong>
+        </div>
+
+        <span class="movement-arrow">→</span>
+
+        <div>
+          <span>Novo clube</span>
+          <strong>${novo}</strong>
+        </div>
+      </div>
+
+      <p><strong>Tipo:</strong> ${tipo}</p>
+
+      ${item.fee ? `
+        <p><strong>Valor:</strong> ${escapar(item.fee)}</p>
+      ` : `
+        <p><strong>Valor:</strong> Não divulgado oficialmente</p>
+      `}
+
+      <div class="card-footer">
+        <span>${data}</span>
+      </div>
+
+      <div class="card-actions">
+        <a href="${escapar(link)}"
+           target="_blank"
+           rel="noopener noreferrer">
+          Ver anúncio oficial ↗
+        </a>
+      </div>
+    `;
+
+    return card;
   }
 
-  function matchesSearch(item, term) {
-    if (!term) return true;
+  // ========================================================
+  // MOSTRAR RUMORES
+  // ========================================================
 
-    const content = [
-      item.title,
-      item.summary,
-      item.source,
-      item.status,
-      item.league,
-      item.player,
-      ...item.detectedClubs
-    ].join(" ");
+  function mostrarRumores() {
+    if (!elements.rumourFeed) return;
 
-    return normalize(content).includes(normalize(term));
-  }
+    const filtros = obterFiltros();
 
-  function sortItems(items) {
-    items.sort((a, b) => {
-      if (currentSort === "oldest") {
-        return getDateValue(a) - getDateValue(b);
-      }
+    const filtrados = ordenarPorData(rumores)
+      .filter(item => correspondeFiltro(item, filtros));
 
-      if (currentSort === "relevance") {
-        return b.relevance - a.relevance;
-      }
+    elements.rumourFeed.replaceChildren();
 
-      return getDateValue(b) - getDateValue(a);
+    filtrados.forEach(item => {
+      elements.rumourFeed.appendChild(
+        criarCartaoRumor(item)
+      );
     });
+
+    if (elements.emptyState) {
+      elements.emptyState.hidden = filtrados.length > 0;
+    }
+
+    if (elements.resultCount) {
+      elements.resultCount.textContent =
+        `${filtrados.length} ${filtrados.length === 1 ? "resultado" : "resultados"}`;
+    }
+
+    return filtrados.length;
   }
 
-  function applyFilters() {
-    const term = elements.search?.value || "";
-    const status = elements.status?.value || "all";
-    const league = elements.league?.value || "all";
+  // ========================================================
+  // MOSTRAR OFICIAIS
+  // ========================================================
 
-    const filtered = allItems.filter(item => {
-      const searchMatch = matchesSearch(item, term);
-      const statusMatch = status === "all" || item.status === status;
-      const leagueMatch = league === "all" || item.league === league;
+  function mostrarOficiais() {
+    prepararSecaoOficial();
 
-      return searchMatch && statusMatch && leagueMatch;
+    const feed = document.getElementById("official-feed");
+    const vazio = document.getElementById("official-empty");
+
+    if (!feed) return;
+
+    const filtros = obterFiltros();
+
+    const filtrados = ordenarPorData(oficiais)
+      .filter(item => correspondeFiltro(item, filtros));
+
+    feed.replaceChildren();
+
+    filtrados.forEach(item => {
+      feed.appendChild(
+        criarCartaoOficial(item)
+      );
     });
 
-    sortItems(filtered);
-    render(filtered);
+    if (vazio) {
+      vazio.hidden = filtrados.length > 0;
+    }
   }
 
-  function clearFilters() {
-    if (elements.search) elements.search.value = "";
-    if (elements.status) elements.status.value = "all";
-    if (elements.league) elements.league.value = "all";
+  // ========================================================
+  // RENDERIZAR TUDO
+  // ========================================================
 
-    currentSort = "newest";
+  function renderizar() {
+    mostrarRumores();
+    mostrarOficiais();
 
-    const sort = document.getElementById("radar-sort");
-    if (sort) sort.value = "newest";
-
-    applyFilters();
+    if (elements.todayLabel) {
+      elements.todayLabel.textContent =
+        new Intl.DateTimeFormat("pt-PT", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric"
+        }).format(new Date());
+    }
   }
 
-  async function loadData() {
-    if (loading) return;
+  // ========================================================
+  // CARREGAR JSON
+  // ========================================================
 
-    loading = true;
+  async function carregarJSON(url) {
+    const separador = url.includes("?") ? "&" : "?";
 
+    const resposta = await fetch(
+      `${url}${separador}_=${Date.now()}`,
+      {
+        cache: "no-store"
+      }
+    );
+
+    if (!resposta.ok) {
+      throw new Error(
+        `Erro HTTP ${resposta.status}: ${url}`
+      );
+    }
+
+    return resposta.json();
+  }
+
+  // ========================================================
+  // ATUALIZAR DADOS
+  // ========================================================
+
+  async function atualizarDados() {
     try {
-      const response = await fetch(
-        `${CONFIG.dataUrl}?t=${Date.now()}`,
-        { cache: "no-store" }
-      );
+      const resultados = await Promise.allSettled([
+        carregarJSON(CONFIG.rumoursUrl),
+        carregarJSON(CONFIG.officialUrl)
+      ]);
 
-      if (!response.ok) {
-        throw new Error(`Erro HTTP ${response.status}`);
-      }
+      if (resultados[0].status === "fulfilled") {
+        const dados = resultados[0].value;
 
-      const data = await response.json();
-
-      allItems = validateData(data);
-
-      addPendingStatusOption();
-      createSortControl();
-      applyFilters();
-
-      lastUpdated = new Date();
-
-      console.info(
-        "TRANSFER MARKET: notícias carregadas:",
-        allItems.length
-      );
-
-    } catch (error) {
-      console.error("Erro no Transfer Radar:", error);
-
-      if (elements.count) {
-        elements.count.textContent = "Erro ao carregar notícias";
-      }
-
-      if (elements.feed) {
-        elements.feed.replaceChildren(
-          createElement(
-            "p",
-            "radar-error",
-            "Não foi possível carregar as notícias. Tenta novamente mais tarde."
-          )
+        if (Array.isArray(dados)) {
+          rumores = dados
+            .map(normalizarRumor)
+            .filter(Boolean)
+            .slice(0, CONFIG.maxRumours);
+        } else {
+          console.error("candidatos.json não contém uma lista.");
+        }
+      } else {
+        console.error(
+          "Erro ao carregar rumores:",
+          resultados[0].reason
         );
       }
-    } finally {
-      loading = false;
+
+      if (resultados[1].status === "fulfilled") {
+        const dados = resultados[1].value;
+
+        if (Array.isArray(dados)) {
+          oficiais = dados
+            .map(normalizarOficial)
+            .filter(Boolean)
+            .filter(item => item.verified)
+            .slice(0, CONFIG.maxOfficials);
+        } else {
+          console.error("oficiais.json não contém uma lista.");
+        }
+      } else {
+        console.warn(
+          "Não foi possível carregar oficiais.json:",
+          resultados[1].reason
+        );
+
+        oficiais = [];
+      }
+
+      renderizar();
+
+      ultimaAtualizacao = new Date();
+
+      document.dispatchEvent(
+        new CustomEvent("transferMarketUpdated", {
+          detail: {
+            rumours: rumores.length,
+            officials: oficiais.length,
+            updatedAt: ultimaAtualizacao
+          }
+        })
+      );
+
+    } catch (erro) {
+      console.error(
+        "Erro ao atualizar TRANSFER MARKET:",
+        erro
+      );
     }
   }
 
-  function bindEvents() {
-    elements.search?.addEventListener("input", applyFilters);
-    elements.status?.addEventListener("change", applyFilters);
-    elements.league?.addEventListener("change", applyFilters);
-    elements.clear?.addEventListener("click", clearFilters);
+  // ========================================================
+  // EVENTOS DOS FILTROS
+  // ========================================================
 
-    document.addEventListener("visibilitychange", () => {
-      if (
-        document.visibilityState === "visible" &&
-        lastUpdated &&
-        Date.now() - lastUpdated.getTime() >= CONFIG.refreshInterval
-      ) {
-        loadData();
-      }
-    });
+  function configurarFiltros() {
+    elements.search?.addEventListener(
+      "input",
+      renderizar
+    );
+
+    elements.status?.addEventListener(
+      "change",
+      renderizar
+    );
+
+    elements.league?.addEventListener(
+      "change",
+      renderizar
+    );
   }
 
-  function init() {
-    if (elements.today) {
-      elements.today.textContent = new Intl.DateTimeFormat(
-        "pt-PT",
-        { dateStyle: "long" }
-      ).format(new Date());
-    }
+  // ========================================================
+  // INICIALIZAÇÃO
+  // ========================================================
 
-    bindEvents();
-    loadData();
+  function iniciar() {
+    configurarFiltros();
 
-    window.setInterval(() => {
-      if (document.visibilityState === "visible") {
-        loadData();
-      }
-    }, CONFIG.refreshInterval);
+    prepararSecaoOficial();
 
-    console.info("TRANSFER MARKET — Radar V4 iniciado.");
+    atualizarDados();
+
+    setInterval(
+      atualizarDados,
+      CONFIG.refreshInterval
+    );
+
+    console.log(
+      "TRANSFER MARKET RADAR V5.0 iniciado."
+    );
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener(
+      "DOMContentLoaded",
+      iniciar
+    );
   } else {
-    init();
+    iniciar();
   }
 
 })();
