@@ -1,10 +1,9 @@
 
 name: Atualizar radar de transferências
 
-'on':
+on:
   schedule:
     - cron: "*/5 * * * *"
-
   workflow_dispatch:
 
 permissions:
@@ -30,7 +29,7 @@ jobs:
       - name: Instalar dependências
         run: |
           python -m pip install --upgrade pip
-          pip install feedparser
+          pip install feedparser deep-translator
 
       - name: Procurar notícias de transferências
         env:
@@ -41,12 +40,9 @@ jobs:
         run: |
           git config user.name "Transfer Market Bot"
           git config user.email "actions@users.noreply.github.com"
-
-          git add candidatos.json
-          git add relatorio_fontes.json
-
+          git add candidatos.json relatorio_fontes.json historico_transferencias.json
           if ! git diff --cached --quiet; then
-            git commit -m "Atualização automática do Transfer Radar V3"
+            git commit -m "Atualização automática do Transfer Market"
             git push
           else
             echo "Não existem alterações."
