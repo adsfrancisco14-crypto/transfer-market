@@ -1,49 +1,24 @@
 {
-  "engine": "TRANSFER MARKET",
-  "version": "6.0",
-  "generatedAt": "2026-11-07T21:16:26+00:00",
-  "translation": {
-    "enabled": true,
-    "target": "pt-PT",
-    "provider": "GoogleTranslator",
-    "originalPreserved": true
-  },
-  "automaticPublication": false,
-  "xPostsUsed": false,
-  "totals": {
-    "sources": 3,
-    "articlesCollected": 66,
-    "newCandidates": 0,
-    "totalCandidates": 21,
-    "awaitingReview": 21
-  },
-  "sourcesReport": [
+  "engineVersion": "7.3",
+  "updatedAt": "2026-11-08T10:48:26.740233+00:00",
+  "sources": [
     {
       "source": "BBC Sport",
-      "feed": "https://feeds.bbci.co.uk/sport/football/rss.xml",
-      "checkedAt": "2026-11-07T21:16:25+00:00",
-      "status": "ok",
-      "articlesRead": 58,
-      "candidatesKept": 0,
-      "error": null
+      "url": "https://feeds.bbci.co.uk/sport/football/rss.xml",
+      "success": true,
+      "itemsFound": 67,
+      "itemsAccepted": 1,
+      "error": ""
     },
     {
       "source": "Sky Sports",
-      "feed": "https://www.skysports.com/rss/12040",
-      "checkedAt": "2026-11-07T21:16:25+00:00",
-      "status": "ok",
-      "articlesRead": 20,
-      "candidatesKept": 0,
-      "error": null
-    },
-    {
-      "source": "Fonte adicional",
-      "feed": "https://rsshub.app/telegram/channel/fabrizioromanotg",
-      "checkedAt": "2026-11-07T21:16:26+00:00",
-      "status": "erro",
-      "articlesRead": 0,
-      "candidatesKept": 0,
-      "error": "Feed RSS indisponível"
+      "url": "https://www.skysports.com/rss/12040",
+      "success": true,
+      "itemsFound": 20,
+      "itemsAccepted": 0,
+      "error": ""
     }
-  ]
+  ],
+  "acceptedTotal": 1,
+  "savedTotal": 8
 }
