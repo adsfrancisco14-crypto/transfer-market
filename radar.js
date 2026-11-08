@@ -1,753 +1,599 @@
-
 /* ==========================================================
    TRANSFER MARKET — TRANSFER RADAR
-   VERSÃO 5.0
+   V6.0 — filtros independentes e compatibilidade V7.3
    ========================================================== */
 
 (() => {
   "use strict";
 
   const CONFIG = {
-    rumoursUrl: "./candidatos.json",
+    candidatesUrl: "./candidatos.json",
     officialUrl: "./oficiais.json",
-    refreshInterval: 60 * 1000,
-    maxRumours: 500,
-    maxOfficials: 500
+    refreshInterval: 60 * 1000
   };
 
-  const elements = {
-    search: document.getElementById("search"),
-    status: document.getElementById("status-filter"),
-    league: document.getElementById("league-filter"),
-    rumourFeed: document.getElementById("rumour-feed"),
-    emptyState: document.getElementById("empty-state"),
-    resultCount: document.getElementById("result-count"),
-    todayLabel: document.getElementById("today-label")
+  const $ = (selector, root = document) => root.querySelector(selector);
+
+  const normalize = value => String(value ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+
+  const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+
+  const PHASE_ALIASES = {
+    "interesse": "Interesse",
+    "interest": "Interesse",
+    "rumor": "Rumor",
+    "rumour": "Rumor",
+    "negociacoes": "Negociações",
+    "negotiation": "Negociações",
+    "negotiations": "Negociações",
+    "acordo proximo": "Acordo próximo",
+    "advanced agreement": "Acordo próximo",
+    "confirmed": "Confirmada",
+    "confirmada": "Confirmada",
+    "official": "Confirmada"
   };
 
-  let rumores = [];
-  let oficiais = [];
+  const REGION_ALIASES = {
+    "inglaterra": "Inglaterra",
+    "england": "Inglaterra",
+    "premier league": "Inglaterra",
 
-  let ultimaAtualizacao = null;
+    "espanha": "Espanha",
+    "spain": "Espanha",
+    "la liga": "Espanha",
 
-  // ========================================================
-  // FUNÇÕES GERAIS
-  // ========================================================
+    "italia": "Itália",
+    "italy": "Itália",
+    "serie a": "Itália",
 
-  function texto(valor) {
-    return String(valor ?? "").trim();
-  }
+    "alemanha": "Alemanha",
+    "germany": "Alemanha",
+    "bundesliga": "Alemanha",
 
-  function escapar(valor) {
-    return texto(valor)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
+    "franca": "França",
+    "france": "França",
+    "ligue 1": "França",
 
-  function obterData(valor) {
-    if (!valor) return null;
-
-    const data = new Date(valor);
-
-    return Number.isNaN(data.getTime()) ? null : data;
-  }
-
-  function formatarData(valor) {
-    const data = obterData(valor);
-
-    if (!data) return "Data não disponível";
-
-    return new Intl.DateTimeFormat("pt-PT", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
-    }).format(data);
-  }
-
-  function normalizar(valor) {
-    return texto(valor)
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase();
-  }
-
-  function obterUrl(valor) {
-    try {
-      const url = new URL(texto(valor));
-
-      if (!["http:", "https:"].includes(url.protocol)) {
-        return "";
-      }
-
-      return url.href;
-    } catch {
-      return "";
-    }
-  }
-
-  function ordenarPorData(lista) {
-    return [...lista].sort((a, b) => {
-      const dataA = obterData(a.date)?.getTime() || 0;
-      const dataB = obterData(b.date)?.getTime() || 0;
-
-      return dataB - dataA;
-    });
-  }
-
-  // ========================================================
-  // LIGAS
-  // ========================================================
-
-  const LIGAS = {
-    inglaterra: "Inglaterra",
-    premierleague: "Inglaterra",
-    espanha: "Espanha",
-    laliga: "Espanha",
-    italia: "Itália",
-    seriea: "Itália",
-    alemanha: "Alemanha",
-    bundesliga: "Alemanha",
-    franca: "França",
-    ligue1: "França",
-    portugal: "Portugal",
-    primeiraliga: "Portugal"
+    "portugal": "Portugal",
+    "primeira liga": "Portugal"
   };
 
-  function obterLiga(item) {
-    const valor = normalizar(
-      item.league ||
-      item.country ||
-      item.competition ||
-      item.region ||
-      ""
-    ).replace(/[^a-z0-9]/g, "");
+  const state = {
+    candidates: [],
+    officials: [],
+    timer: null
+  };
 
-    if (LIGAS[valor]) {
-      return LIGAS[valor];
+  function phaseOf(item) {
+    const raw =
+      item.phase ||
+      item.suggestedStatus ||
+      item.status ||
+      "Por classificar";
+
+    return PHASE_ALIASES[normalize(raw)] || raw;
+  }
+
+  function verificationOf(item) {
+    const raw =
+      item.verificationStatus ||
+      item.verification ||
+      item.editorStatus ||
+      "Por verificar";
+
+    const n = normalize(raw);
+
+    if ([
+      "verified",
+      "verificada",
+      "confirmada",
+      "official",
+      "oficial"
+    ].includes(n)) {
+      return "Verificada";
     }
 
-    const clubes = normalizar(
-      [
-        item.currentClub,
-        item.destination,
-        item.oldClub,
-        item.newClub,
-        ...(Array.isArray(item.detectedClubs)
-          ? item.detectedClubs
-          : [])
-      ].join(" ")
+    if ([
+      "rejected",
+      "rejeitada",
+      "excluida",
+      "excluída"
+    ].includes(n)) {
+      return "Rejeitada";
+    }
+
+    return "Por verificar";
+  }
+
+  function regionsOf(item) {
+    const raw = Array.isArray(item.regions)
+      ? item.regions
+      : Array.isArray(item.leagues)
+        ? item.leagues
+        : (item.league ? [item.league] : []);
+
+    const mapped = raw
+      .map(value => REGION_ALIASES[normalize(value)] || value)
+      .filter(value => [
+        "Inglaterra",
+        "Espanha",
+        "Itália",
+        "Alemanha",
+        "França",
+        "Portugal"
+      ].includes(value));
+
+    return [...new Set(mapped)];
+  }
+
+  function isOfficial(item) {
+    const verification = normalize(
+      item.verification || item.verificationStatus || ""
     );
 
-    const equipas = [
-      {
-        liga: "Portugal",
-        nomes: [
-          "benfica", "porto", "sporting",
-          "braga", "vitoria guimaraes",
-          "gil vicente", "moreirense",
-          "santa clara", "famalicao",
-          "estoril", "casa pia", "rio ave",
-          "nacional", "arouca", "farense",
-          "boavista", "avs"
-        ]
-      },
-      {
-        liga: "Inglaterra",
-        nomes: [
-          "manchester city", "manchester united",
-          "liverpool", "arsenal", "chelsea",
-          "tottenham", "newcastle",
-          "aston villa", "everton",
-          "west ham", "brighton",
-          "nottingham forest", "fulham",
-          "crystal palace", "wolves",
-          "brentford", "bournemouth",
-          "leeds united", "sunderland", "burnley"
-        ]
-      },
-      {
-        liga: "Espanha",
-        nomes: [
-          "real madrid", "barcelona",
-          "atletico madrid", "sevilla",
-          "valencia", "villarreal",
-          "real sociedad", "athletic bilbao",
-          "girona", "getafe", "osasuna",
-          "celta vigo", "mallorca"
-        ]
-      },
-      {
-        liga: "Itália",
-        nomes: [
-          "juventus", "inter milan",
-          "ac milan", "napoli",
-          "roma", "lazio", "atalanta",
-          "fiorentina", "bologna",
-          "torino", "genoa"
-        ]
-      },
-      {
-        liga: "Alemanha",
-        nomes: [
-          "bayern munich", "borussia dortmund",
-          "bayer leverkusen", "rb leipzig",
-          "eintracht frankfurt",
-          "stuttgart", "wolfsburg",
-          "freiburg", "hoffenheim"
-        ]
-      },
-      {
-        liga: "França",
-        nomes: [
-          "paris saint germain", "psg",
-          "marseille", "monaco",
-          "lyon", "lille", "nice",
-          "lens", "rennes", "strasbourg"
-        ]
-      }
-    ];
-
-    for (const grupo of equipas) {
-      if (grupo.nomes.some(nome => clubes.includes(nome))) {
-        return grupo.liga;
-      }
-    }
-
-    return texto(item.league || item.country || "Europa");
+    return item.verified === true ||
+      item.official === true ||
+      [
+        "official",
+        "oficial",
+        "confirmed",
+        "confirmada"
+      ].includes(verification) ||
+      item.verification === "official";
   }
 
-  // ========================================================
-  // NORMALIZAR RUMORES
-  // ========================================================
-
-  function normalizarRumor(item) {
-    if (!item || typeof item !== "object") return null;
-
-    const url = obterUrl(item.url);
-
-    if (!url) return null;
-
-    const titulo = texto(item.title);
-
-    if (!titulo) return null;
+  function normalizeCandidate(item) {
+    const phase = phaseOf(item);
 
     return {
       ...item,
-      title: titulo,
-      summary: texto(item.summary),
-      originalTitle: texto(item.originalTitle),
-      originalSummary: texto(item.originalSummary),
-      source: texto(item.source) || "Fonte não identificada",
-      url,
-      date: texto(item.date),
-      status: texto(item.editorStatus || item.status || "Por verificar"),
-      relevance: Number(item.relevance ?? item.transferRelevance ?? 0),
-      league: obterLiga(item)
+
+      _phase: phase,
+      _verification: verificationOf(item),
+      _regions: regionsOf(item),
+
+      _search: normalize([
+        item.title,
+        item.summary,
+        item.originalTitle,
+        item.originalSummary,
+        item.translatedTitle,
+        item.translatedSummary,
+        item.player,
+        item.currentClub,
+        item.destination,
+        ...(item.detectedPlayers || []),
+        ...(item.detectedClubs || [])
+      ].join(" "))
     };
   }
 
-  // ========================================================
-  // NORMALIZAR TRANSFERÊNCIAS OFICIAIS
-  // ========================================================
+  function ensureVerificationFilter() {
+    if ($("#verification-filter")) {
+      return $("#verification-filter");
+    }
 
-  function normalizarOficial(item) {
-    if (!item || typeof item !== "object") return null;
+    const status = $("#status-filter");
 
-    const url = obterUrl(
-      item.officialUrl ||
-      item.announcementUrl ||
-      item.url
-    );
-
-    if (!url) return null;
-
-    const jogador = texto(
-      item.player ||
-      item.playerName
-    );
-
-    const clubeAntigo = texto(
-      item.oldClub ||
-      item.from ||
-      item.previousClub
-    );
-
-    const clubeNovo = texto(
-      item.newClub ||
-      item.to ||
-      item.destination
-    );
-
-    if (!jogador || (!clubeAntigo && !clubeNovo)) {
+    if (!status) {
       return null;
     }
 
-    return {
-      ...item,
-      player: jogador,
-      oldClub: clubeAntigo || "Não indicado",
-      newClub: clubeNovo || "Não indicado",
-      transferType: texto(item.transferType || item.type || "Transferência"),
-      fee: texto(item.fee || item.amount || ""),
-      date: texto(item.date || item.announcementDate),
-      league: obterLiga(item),
-      url,
-      source: texto(item.source || "Anúncio oficial"),
-      verified: item.verified === true ||
-        item.official === true ||
-        item.verification === "official"
-    };
+    const wrapper = document.createElement("label");
+
+    wrapper.className =
+      "filter-control verification-filter-control";
+
+    wrapper.innerHTML = `
+      <span>Verificação</span>
+      <select id="verification-filter">
+        <option value="">Todas</option>
+        <option value="Por verificar">Por verificar</option>
+        <option value="Verificada">Verificada</option>
+        <option value="Rejeitada">Rejeitada</option>
+      </select>
+    `;
+
+    status.parentElement?.insertBefore(
+      wrapper,
+      status.nextSibling
+    );
+
+    return $("#verification-filter");
   }
 
-  // ========================================================
-  // SECÇÃO DE TRANSFERÊNCIAS OFICIAIS
-  // ========================================================
-
-  function prepararSecaoOficial() {
-    let secao = document.getElementById("official-section");
-
-    if (secao) {
-      return secao;
+  function dateLabel(value) {
+    if (!value) {
+      return "Data não disponível";
     }
 
-    secao = document.createElement("section");
-    secao.id = "official-section";
-    secao.className = "official-section";
+    const date = new Date(value);
 
-    secao.innerHTML = `
-      <div class="section-heading">
-        <h2>Transferências oficiais</h2>
-        <p>Movimentações confirmadas oficialmente</p>
-      </div>
+    if (Number.isNaN(date.getTime())) {
+      return escapeHTML(value);
+    }
 
+    return new Intl.DateTimeFormat("pt-PT", {
+      dateStyle: "medium",
+      timeStyle: "short"
+    }).format(date);
+  }
+
+  function sourceLink(item) {
+    const url =
+      item.url ||
+      item.officialUrl ||
+      item.announcementUrl ||
+      "#";
+
+    return `
+      <a
+        href="${escapeHTML(url)}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Ver fonte original ↗
+      </a>
+    `;
+  }
+
+  function renderRumour(item) {
+    const title =
+      item.title ||
+      item.translatedTitle ||
+      item.originalTitle ||
+      "Notícia sem título";
+
+    const summary =
+      item.summary ||
+      item.translatedSummary ||
+      item.originalSummary ||
+      "";
+
+    const player = item.player
+      ? `<p class="card-player"><strong>Jogador:</strong> ${escapeHTML(item.player)}</p>`
+      : "";
+
+    const club = item.currentClub
+      ? `<p class="card-club"><strong>Clube:</strong> ${escapeHTML(item.currentClub)}</p>`
+      : "";
+
+    const destination = item.destination
+      ? `<p class="card-destination"><strong>Destino:</strong> ${escapeHTML(item.destination)}</p>`
+      : "";
+
+    const region = item._regions.length
+      ? item._regions.join(" · ")
+      : "Por identificar";
+
+    return `
+      <article class="rumour-card" data-id="${escapeHTML(item.id || "")}">
+        <div class="card-top">
+          <span class="card-league">${escapeHTML(region)}</span>
+          <span class="card-status">${escapeHTML(item._phase)}</span>
+        </div>
+
+        <h3>${escapeHTML(title)}</h3>
+
+        ${summary
+          ? `<p class="card-summary">${escapeHTML(summary)}</p>`
+          : ""
+        }
+
+        ${player}
+        ${club}
+        ${destination}
+
+        <div class="card-footer">
+          <span>${escapeHTML(item.source || item.domain || "Fonte não identificada")}</span>
+          <time>${dateLabel(item.date)}</time>
+        </div>
+
+        <div class="card-actions">
+          <span class="verification-label">${escapeHTML(item._verification)}</span>
+          ${sourceLink(item)}
+        </div>
+      </article>
+    `;
+  }
+
+  function renderOfficial(item) {
+    const player =
+      item.player ||
+      item.playerName ||
+      "Jogador não identificado";
+
+    const oldClub =
+      item.oldClub ||
+      item.from ||
+      item.previousClub ||
+      "";
+
+    const newClub =
+      item.newClub ||
+      item.to ||
+      item.destination ||
+      "";
+
+    const type =
+      item.transferType ||
+      item.type ||
+      "Transferência";
+
+    const fee =
+      item.fee ||
+      item.amount ||
+      "";
+
+    const date =
+      item.announcementDate ||
+      item.date ||
+      "";
+
+    const url =
+      item.officialUrl ||
+      item.announcementUrl ||
+      item.url ||
+      "#";
+
+    return `
+      <article class="official-card">
+        <div class="official-card-top">
+          <span class="official-label">Confirmada oficialmente</span>
+          <time>${dateLabel(date)}</time>
+        </div>
+
+        <h3>${escapeHTML(player)}</h3>
+
+        <div class="official-movement">
+          <span>${escapeHTML(oldClub || "Clube anterior não indicado")}</span>
+          <span class="movement-arrow">→</span>
+          <strong>${escapeHTML(newClub || "Novo clube não indicado")}</strong>
+        </div>
+
+        <p class="card-summary">
+          ${escapeHTML(type)}${fee ? ` · ${escapeHTML(fee)}` : ""}
+        </p>
+
+        <div class="card-actions">
+          <a href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer">
+            Anúncio oficial ↗
+          </a>
+        </div>
+      </article>
+    `;
+  }
+
+  function ensureOfficialSection() {
+    let section = $("#official-section");
+
+    if (section) {
+      return section;
+    }
+
+    const feed = $("#rumour-feed");
+
+    if (!feed) {
+      return null;
+    }
+
+    section = document.createElement("section");
+    section.id = "official-section";
+    section.className = "official-section";
+
+    section.innerHTML = `
+      <h2>Transferências oficiais</h2>
       <div id="official-feed" class="official-feed"></div>
-
-      <p id="official-empty" class="empty-state">
+      <p id="official-empty">
         Ainda não existem transferências oficiais registadas.
       </p>
     `;
 
-    const feed = elements.rumourFeed;
+    feed.parentElement?.insertBefore(section, feed);
 
-    if (feed && feed.parentElement) {
-      feed.parentElement.insertBefore(secao, feed);
-    } else {
-      document.body.appendChild(secao);
-    }
-
-    return secao;
+    return section;
   }
 
-  // ========================================================
-  // FILTROS
-  // ========================================================
+  function matchesFilters(item) {
+    const search = normalize($("#search")?.value || "");
+    const phase = $("#status-filter")?.value || "";
+    const verification = $("#verification-filter")?.value || "";
+    const region = $("#league-filter")?.value || "";
 
-  function obterFiltros() {
-    return {
-      pesquisa: normalizar(elements.search?.value || ""),
-      estado: texto(elements.status?.value || "all"),
-      liga: texto(elements.league?.value || "all")
-    };
-  }
-
-  function correspondeFiltro(item, filtros) {
-    const conteudo = normalizar([
-      item.title,
-      item.summary,
-      item.player,
-      item.currentClub,
-      item.destination,
-      item.oldClub,
-      item.newClub,
-      item.source
-    ].join(" "));
+    if (search && !item._search.includes(search)) {
+      return false;
+    }
 
     if (
-      filtros.pesquisa &&
-      !conteudo.includes(filtros.pesquisa)
+      phase &&
+      normalize(item._phase) !==
+      normalize(PHASE_ALIASES[normalize(phase)] || phase)
     ) {
       return false;
     }
 
     if (
-      filtros.estado &&
-      filtros.estado !== "all" &&
-      normalizar(item.status) !== normalizar(filtros.estado)
+      verification &&
+      normalize(item._verification) !== normalize(verification)
     ) {
       return false;
     }
 
-    if (
-      filtros.liga &&
-      filtros.liga !== "all" &&
-      normalizar(item.league) !== normalizar(filtros.liga)
-    ) {
-      return false;
+    if (region) {
+      if (region === "Europa") {
+        return item._regions.length === 0;
+      }
+
+      if (!item._regions.some(
+        value => normalize(value) ===
+          normalize(REGION_ALIASES[normalize(region)] || region)
+      )) {
+        return false;
+      }
     }
 
     return true;
   }
 
-  // ========================================================
-  // CRIAR CARTÃO DE RUMOR
-  // ========================================================
+  function update() {
+    const rumourFeed = $("#rumour-feed");
 
-  function criarCartaoRumor(item) {
-    const card = document.createElement("article");
-
-    card.className = "rumour-card";
-
-    const titulo = escapar(item.title);
-    const resumo = escapar(item.summary);
-    const fonte = escapar(item.source);
-    const data = escapar(formatarData(item.date));
-    const estado = escapar(item.status);
-    const liga = escapar(item.league);
-
-    const jogador = escapar(item.player);
-    const clube = escapar(item.currentClub);
-    const destino = escapar(item.destination);
-
-    const link = obterUrl(item.url);
-
-    card.innerHTML = `
-      <div class="card-top">
-        <span class="card-league">${liga}</span>
-        <span class="card-status">${estado}</span>
-      </div>
-
-      <h3>${titulo}</h3>
-
-      ${resumo ? `<p class="card-summary">${resumo}</p>` : ""}
-
-      ${jogador ? `
-        <p class="card-player">
-          <strong>Jogador:</strong> ${jogador}
-        </p>
-      ` : ""}
-
-      ${clube ? `
-        <p class="card-club">
-          <strong>Clube atual:</strong> ${clube}
-        </p>
-      ` : ""}
-
-      ${destino ? `
-        <p class="card-destination">
-          <strong>Destino:</strong> ${destino}
-        </p>
-      ` : ""}
-
-      <div class="card-footer">
-        <span>${fonte}</span>
-        <span>${data}</span>
-      </div>
-
-      <div class="card-actions">
-        <a href="${escapar(link)}"
-           target="_blank"
-           rel="noopener noreferrer">
-          Ver notícia original ↗
-        </a>
-      </div>
-    `;
-
-    return card;
-  }
-
-  // ========================================================
-  // CRIAR CARTÃO OFICIAL
-  // ========================================================
-
-  function criarCartaoOficial(item) {
-    const card = document.createElement("article");
-
-    card.className = "official-card";
-
-    const jogador = escapar(item.player);
-    const antigo = escapar(item.oldClub);
-    const novo = escapar(item.newClub);
-    const tipo = escapar(item.transferType);
-    const liga = escapar(item.league);
-    const data = escapar(formatarData(item.date));
-
-    const link = obterUrl(item.url);
-
-    card.innerHTML = `
-      <div class="official-card-top">
-        <span class="card-league">${liga}</span>
-        <span class="official-label">Confirmada</span>
-      </div>
-
-      <h3>${jogador}</h3>
-
-      <div class="official-movement">
-        <div>
-          <span>Clube anterior</span>
-          <strong>${antigo}</strong>
-        </div>
-
-        <span class="movement-arrow">→</span>
-
-        <div>
-          <span>Novo clube</span>
-          <strong>${novo}</strong>
-        </div>
-      </div>
-
-      <p><strong>Tipo:</strong> ${tipo}</p>
-
-      ${item.fee ? `
-        <p><strong>Valor:</strong> ${escapar(item.fee)}</p>
-      ` : `
-        <p><strong>Valor:</strong> Não divulgado oficialmente</p>
-      `}
-
-      <div class="card-footer">
-        <span>${data}</span>
-      </div>
-
-      <div class="card-actions">
-        <a href="${escapar(link)}"
-           target="_blank"
-           rel="noopener noreferrer">
-          Ver anúncio oficial ↗
-        </a>
-      </div>
-    `;
-
-    return card;
-  }
-
-  // ========================================================
-  // MOSTRAR RUMORES
-  // ========================================================
-
-  function mostrarRumores() {
-    if (!elements.rumourFeed) return;
-
-    const filtros = obterFiltros();
-
-    const filtrados = ordenarPorData(rumores)
-      .filter(item => correspondeFiltro(item, filtros));
-
-    elements.rumourFeed.replaceChildren();
-
-    filtrados.forEach(item => {
-      elements.rumourFeed.appendChild(
-        criarCartaoRumor(item)
-      );
-    });
-
-    if (elements.emptyState) {
-      elements.emptyState.hidden = filtrados.length > 0;
+    if (!rumourFeed) {
+      return;
     }
 
-    if (elements.resultCount) {
-      elements.resultCount.textContent =
-        `${filtrados.length} ${filtrados.length === 1 ? "resultado" : "resultados"}`;
+    const filtered = state.candidates
+      .map(normalizeCandidate)
+      .filter(item => !isOfficial(item))
+      .filter(matchesFilters);
+
+    rumourFeed.innerHTML = filtered
+      .map(renderRumour)
+      .join("");
+
+    const count = $("#result-count");
+
+    if (count) {
+      count.textContent = String(filtered.length);
     }
 
-    return filtrados.length;
-  }
+    const empty = $("#empty-state");
 
-  // ========================================================
-  // MOSTRAR OFICIAIS
-  // ========================================================
-
-  function mostrarOficiais() {
-    prepararSecaoOficial();
-
-    const feed = document.getElementById("official-feed");
-    const vazio = document.getElementById("official-empty");
-
-    if (!feed) return;
-
-    const filtros = obterFiltros();
-
-    const filtrados = ordenarPorData(oficiais)
-      .filter(item => correspondeFiltro(item, filtros));
-
-    feed.replaceChildren();
-
-    filtrados.forEach(item => {
-      feed.appendChild(
-        criarCartaoOficial(item)
-      );
-    });
-
-    if (vazio) {
-      vazio.hidden = filtrados.length > 0;
+    if (empty) {
+      empty.hidden = filtered.length !== 0;
     }
-  }
 
-  // ========================================================
-  // RENDERIZAR TUDO
-  // ========================================================
+    ensureOfficialSection();
 
-  function renderizar() {
-    mostrarRumores();
-    mostrarOficiais();
+    const officialFeed = $("#official-feed");
 
-    if (elements.todayLabel) {
-      elements.todayLabel.textContent =
-        new Intl.DateTimeFormat("pt-PT", {
-          day: "2-digit",
-          month: "long",
-          year: "numeric"
-        }).format(new Date());
-    }
-  }
+    if (officialFeed) {
+      officialFeed.innerHTML = state.officials
+        .filter(isOfficial)
+        .sort((a, b) =>
+          new Date(b.announcementDate || b.date || 0) -
+          new Date(a.announcementDate || a.date || 0)
+        )
+        .map(renderOfficial)
+        .join("");
 
-  // ========================================================
-  // CARREGAR JSON
-  // ========================================================
+      const officialEmpty = $("#official-empty");
 
-  async function carregarJSON(url) {
-    const separador = url.includes("?") ? "&" : "?";
-
-    const resposta = await fetch(
-      `${url}${separador}_=${Date.now()}`,
-      {
-        cache: "no-store"
+      if (officialEmpty) {
+        officialEmpty.hidden = officialFeed.innerHTML !== "";
       }
-    );
-
-    if (!resposta.ok) {
-      throw new Error(
-        `Erro HTTP ${resposta.status}: ${url}`
-      );
     }
 
-    return resposta.json();
+    const demoAlert = $(".demo-alert");
+
+    if (demoAlert) {
+      demoAlert.hidden = state.candidates.length > 0;
+    }
+
+    const today = $("#today-label");
+
+    if (today) {
+      today.textContent = new Intl.DateTimeFormat("pt-PT", {
+        dateStyle: "full"
+      }).format(new Date());
+    }
   }
 
-  // ========================================================
-  // ATUALIZAR DADOS
-  // ========================================================
-
-  async function atualizarDados() {
+  async function readJSON(url, fallback) {
     try {
-      const resultados = await Promise.allSettled([
-        carregarJSON(CONFIG.rumoursUrl),
-        carregarJSON(CONFIG.officialUrl)
-      ]);
+      const response = await fetch(
+        `${url}?v=${Date.now()}`,
+        { cache: "no-store" }
+      );
 
-      if (resultados[0].status === "fulfilled") {
-        const dados = resultados[0].value;
-
-        if (Array.isArray(dados)) {
-          rumores = dados
-            .map(normalizarRumor)
-            .filter(Boolean)
-            .slice(0, CONFIG.maxRumours);
-        } else {
-          console.error("candidatos.json não contém uma lista.");
-        }
-      } else {
-        console.error(
-          "Erro ao carregar rumores:",
-          resultados[0].reason
+      if (!response.ok) {
+        throw new Error(
+          `${response.status} ${response.statusText}`
         );
       }
 
-      if (resultados[1].status === "fulfilled") {
-        const dados = resultados[1].value;
+      return await response.json();
 
-        if (Array.isArray(dados)) {
-          oficiais = dados
-            .map(normalizarOficial)
-            .filter(Boolean)
-            .filter(item => item.verified)
-            .slice(0, CONFIG.maxOfficials);
-        } else {
-          console.error("oficiais.json não contém uma lista.");
-        }
-      } else {
-        console.warn(
-          "Não foi possível carregar oficiais.json:",
-          resultados[1].reason
-        );
-
-        oficiais = [];
-      }
-
-      renderizar();
-
-      ultimaAtualizacao = new Date();
-
-      document.dispatchEvent(
-        new CustomEvent("transferMarketUpdated", {
-          detail: {
-            rumours: rumores.length,
-            officials: oficiais.length,
-            updatedAt: ultimaAtualizacao
-          }
-        })
+    } catch (error) {
+      console.warn(
+        `TRANSFER MARKET: não foi possível carregar ${url}`,
+        error
       );
 
-    } catch (erro) {
-      console.error(
-        "Erro ao atualizar TRANSFER MARKET:",
-        erro
-      );
+      return fallback;
     }
   }
 
-  // ========================================================
-  // EVENTOS DOS FILTROS
-  // ========================================================
+  async function load() {
+    const [candidates, officials] = await Promise.all([
+      readJSON(CONFIG.candidatesUrl, []),
+      readJSON(CONFIG.officialUrl, [])
+    ]);
 
-  function configurarFiltros() {
-    elements.search?.addEventListener(
-      "input",
-      renderizar
-    );
+    state.candidates = Array.isArray(candidates)
+      ? candidates
+      : [];
 
-    elements.status?.addEventListener(
-      "change",
-      renderizar
-    );
+    state.officials = Array.isArray(officials)
+      ? officials
+      : [];
 
-    elements.league?.addEventListener(
-      "change",
-      renderizar
-    );
+    update();
   }
 
-  // ========================================================
-  // INICIALIZAÇÃO
-  // ========================================================
+  function bindFilters() {
+    ensureVerificationFilter();
 
-  function iniciar() {
-    configurarFiltros();
+    [
+      "#search",
+      "#status-filter",
+      "#verification-filter",
+      "#league-filter"
+    ].forEach(selector => {
+      $(selector)?.addEventListener(
+        selector === "#search" ? "input" : "change",
+        update
+      );
+    });
 
-    prepararSecaoOficial();
+    $("#clear-filters")?.addEventListener("click", event => {
+      event.preventDefault();
 
-    atualizarDados();
+      [
+        "#search",
+        "#status-filter",
+        "#verification-filter",
+        "#league-filter"
+      ].forEach(selector => {
+        const element = $(selector);
 
-    setInterval(
-      atualizarDados,
+        if (element) {
+          element.value = "";
+        }
+      });
+
+      update();
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    bindFilters();
+    load();
+
+    state.timer = window.setInterval(
+      load,
       CONFIG.refreshInterval
     );
-
-    console.log(
-      "TRANSFER MARKET RADAR V5.0 iniciado."
-    );
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener(
-      "DOMContentLoaded",
-      iniciar
-    );
-  } else {
-    iniciar();
-  }
+  });
 
 })();
