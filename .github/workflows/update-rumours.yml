@@ -21,33 +21,34 @@ jobs:
       - name: Obter repositório
         uses: actions/checkout@v4
 
-      - name: Instalar Python
+      - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
           cache-dependency-path: requirements.txt
 
-      - name: Instalar bibliotecas
+      - name: Instalar dependências
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Executar motor V7.2
+      - name: Validar sintaxe
+        run: python -m py_compile atualizar_rumores.py
+
+      - name: Executar motor
         run: python atualizar_rumores.py
 
-      - name: Guardar notícias atualizadas
+      - name: Guardar dados atualizados
         run: |
           git config user.name "TRANSFER MARKET Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add candidatos.json
-          git add historico_transferencias.json
-          git add relatorio_fontes.json
+          git add candidatos.json historico_transferencias.json relatorio_fontes.json
 
           if ! git diff --cached --quiet; then
-            git commit -m "Atualização automática das notícias"
+            git commit -m "Atualização automática do radar de transferências"
             git push
           else
-            echo "Não existem alterações."
+            echo "Sem alterações para guardar."
           fi
