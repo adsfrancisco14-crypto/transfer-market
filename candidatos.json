@@ -1,5 +1,62 @@
 [
   {
+    "id": "e28ed739d0e765d966d5",
+    "title": "Atletico target Zubimendi move - Tuesday's gossip",
+    "summary": "Arsenal midfielder Martin Zubimendi is a target for Atletico Madrid, Leeds United plan to step up contract talks with striker Dominic Calvert-Lewin, Barcelona are keen on Bayern Munich defender Jonathan Tah, plus more.",
+    "originalTitle": "Atletico target Zubimendi move - Tuesday's gossip",
+    "originalSummary": "Arsenal midfielder Martin Zubimendi is a target for Atletico Madrid, Leeds United plan to step up contract talks with striker Dominic Calvert-Lewin, Barcelona are keen on Bayern Munich defender Jonathan Tah, plus more.",
+    "translatedTitle": "Atletico target Zubimendi move - Tuesday's gossip",
+    "translatedSummary": "Arsenal midfielder Martin Zubimendi is a target for Atletico Madrid, Leeds United plan to step up contract talks with striker Dominic Calvert-Lewin, Barcelona are keen on Bayern Munich defender Jonathan Tah, plus more.",
+    "source": "BBC Sport",
+    "domain": "www.bbc.co.uk",
+    "url": "https://www.bbc.co.uk/sport/football/articles/cjn5v5xypez2o?at_medium=RSS&at_campaign=rss",
+    "date": "2026-11-09T21:13:37+00:00",
+    "firstSeen": "2026-11-09T21:57:32.888124+00:00",
+    "lastSeen": "2026-11-09T21:57:32.888128+00:00",
+    "status": "Negociações",
+    "suggestedStatus": "Negociações",
+    "phase": "Negociações",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 55,
+    "relevance": 55,
+    "classificationReasons": [
+      "Sinal de transferência no resumo",
+      "Referência a negociações",
+      "Dois ou mais clubes identificados"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Arsenal",
+      "Leeds United",
+      "Atletico Madrid",
+      "Barcelona",
+      "Bayern Munich",
+      "Bayern"
+    ],
+    "regions": [
+      "Inglaterra",
+      "Espanha",
+      "Alemanha"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "BBC Sport",
+        "url": "https://www.bbc.co.uk/sport/football/articles/cjn5v5xypez2o?at_medium=RSS&at_campaign=rss"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "65e5cd9aa30666eb8c57",
     "title": "Alisson wants to sign new Liverpool contract",
     "summary": "Liverpool goalkeeper Alisson Becker wants to stay at the club beyond the end of the season, when his current contract is set to expire.",
@@ -12,7 +69,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/cw62ypepq2m7o?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-09T12:00:11+00:00",
     "firstSeen": "2026-11-09T12:19:47.848532+00:00",
-    "lastSeen": "2026-11-09T21:15:06.552031+00:00",
+    "lastSeen": "2026-11-09T21:57:35.017373+00:00",
     "status": "Interesse",
     "suggestedStatus": "Interesse",
     "phase": "Interesse",
@@ -425,7 +482,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-09T21:15:06.552305+00:00",
+    "lastSeen": "2026-11-09T21:57:35.018893+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
