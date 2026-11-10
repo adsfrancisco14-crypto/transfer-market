@@ -1,5 +1,54 @@
 [
   {
+    "id": "61f347a70b1b310dacce",
+    "title": "'You can't make a house on a puddle' - Merse criticises INEOS transfer policy",
+    "summary": "Paul Merson discusses Manchester United's transfer activity under INEOS and why it has led to poor results.",
+    "originalTitle": "'You can't make a house on a puddle' - Merse criticises INEOS transfer policy",
+    "originalSummary": "Paul Merson discusses Manchester United's transfer activity under INEOS and why it has led to poor results.",
+    "translatedTitle": "'You can't make a house on a puddle' - Merse criticises INEOS transfer policy",
+    "translatedSummary": "Paul Merson discusses Manchester United's transfer activity under INEOS and why it has led to poor results.",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/watch/video/13610614/manchester-united-paul-merson-criticises-ineos-transfer-policy-and-how-its-affected-michael-carricks-job-as-head-coach",
+    "date": "2026-11-10T12:32:00+00:00",
+    "firstSeen": "2026-11-10T13:31:40.844445+00:00",
+    "lastSeen": "2026-11-10T13:31:40.844448+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 40,
+    "relevance": 40,
+    "classificationReasons": [
+      "Sinal de transferência no título",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Manchester United"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/watch/video/13610614/manchester-united-paul-merson-criticises-ineos-transfer-policy-and-how-its-affected-michael-carricks-job-as-head-coach"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "e28ed739d0e765d966d5",
     "title": "Atletico target Zubimendi move - Tuesday's gossip",
     "summary": "Arsenal midfielder Martin Zubimendi is a target for Atletico Madrid, Leeds United plan to step up contract talks with striker Dominic Calvert-Lewin, Barcelona are keen on Bayern Munich defender Jonathan Tah, plus more.",
@@ -12,7 +61,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/cjn5v5xypez2o?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-09T21:13:37+00:00",
     "firstSeen": "2026-11-09T21:57:32.888124+00:00",
-    "lastSeen": "2026-11-10T12:16:33.182868+00:00",
+    "lastSeen": "2026-11-10T13:31:41.681257+00:00",
     "status": "Negociações",
     "suggestedStatus": "Negociações",
     "phase": "Negociações",
@@ -69,7 +118,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/cw62ypepq2m7o?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-09T12:00:11+00:00",
     "firstSeen": "2026-11-09T12:19:47.848532+00:00",
-    "lastSeen": "2026-11-10T12:16:33.183002+00:00",
+    "lastSeen": "2026-11-10T13:31:41.681402+00:00",
     "status": "Interesse",
     "suggestedStatus": "Interesse",
     "phase": "Interesse",
@@ -482,7 +531,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-10T12:16:33.183417+00:00",
+    "lastSeen": "2026-11-10T13:31:41.681696+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
