@@ -1,5 +1,54 @@
 [
   {
+    "id": "13e0f40caa0ef76f4d61",
+    "title": "Merson: Man Utd transfer policy is to blame - not Carrick",
+    "summary": "Sky Sports' Paul Merson believes Manchester United’s transfer strategy is to blame for their worst start to a top-flight season instead of head coach Michael Carrick.",
+    "originalTitle": "Merson: Man Utd transfer policy is to blame - not Carrick",
+    "originalSummary": "Sky Sports' Paul Merson believes Manchester United’s transfer strategy is to blame for their worst start to a top-flight season instead of head coach Michael Carrick.",
+    "translatedTitle": "Merson: Man Utd transfer policy is to blame - not Carrick",
+    "translatedSummary": "Sky Sports' Paul Merson believes Manchester United’s transfer strategy is to blame for their worst start to a top-flight season instead of head coach Michael Carrick.",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/news/12040/13610645/man-utds-transfer-policy-to-blame-for-clubs-worst-premier-league-start-and-not-michael-carrick-says-paul-merson",
+    "date": "2026-11-10T13:30:00+00:00",
+    "firstSeen": "2026-11-10T14:31:31.564516+00:00",
+    "lastSeen": "2026-11-10T14:31:31.564519+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 40,
+    "relevance": 40,
+    "classificationReasons": [
+      "Sinal de transferência no título",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Manchester United"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/news/12040/13610645/man-utds-transfer-policy-to-blame-for-clubs-worst-premier-league-start-and-not-michael-carrick-says-paul-merson"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "61f347a70b1b310dacce",
     "title": "'You can't make a house on a puddle' - Merse criticises INEOS transfer policy",
     "summary": "Paul Merson discusses Manchester United's transfer activity under INEOS and why it has led to poor results.",
@@ -12,7 +61,7 @@
     "url": "https://www.skysports.com/watch/video/13610614/manchester-united-paul-merson-criticises-ineos-transfer-policy-and-how-its-affected-michael-carricks-job-as-head-coach",
     "date": "2026-11-10T12:32:00+00:00",
     "firstSeen": "2026-11-10T13:31:40.844445+00:00",
-    "lastSeen": "2026-11-10T13:31:40.844448+00:00",
+    "lastSeen": "2026-11-10T14:31:33.680684+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -61,7 +110,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/cjn5v5xypez2o?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-09T21:13:37+00:00",
     "firstSeen": "2026-11-09T21:57:32.888124+00:00",
-    "lastSeen": "2026-11-10T13:31:41.681257+00:00",
+    "lastSeen": "2026-11-10T14:31:33.678663+00:00",
     "status": "Negociações",
     "suggestedStatus": "Negociações",
     "phase": "Negociações",
@@ -118,7 +167,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/cw62ypepq2m7o?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-09T12:00:11+00:00",
     "firstSeen": "2026-11-09T12:19:47.848532+00:00",
-    "lastSeen": "2026-11-10T13:31:41.681402+00:00",
+    "lastSeen": "2026-11-10T14:31:33.678771+00:00",
     "status": "Interesse",
     "suggestedStatus": "Interesse",
     "phase": "Interesse",
@@ -531,7 +580,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-10T13:31:41.681696+00:00",
+    "lastSeen": "2026-11-10T14:31:33.679053+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
