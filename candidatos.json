@@ -1,5 +1,57 @@
 [
   {
+    "id": "2932d7dd6e738ce84ca8",
+    "title": "Papers: Arsenal, Chelsea and Liverpool chase Bournemouth star Scott",
+    "summary": "The top stories and transfer rumours from Thursday's newspapers...",
+    "originalTitle": "Papers: Arsenal, Chelsea and Liverpool chase Bournemouth star Scott",
+    "originalSummary": "The top stories and transfer rumours from Thursday's newspapers...",
+    "translatedTitle": "Papers: Arsenal, Chelsea and Liverpool chase Bournemouth star Scott",
+    "translatedSummary": "The top stories and transfer rumours from Thursday's newspapers...",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/news/12040/13611225/arsenal-chelsea-and-liverpool-chase-bournemouth-star-alex-scott-paper-talk",
+    "date": "2026-11-11T21:50:00+00:00",
+    "firstSeen": "2026-11-11T22:37:19.560117+00:00",
+    "lastSeen": "2026-11-11T22:37:19.560120+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 30,
+    "relevance": 30,
+    "classificationReasons": [
+      "Sinal de transferência no resumo",
+      "Dois ou mais clubes identificados"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Arsenal",
+      "Bournemouth",
+      "Chelsea",
+      "Liverpool"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/news/12040/13611225/arsenal-chelsea-and-liverpool-chase-bournemouth-star-alex-scott-paper-talk"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "940107523cc6d6f69792",
     "title": "Man Utd close to agreeing Poch deal as Carrick reports for work",
     "summary": "Manchester United are close to agreeing a deal with Mauricio Pochettino to become their next head coach if they decide to sack Michael Carrick.",
@@ -629,7 +681,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-11T20:03:55.180886+00:00",
+    "lastSeen": "2026-11-11T22:37:20.531785+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
