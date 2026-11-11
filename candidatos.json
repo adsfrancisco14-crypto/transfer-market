@@ -1,5 +1,54 @@
 [
   {
+    "id": "940107523cc6d6f69792",
+    "title": "Man Utd close to agreeing Poch deal as Carrick reports for work",
+    "summary": "Manchester United are close to agreeing a deal with Mauricio Pochettino to become their next head coach if they decide to sack Michael Carrick.",
+    "originalTitle": "Man Utd close to agreeing Poch deal as Carrick reports for work",
+    "originalSummary": "Manchester United are close to agreeing a deal with Mauricio Pochettino to become their next head coach if they decide to sack Michael Carrick.",
+    "translatedTitle": "Man Utd close to agreeing Poch deal as Carrick reports for work",
+    "translatedSummary": "Manchester United are close to agreeing a deal with Mauricio Pochettino to become their next head coach if they decide to sack Michael Carrick.",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/news/12040/13610862/mauricio-pochettino-man-utd-close-to-agreeing-deal-with-michael-carricks-potential-successor-ahead-of-monaco-meeting",
+    "date": "2026-11-11T08:28:00+00:00",
+    "firstSeen": "2026-11-11T09:34:06.861235+00:00",
+    "lastSeen": "2026-11-11T09:34:06.861238+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 40,
+    "relevance": 40,
+    "classificationReasons": [
+      "Sinal de transferência no título",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Manchester United"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/news/12040/13610862/mauricio-pochettino-man-utd-close-to-agreeing-deal-with-michael-carricks-potential-successor-ahead-of-monaco-meeting"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "13e0f40caa0ef76f4d61",
     "title": "Merson: Man Utd transfer policy is to blame - not Carrick",
     "summary": "Sky Sports' Paul Merson believes Manchester United’s transfer strategy is to blame for their worst start to a top-flight season instead of head coach Michael Carrick.",
@@ -580,7 +629,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-11T08:38:27.952905+00:00",
+    "lastSeen": "2026-11-11T09:34:07.853211+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
