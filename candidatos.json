@@ -49,6 +49,55 @@
     "engineVersion": "7.3"
   },
   {
+    "id": "fa7ce041fec7bbfa5d06",
+    "title": "Neville: Pochettino needs control of Man Utd recruitment",
+    "summary": "Sky Sports' Gary Neville says it will be key for Mauricio Pochettino to take a leading role in Manchester United's recruitment plans for the upcoming transfer window and beyond if he is to achieve success at Old Trafford.",
+    "originalTitle": "Neville: Pochettino needs control of Man Utd recruitment",
+    "originalSummary": "Sky Sports' Gary Neville says it will be key for Mauricio Pochettino to take a leading role in Manchester United's recruitment plans for the upcoming transfer window and beyond if he is to achieve success at Old Trafford.",
+    "translatedTitle": "Neville: Pochettino needs control of Man Utd recruitment",
+    "translatedSummary": "Sky Sports' Gary Neville says it will be key for Mauricio Pochettino to take a leading role in Manchester United's recruitment plans for the upcoming transfer window and beyond if he is to achieve success at Old Trafford.",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/news/12040/13611886/gary-neville-mauricio-pochettino-needs-control-of-manchester-united-recruitment",
+    "date": "2026-11-12T14:49:00+00:00",
+    "firstSeen": "2026-11-13T13:51:29.471103+00:00",
+    "lastSeen": "2026-11-13T13:51:29.471105+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 25,
+    "relevance": 25,
+    "classificationReasons": [
+      "Sinal de transferência no resumo",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Manchester United"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/news/12040/13611886/gary-neville-mauricio-pochettino-needs-control-of-manchester-united-recruitment"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "2932d7dd6e738ce84ca8",
     "title": "Papers: Arsenal, Chelsea and Liverpool chase Bournemouth star Scott",
     "summary": "The top stories and transfer rumours from Thursday's newspapers...",
@@ -730,7 +779,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-13T12:36:48.677367+00:00",
+    "lastSeen": "2026-11-13T13:51:30.525304+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
