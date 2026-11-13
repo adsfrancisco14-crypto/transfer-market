@@ -1,5 +1,54 @@
 [
   {
+    "id": "56375716672feddf2500",
+    "title": "Papers: Man Utd eyeing move for Como star Paz",
+    "summary": "The top stories and transfer rumours from Saturday's newspapers...",
+    "originalTitle": "Papers: Man Utd eyeing move for Como star Paz",
+    "originalSummary": "The top stories and transfer rumours from Saturday's newspapers...",
+    "translatedTitle": "Papers: Man Utd eyeing move for Como star Paz",
+    "translatedSummary": "The top stories and transfer rumours from Saturday's newspapers...",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/news/12040/13611965/man-utd-transfer-news-como-star-nico-paz-emerges-as-target-ahead-of-summer-transfer-window-paper-talk",
+    "date": "2026-11-13T22:51:00+00:00",
+    "firstSeen": "2026-11-13T23:28:25.236122+00:00",
+    "lastSeen": "2026-11-13T23:28:25.236124+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 25,
+    "relevance": 25,
+    "classificationReasons": [
+      "Sinal de transferência no resumo",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Como"
+    ],
+    "regions": [
+      "Itália"
+    ],
+    "league": "Itália",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/news/12040/13611965/man-utd-transfer-news-como-star-nico-paz-emerges-as-target-ahead-of-summer-transfer-window-paper-talk"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "b3c4f5b3e82958509ce5",
     "title": "Man Utd want Paz, Chelsea target Kounde - Saturday's gossip",
     "summary": "Manchester United are targeting Como midfielder Nico Paz as new manager Mauricio Pochettino prepares to receive backing in the transfer market at Old Trafford.",
@@ -12,7 +61,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/cq39glw42xkjo?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-13T22:05:14+00:00",
     "firstSeen": "2026-11-13T22:49:53.836578+00:00",
-    "lastSeen": "2026-11-13T22:49:53.836582+00:00",
+    "lastSeen": "2026-11-13T23:28:25.972604+00:00",
     "status": "Interesse",
     "suggestedStatus": "Interesse",
     "phase": "Interesse",
@@ -84,7 +133,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-13T22:49:55.725807+00:00",
+    "lastSeen": "2026-11-13T23:28:25.972745+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
