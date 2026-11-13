@@ -1,5 +1,54 @@
 [
   {
+    "id": "7a71928874a9efcf3ee1",
+    "title": "'He'll be backed considerably' - Is Pochettino set for a busy January transfer window?",
+    "summary": "Sky Sports' Rob Dorsett explains why Manchester United boss Mauricio Pochettino could be set for a busy January transfer window.",
+    "originalTitle": "'He'll be backed considerably' - Is Pochettino set for a busy January transfer window?",
+    "originalSummary": "Sky Sports' Rob Dorsett explains why Manchester United boss Mauricio Pochettino could be set for a busy January transfer window.",
+    "translatedTitle": "'He'll be backed considerably' - Is Pochettino set for a busy January transfer window?",
+    "translatedSummary": "Sky Sports' Rob Dorsett explains why Manchester United boss Mauricio Pochettino could be set for a busy January transfer window.",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/watch/video/13611865/mauricio-pochettino-is-man-utd-boss-set-for-a-busy-january-transfer-window",
+    "date": "2026-11-13T11:30:00+00:00",
+    "firstSeen": "2026-11-13T12:36:47.715278+00:00",
+    "lastSeen": "2026-11-13T12:36:47.715282+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 40,
+    "relevance": 40,
+    "classificationReasons": [
+      "Sinal de transferência no título",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Manchester United"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/watch/video/13611865/mauricio-pochettino-is-man-utd-boss-set-for-a-busy-january-transfer-window"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "2932d7dd6e738ce84ca8",
     "title": "Papers: Arsenal, Chelsea and Liverpool chase Bournemouth star Scott",
     "summary": "The top stories and transfer rumours from Thursday's newspapers...",
@@ -681,7 +730,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-13T11:32:49.042595+00:00",
+    "lastSeen": "2026-11-13T12:36:48.677367+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
