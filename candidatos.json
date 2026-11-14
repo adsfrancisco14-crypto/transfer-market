@@ -1,5 +1,55 @@
 [
   {
+    "id": "b0ea73f10b2c75033543",
+    "title": "Rice close to signing new Arsenal contract",
+    "summary": "Arsenal and England midfielder Declan Rice says he is close to signing a new contract with his club.",
+    "originalTitle": "Rice close to signing new Arsenal contract",
+    "originalSummary": "Arsenal and England midfielder Declan Rice says he is close to signing a new contract with his club.",
+    "translatedTitle": "Rice close to signing new Arsenal contract",
+    "translatedSummary": "Arsenal and England midfielder Declan Rice says he is close to signing a new contract with his club.",
+    "source": "BBC Sport",
+    "domain": "www.bbc.co.uk",
+    "url": "https://www.bbc.co.uk/sport/football/articles/cq0mdzrjn0j2o?at_medium=RSS&at_campaign=rss",
+    "date": "2026-11-14T20:40:35+00:00",
+    "firstSeen": "2026-11-14T21:16:13.428199+00:00",
+    "lastSeen": "2026-11-14T21:16:13.428202+00:00",
+    "status": "Acordo próximo",
+    "suggestedStatus": "Acordo próximo",
+    "phase": "Acordo próximo",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 65,
+    "relevance": 65,
+    "classificationReasons": [
+      "Sinal de transferência no título",
+      "Possível acordo",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Arsenal"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "BBC Sport",
+        "url": "https://www.bbc.co.uk/sport/football/articles/cq0mdzrjn0j2o?at_medium=RSS&at_campaign=rss"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "56375716672feddf2500",
     "title": "Papers: Man Utd eyeing move for Como star Paz",
     "summary": "The top stories and transfer rumours from Saturday's newspapers...",
@@ -61,7 +111,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/cq39glw42xkjo?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-13T22:05:14+00:00",
     "firstSeen": "2026-11-13T22:49:53.836578+00:00",
-    "lastSeen": "2026-11-14T20:30:48.884661+00:00",
+    "lastSeen": "2026-11-14T21:16:16.500599+00:00",
     "status": "Interesse",
     "suggestedStatus": "Interesse",
     "phase": "Interesse",
@@ -133,7 +183,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-14T20:30:48.884783+00:00",
+    "lastSeen": "2026-11-14T21:16:16.500703+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
