@@ -1,5 +1,61 @@
 [
   {
+    "id": "edd26dfe28fdc98a2ee1",
+    "title": "Man Utd target Fulham's Bassey - Monday's gossip",
+    "summary": "Manchester United target Fulham's Calvin Bassey and Brentford's Nathan Collins, AC Milan want Real Madrid's Endrick on loan, plus more.",
+    "originalTitle": "Man Utd target Fulham's Bassey - Monday's gossip",
+    "originalSummary": "Manchester United target Fulham's Calvin Bassey and Brentford's Nathan Collins, AC Milan want Real Madrid's Endrick on loan, plus more.",
+    "translatedTitle": "Man Utd target Fulham's Bassey - Monday's gossip",
+    "translatedSummary": "Manchester United target Fulham's Calvin Bassey and Brentford's Nathan Collins, AC Milan want Real Madrid's Endrick on loan, plus more.",
+    "source": "BBC Sport",
+    "domain": "www.bbc.co.uk",
+    "url": "https://www.bbc.co.uk/sport/football/articles/cklyegvq86w8o?at_medium=RSS&at_campaign=rss",
+    "date": "2026-11-15T20:47:44+00:00",
+    "firstSeen": "2026-11-15T21:02:15.575649+00:00",
+    "lastSeen": "2026-11-15T21:02:15.575652+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 30,
+    "relevance": 30,
+    "classificationReasons": [
+      "Sinal de transferência no resumo",
+      "Dois ou mais clubes identificados"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Brentford",
+      "Fulham",
+      "Manchester United",
+      "Real Madrid",
+      "AC Milan",
+      "Milan"
+    ],
+    "regions": [
+      "Inglaterra",
+      "Espanha",
+      "Itália"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "BBC Sport",
+        "url": "https://www.bbc.co.uk/sport/football/articles/cklyegvq86w8o?at_medium=RSS&at_campaign=rss"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "b0ea73f10b2c75033543",
     "title": "Rice close to signing new Arsenal contract",
     "summary": "Arsenal and England midfielder Declan Rice says he is close to signing a new contract with his club.",
@@ -183,7 +239,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-15T20:25:26.248661+00:00",
+    "lastSeen": "2026-11-15T21:02:17.529560+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
