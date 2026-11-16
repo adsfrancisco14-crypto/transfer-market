@@ -1,43 +1,41 @@
 [
   {
     "id": "53ef97aed3c3ce634e55",
-    "title": "Vinicius says Arsenal interest has affected Real form",
+    "title": "Vinicius says transfer interest affected Real form",
     "summary": "Real Madrid forward Vinicius Jr says he felt \"truly overwhelmed\" by transfer speculation in the summer.",
-    "originalTitle": "Vinicius says Arsenal interest has affected Real form",
+    "originalTitle": "Vinicius says transfer interest affected Real form",
     "originalSummary": "Real Madrid forward Vinicius Jr says he felt \"truly overwhelmed\" by transfer speculation in the summer.",
-    "translatedTitle": "Vinicius says Arsenal interest has affected Real form",
+    "translatedTitle": "Vinicius says transfer interest affected Real form",
     "translatedSummary": "Real Madrid forward Vinicius Jr says he felt \"truly overwhelmed\" by transfer speculation in the summer.",
     "source": "BBC Sport",
     "domain": "www.bbc.co.uk",
     "url": "https://www.bbc.co.uk/sport/football/articles/cmqx584jwwpvo?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-16T12:01:16+00:00",
     "firstSeen": "2026-11-16T12:15:17.855562+00:00",
-    "lastSeen": "2026-11-16T12:15:17.855566+00:00",
+    "lastSeen": "2026-11-16T15:32:27.126879+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
     "editorStatus": "Por verificar",
     "verification": "Por verificar",
     "verificationStatus": "Por verificar",
-    "transferRelevance": 30,
-    "relevance": 30,
+    "transferRelevance": 40,
+    "relevance": 40,
     "classificationReasons": [
-      "Sinal de transferência no resumo",
-      "Dois ou mais clubes identificados"
+      "Sinal de transferência no título",
+      "Clube identificado"
     ],
     "player": "",
     "detectedPlayers": [],
     "currentClub": "",
     "destination": "",
     "detectedClubs": [
-      "Arsenal",
       "Real Madrid"
     ],
     "regions": [
-      "Inglaterra",
       "Espanha"
     ],
-    "league": "Inglaterra",
+    "league": "Espanha",
     "sourceLinks": [
       {
         "source": "BBC Sport",
@@ -63,7 +61,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/cklyegvq86w8o?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-15T20:47:44+00:00",
     "firstSeen": "2026-11-15T21:02:15.575649+00:00",
-    "lastSeen": "2026-11-16T12:15:20.466493+00:00",
+    "lastSeen": "2026-11-16T15:32:27.126983+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -290,7 +288,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-16T12:15:20.466690+00:00",
+    "lastSeen": "2026-11-16T15:32:27.127218+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
