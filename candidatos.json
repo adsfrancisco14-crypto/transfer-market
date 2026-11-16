@@ -1,5 +1,54 @@
 [
   {
+    "id": "eb713528547e8efac885",
+    "title": "Your questions on Man Utd transfers and ownership answered!",
+    "summary": "Kaveh Solhekol answers the key questions surrounding Manchester United’s ownership involving the Glazers and potential plans for the January transfer window.",
+    "originalTitle": "Your questions on Man Utd transfers and ownership answered!",
+    "originalSummary": "Kaveh Solhekol answers the key questions surrounding Manchester United’s ownership involving the Glazers and potential plans for the January transfer window.",
+    "translatedTitle": "Your questions on Man Utd transfers and ownership answered!",
+    "translatedSummary": "Kaveh Solhekol answers the key questions surrounding Manchester United’s ownership involving the Glazers and potential plans for the January transfer window.",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/watch/video/13612916/kaveh-solhekol-qa-manchester-united-ownership-and-january-transfer-plans",
+    "date": "2026-11-16T16:08:00+00:00",
+    "firstSeen": "2026-11-16T17:49:46.794691+00:00",
+    "lastSeen": "2026-11-16T17:49:46.794695+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 40,
+    "relevance": 40,
+    "classificationReasons": [
+      "Sinal de transferência no título",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Manchester United"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/watch/video/13612916/kaveh-solhekol-qa-manchester-united-ownership-and-january-transfer-plans"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "53ef97aed3c3ce634e55",
     "title": "Vinicius says transfer interest affected Real form",
     "summary": "Real Madrid forward Vinicius Jr says he felt \"truly overwhelmed\" by transfer speculation in the summer.",
@@ -12,7 +61,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/cmqx584jwwpvo?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-16T12:01:16+00:00",
     "firstSeen": "2026-11-16T12:15:17.855562+00:00",
-    "lastSeen": "2026-11-16T16:55:39.933685+00:00",
+    "lastSeen": "2026-11-16T17:49:47.663791+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -61,7 +110,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/cklyegvq86w8o?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-15T20:47:44+00:00",
     "firstSeen": "2026-11-15T21:02:15.575649+00:00",
-    "lastSeen": "2026-11-16T16:55:39.933821+00:00",
+    "lastSeen": "2026-11-16T17:49:47.663916+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -288,7 +337,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-16T16:55:39.934190+00:00",
+    "lastSeen": "2026-11-16T17:49:47.664206+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
