@@ -1,12 +1,12 @@
 {
   "engineVersion": "7.3",
-  "updatedAt": "2026-11-17T01:20:59.209701+00:00",
+  "updatedAt": "2026-11-17T02:29:06.852953+00:00",
   "sources": [
     {
       "source": "BBC Sport",
       "url": "https://feeds.bbci.co.uk/sport/football/rss.xml",
       "success": true,
-      "itemsFound": 77,
+      "itemsFound": 78,
       "itemsAccepted": 2,
       "error": ""
     },
