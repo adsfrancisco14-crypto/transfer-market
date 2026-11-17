@@ -1,5 +1,55 @@
 [
   {
+    "id": "e67afce8a5e0e910e037",
+    "title": "Arsenal latest: 'Agreement reached over new Raya contract'",
+    "summary": "",
+    "originalTitle": "Arsenal latest: 'Agreement reached over new Raya contract'",
+    "originalSummary": "",
+    "translatedTitle": "Arsenal latest: 'Agreement reached over new Raya contract'",
+    "translatedSummary": "",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/live-blog/12040/13025486/arsenal-transfer-news-rumours-and-gossip-live-updates-and-latest-on-deals-signings-loans-and-contracts",
+    "date": "2026-11-17T09:15:00+00:00",
+    "firstSeen": "2026-11-17T09:48:15.165048+00:00",
+    "lastSeen": "2026-11-17T09:48:15.165050+00:00",
+    "status": "Acordo próximo",
+    "suggestedStatus": "Acordo próximo",
+    "phase": "Acordo próximo",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 65,
+    "relevance": 65,
+    "classificationReasons": [
+      "Sinal de transferência no título",
+      "Possível acordo",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Arsenal"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/live-blog/12040/13025486/arsenal-transfer-news-rumours-and-gossip-live-updates-and-latest-on-deals-signings-loans-and-contracts"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "eb713528547e8efac885",
     "title": "Your questions on Man Utd transfers and ownership answered!",
     "summary": "Kaveh Solhekol answers the key questions surrounding Manchester United’s ownership involving the Glazers and potential plans for the January transfer window.",
@@ -61,7 +111,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/cmqx584jwwpvo?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-16T12:01:16+00:00",
     "firstSeen": "2026-11-16T12:15:17.855562+00:00",
-    "lastSeen": "2026-11-17T08:46:54.626816+00:00",
+    "lastSeen": "2026-11-17T09:48:15.478562+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -386,7 +436,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-17T08:46:54.627156+00:00",
+    "lastSeen": "2026-11-17T09:48:15.478874+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
