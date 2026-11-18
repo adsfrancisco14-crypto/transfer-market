@@ -1,5 +1,58 @@
 [
   {
+    "id": "603b80a9b5d9c869aa28",
+    "title": "Arsenal willing to make sales to beat Chelsea and Liverpool to Scott signing",
+    "summary": "Arsenal are one of three top Premier League clubs interested in signing Bournemouth and England midfielder Alex Scott.",
+    "originalTitle": "Arsenal willing to make sales to beat Chelsea and Liverpool to Scott signing",
+    "originalSummary": "Arsenal are one of three top Premier League clubs interested in signing Bournemouth and England midfielder Alex Scott.",
+    "translatedTitle": "Arsenal willing to make sales to beat Chelsea and Liverpool to Scott signing",
+    "translatedSummary": "Arsenal are one of three top Premier League clubs interested in signing Bournemouth and England midfielder Alex Scott.",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/news/12040/13613285/alex-scott-arsenal-keen-on-chelsea-and-liverpool-target-with-bournemouth-softening-stance-over-potential-sale",
+    "date": "2026-11-18T15:00:00+00:00",
+    "firstSeen": "2026-11-18T15:53:51.587785+00:00",
+    "lastSeen": "2026-11-18T15:53:51.587788+00:00",
+    "status": "Interesse",
+    "suggestedStatus": "Interesse",
+    "phase": "Interesse",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 55,
+    "relevance": 55,
+    "classificationReasons": [
+      "Sinal de transferência no título",
+      "Interesse de clube",
+      "Dois ou mais clubes identificados"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Arsenal",
+      "Bournemouth",
+      "Chelsea",
+      "Liverpool"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/news/12040/13613285/alex-scott-arsenal-keen-on-chelsea-and-liverpool-target-with-bournemouth-softening-stance-over-potential-sale"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "f8fda1b223a4a56f618c",
     "title": "Man Utd expected to back Poch in January transfer window",
     "summary": "Manchester United head coach Mauricio Pochettino is expected to be backed in the January transfer window as the club aim to address their disappointing start to the season.",
@@ -12,7 +65,7 @@
     "url": "https://www.skysports.com/football/news/12040/13613260/man-utd-transfer-news-calvin-bassey-and-jarrad-branthwaite-among-targets-with-mauricio-pochettino-set-to-be-backed-in-january",
     "date": "2026-11-18T12:00:00+00:00",
     "firstSeen": "2026-11-18T12:50:18.097390+00:00",
-    "lastSeen": "2026-11-18T15:00:04.776058+00:00",
+    "lastSeen": "2026-11-18T15:53:52.345790+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -535,7 +588,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-18T15:00:04.776006+00:00",
+    "lastSeen": "2026-11-18T15:53:52.345720+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
