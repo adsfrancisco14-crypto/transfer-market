@@ -1,12 +1,12 @@
 {
   "engineVersion": "7.3",
-  "updatedAt": "2026-11-18T22:30:19.011561+00:00",
+  "updatedAt": "2026-11-18T23:21:33.031440+00:00",
   "sources": [
     {
       "source": "BBC Sport",
       "url": "https://feeds.bbci.co.uk/sport/football/rss.xml",
       "success": true,
-      "itemsFound": 81,
+      "itemsFound": 82,
       "itemsAccepted": 3,
       "error": ""
     },
@@ -15,10 +15,10 @@
       "url": "https://www.skysports.com/rss/12040",
       "success": true,
       "itemsFound": 20,
-      "itemsAccepted": 1,
+      "itemsAccepted": 0,
       "error": ""
     }
   ],
-  "acceptedTotal": 4,
+  "acceptedTotal": 3,
   "savedTotal": 28
 }
