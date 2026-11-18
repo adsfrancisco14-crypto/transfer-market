@@ -1,5 +1,54 @@
 [
   {
+    "id": "f8fda1b223a4a56f618c",
+    "title": "Man Utd expected to back Poch in January transfer window",
+    "summary": "Manchester United head coach Mauricio Pochettino is expected to be backed in the January transfer window as the club aim to address their disappointing start to the season.",
+    "originalTitle": "Man Utd expected to back Poch in January transfer window",
+    "originalSummary": "Manchester United head coach Mauricio Pochettino is expected to be backed in the January transfer window as the club aim to address their disappointing start to the season.",
+    "translatedTitle": "Man Utd expected to back Poch in January transfer window",
+    "translatedSummary": "Manchester United head coach Mauricio Pochettino is expected to be backed in the January transfer window as the club aim to address their disappointing start to the season.",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/news/12040/13613260/man-utd-transfer-news-calvin-bassey-and-jarrad-branthwaite-among-targets-with-mauricio-pochettino-set-to-be-backed-in-january",
+    "date": "2026-11-18T12:00:00+00:00",
+    "firstSeen": "2026-11-18T12:50:18.097390+00:00",
+    "lastSeen": "2026-11-18T12:50:18.097393+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 40,
+    "relevance": 40,
+    "classificationReasons": [
+      "Sinal de transferência no título",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Manchester United"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/news/12040/13613260/man-utd-transfer-news-calvin-bassey-and-jarrad-branthwaite-among-targets-with-mauricio-pochettino-set-to-be-backed-in-january"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "7ca0ce000715d3d50516",
     "title": "Hincapie in advanced talks over new Arsenal deal",
     "summary": "Arsenal are in advanced talks with defender Piero Hincapie over a new contract.",
@@ -12,7 +61,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/c6ge39lgyzzzo?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-17T13:09:23+00:00",
     "firstSeen": "2026-11-17T13:52:48.477829+00:00",
-    "lastSeen": "2026-11-18T11:47:08.546006+00:00",
+    "lastSeen": "2026-11-18T12:50:18.965234+00:00",
     "status": "Negociações",
     "suggestedStatus": "Negociações",
     "phase": "Negociações",
@@ -486,7 +535,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-18T11:47:08.546295+00:00",
+    "lastSeen": "2026-11-18T12:50:18.965813+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
