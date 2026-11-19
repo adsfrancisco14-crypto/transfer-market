@@ -1,5 +1,59 @@
 [
   {
+    "id": "a04ed316c874fe553acf",
+    "title": "All done deals from September-November 2026",
+    "summary": "Check out the significant signings and departures in the Premier League, Scottish Premiership, EFL and Women's Super League.",
+    "originalTitle": "All done deals from September-November 2026",
+    "originalSummary": "Check out the significant signings and departures in the Premier League, Scottish Premiership, EFL and Women's Super League.",
+    "originalLanguage": "en",
+    "displayLanguage": "original",
+    "source": "BBC Sport",
+    "domain": "www.bbc.co.uk",
+    "url": "https://www.bbc.co.uk/sport/football/articles/cvgyxyxplkvo?at_medium=RSS&at_campaign=rss",
+    "date": "2026-11-19T17:54:30+00:00",
+    "collectedAt": "2026-11-06T21:35:13+00:00",
+    "player": "",
+    "currentClub": "",
+    "destination": "",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "relevance": 20,
+    "classificationReasons": [
+      "Sinal de transferência no resumo"
+    ],
+    "detectedPlayers": [],
+    "editorApproved": false,
+    "editorStatus": "Por verificar",
+    "editorNotes": "",
+    "independentSources": [
+      "BBC Sport"
+    ],
+    "engineVersion": "7.3",
+    "sourceCount": 1,
+    "firstSeen": "2026-11-07T09:35:40+00:00",
+    "lastSeen": "2026-11-19T18:45:12.448663+00:00",
+    "verification": "Aguarda verificação editorial.",
+    "classification": "Notícia de transferências",
+    "transferRelevance": 20,
+    "detectedClubs": [],
+    "translatedTitle": "All done deals from September-November 2026",
+    "translatedSummary": "Check out the significant signings and departures in the Premier League, Scottish Premiership, EFL and Women's Super League.",
+    "phase": "Rumor",
+    "verificationStatus": "Por verificar",
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "BBC Sport",
+        "url": "https://www.bbc.co.uk/sport/football/articles/cvgyxyxplkvo?at_medium=RSS&at_campaign=rss"
+      }
+    ],
+    "translationStatus": "failed",
+    "translationVersion": ""
+  },
+  {
     "id": "569a4293e263e0650660",
     "title": "How 'sleeping giant' Everton are exceeding expectations",
     "summary": "Everything felt a bit gloomy at Everton after the closure of the summer transfer window. 'Disappointment' was the buzzword used by David Moyes - especially after a Deadline Day move for Folarin Balogun fell through.",
@@ -61,7 +115,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/c6782xedd985o?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-18T18:06:04+00:00",
     "firstSeen": "2026-11-18T20:33:41.446965+00:00",
-    "lastSeen": "2026-11-19T17:45:39.221695+00:00",
+    "lastSeen": "2026-11-19T18:45:12.448722+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -648,60 +702,6 @@
     "translationVersion": "",
     "displayLanguage": "original",
     "engineVersion": "7.3"
-  },
-  {
-    "id": "a04ed316c874fe553acf",
-    "title": "All done deals from September-November 2026",
-    "summary": "Check out the significant signings and departures in the Premier League, Scottish Premiership, EFL and Women's Super League.",
-    "originalTitle": "All done deals from September-November 2026",
-    "originalSummary": "Check out the significant signings and departures in the Premier League, Scottish Premiership, EFL and Women's Super League.",
-    "originalLanguage": "en",
-    "displayLanguage": "original",
-    "source": "BBC Sport",
-    "domain": "www.bbc.co.uk",
-    "url": "https://www.bbc.co.uk/sport/football/articles/cvgyxyxplkvo?at_medium=RSS&at_campaign=rss",
-    "date": "2026-11-13T17:21:23+00:00",
-    "collectedAt": "2026-11-06T21:35:13+00:00",
-    "player": "",
-    "currentClub": "",
-    "destination": "",
-    "status": "Rumor",
-    "suggestedStatus": "Rumor",
-    "relevance": 20,
-    "classificationReasons": [
-      "Sinal de transferência no resumo"
-    ],
-    "detectedPlayers": [],
-    "editorApproved": false,
-    "editorStatus": "Por verificar",
-    "editorNotes": "",
-    "independentSources": [
-      "BBC Sport"
-    ],
-    "engineVersion": "7.3",
-    "sourceCount": 1,
-    "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-19T17:45:39.221666+00:00",
-    "verification": "Aguarda verificação editorial.",
-    "classification": "Notícia de transferências",
-    "transferRelevance": 20,
-    "detectedClubs": [],
-    "translatedTitle": "All done deals from September-November 2026",
-    "translatedSummary": "Check out the significant signings and departures in the Premier League, Scottish Premiership, EFL and Women's Super League.",
-    "phase": "Rumor",
-    "verificationStatus": "Por verificar",
-    "regions": [
-      "Inglaterra"
-    ],
-    "league": "Inglaterra",
-    "sourceLinks": [
-      {
-        "source": "BBC Sport",
-        "url": "https://www.bbc.co.uk/sport/football/articles/cvgyxyxplkvo?at_medium=RSS&at_campaign=rss"
-      }
-    ],
-    "translationStatus": "failed",
-    "translationVersion": ""
   },
   {
     "id": "7a71928874a9efcf3ee1",
