@@ -1,5 +1,54 @@
 [
   {
+    "id": "763462160d26c88cc885",
+    "title": "Papers: Fulham pushing to extend contract of Man Utd target",
+    "summary": "The top stories and transfer rumours from Friday's newspapers...",
+    "originalTitle": "Papers: Fulham pushing to extend contract of Man Utd target",
+    "originalSummary": "The top stories and transfer rumours from Friday's newspapers...",
+    "translatedTitle": "Papers: Fulham pushing to extend contract of Man Utd target",
+    "translatedSummary": "The top stories and transfer rumours from Friday's newspapers...",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/news/12040/13614185/fulham-pushing-to-extend-contract-of-man-utd-target-calvin-bassey-paper-talk",
+    "date": "2026-11-19T22:30:00+00:00",
+    "firstSeen": "2026-11-19T23:10:02.768271+00:00",
+    "lastSeen": "2026-11-20T06:37:01.336310+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 25,
+    "relevance": 25,
+    "classificationReasons": [
+      "Sinal de transferência no resumo",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Fulham"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/news/12040/13614185/fulham-pushing-to-extend-contract-of-man-utd-target-calvin-bassey-paper-talk"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "a04ed316c874fe553acf",
     "title": "All done deals from September-November 2026",
     "summary": "Check out the significant signings and departures in the Premier League, Scottish Premiership, EFL and Women's Super League.",
@@ -31,7 +80,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-20T05:40:11.726257+00:00",
+    "lastSeen": "2026-11-20T06:37:01.336272+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
@@ -115,7 +164,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/c6782xedd985o?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-18T18:06:04+00:00",
     "firstSeen": "2026-11-18T20:33:41.446965+00:00",
-    "lastSeen": "2026-11-20T05:40:11.726137+00:00",
+    "lastSeen": "2026-11-20T06:37:01.336176+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -240,55 +289,6 @@
       {
         "source": "Sky Sports",
         "url": "https://www.skysports.com/football/news/12040/13613260/man-utd-transfer-news-calvin-bassey-and-jarrad-branthwaite-among-targets-with-mauricio-pochettino-set-to-be-backed-in-january"
-      }
-    ],
-    "sourceCount": 1,
-    "translationStatus": "failed",
-    "translationVersion": "",
-    "displayLanguage": "original",
-    "engineVersion": "7.3"
-  },
-  {
-    "id": "763462160d26c88cc885",
-    "title": "Papers: Fulham pushing to extend contract of Man Utd target",
-    "summary": "The top stories and transfer rumours from Friday's newspapers...",
-    "originalTitle": "Papers: Fulham pushing to extend contract of Man Utd target",
-    "originalSummary": "The top stories and transfer rumours from Friday's newspapers...",
-    "translatedTitle": "Papers: Fulham pushing to extend contract of Man Utd target",
-    "translatedSummary": "The top stories and transfer rumours from Friday's newspapers...",
-    "source": "Sky Sports",
-    "domain": "www.skysports.com",
-    "url": "https://www.skysports.com/football/news/12040/13614185/fulham-pushing-to-extend-contract-of-man-utd-target-calvin-bassey-paper-talk",
-    "date": "2026-11-17T22:58:00+00:00",
-    "firstSeen": "2026-11-19T23:10:02.768271+00:00",
-    "lastSeen": "2026-11-20T05:40:11.726311+00:00",
-    "status": "Rumor",
-    "suggestedStatus": "Rumor",
-    "phase": "Rumor",
-    "editorStatus": "Por verificar",
-    "verification": "Por verificar",
-    "verificationStatus": "Por verificar",
-    "transferRelevance": 25,
-    "relevance": 25,
-    "classificationReasons": [
-      "Sinal de transferência no resumo",
-      "Clube identificado"
-    ],
-    "player": "",
-    "detectedPlayers": [],
-    "currentClub": "",
-    "destination": "",
-    "detectedClubs": [
-      "Fulham"
-    ],
-    "regions": [
-      "Inglaterra"
-    ],
-    "league": "Inglaterra",
-    "sourceLinks": [
-      {
-        "source": "Sky Sports",
-        "url": "https://www.skysports.com/football/news/12040/13614185/fulham-pushing-to-extend-contract-of-man-utd-target-calvin-bassey-paper-talk"
       }
     ],
     "sourceCount": 1,
