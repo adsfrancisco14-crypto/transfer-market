@@ -1,5 +1,54 @@
 [
   {
+    "id": "ab3878843156d1981ef0",
+    "title": "Brighton latest: In-form midfielder signs new contract",
+    "summary": "",
+    "originalTitle": "Brighton latest: In-form midfielder signs new contract",
+    "originalSummary": "",
+    "translatedTitle": "Brighton latest: In-form midfielder signs new contract",
+    "translatedSummary": "",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/live-blog/12040/13279295/brighton-transfers-latest-news-rumours-and-gossip-live-updates-goals-and-highlights",
+    "date": "2026-11-20T17:30:00+00:00",
+    "firstSeen": "2026-11-20T17:36:55.596640+00:00",
+    "lastSeen": "2026-11-20T17:36:55.596643+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 40,
+    "relevance": 40,
+    "classificationReasons": [
+      "Sinal de transferência no título",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Brighton"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/live-blog/12040/13279295/brighton-transfers-latest-news-rumours-and-gossip-live-updates-goals-and-highlights"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "5a05f7d50edbfd80da4f",
     "title": "Berrada on Carrick, Poch, defending club leadership and transfers",
     "summary": "In a turbulent time at Manchester United, chief executive Omar Berrada has sat down exclusively with Sky Sports about United's start to the season, the decision to change head coach and facing fan criticism about the club's leadership.",
@@ -12,7 +61,7 @@
     "url": "https://www.skysports.com/football/news/12040/13614312/omar-berrada-interview-manchester-united-chief-executive-on-michael-carrick-mauricio-pochettino-recent-transfer-activity-and-the-club-hierarchy",
     "date": "2026-11-20T14:36:00+00:00",
     "firstSeen": "2026-11-20T14:45:08.525684+00:00",
-    "lastSeen": "2026-11-20T16:36:38.625656+00:00",
+    "lastSeen": "2026-11-20T17:36:56.771689+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -129,7 +178,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-20T16:36:38.625587+00:00",
+    "lastSeen": "2026-11-20T17:36:56.768775+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
