@@ -1,6 +1,6 @@
 {
   "engineVersion": "7.3",
-  "updatedAt": "2026-11-20T23:37:35.661800+00:00",
+  "updatedAt": "2026-11-21T00:28:38.336600+00:00",
   "sources": [
     {
       "source": "BBC Sport",
@@ -15,10 +15,10 @@
       "url": "https://www.skysports.com/rss/12040",
       "success": true,
       "itemsFound": 20,
-      "itemsAccepted": 1,
+      "itemsAccepted": 0,
       "error": ""
     }
   ],
-  "acceptedTotal": 3,
+  "acceptedTotal": 2,
   "savedTotal": 33
 }
