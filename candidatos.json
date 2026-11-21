@@ -1,5 +1,55 @@
 [
   {
+    "id": "fb5075ca6044a5823d82",
+    "title": "Warning signs for Chelsea as Liverpool push for opener LIVE!",
+    "summary": "",
+    "originalTitle": "Warning signs for Chelsea as Liverpool push for opener LIVE!",
+    "originalSummary": "",
+    "translatedTitle": "Warning signs for Chelsea as Liverpool push for opener LIVE!",
+    "translatedSummary": "",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/liverpool-women-vs-chelsea-women/live/575829",
+    "date": "2026-11-21T12:20:00+00:00",
+    "firstSeen": "2026-11-21T13:52:23.965363+00:00",
+    "lastSeen": "2026-11-21T13:52:23.965366+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 45,
+    "relevance": 45,
+    "classificationReasons": [
+      "Sinal de transferência no título",
+      "Dois ou mais clubes identificados"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Chelsea",
+      "Liverpool"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/liverpool-women-vs-chelsea-women/live/575829"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "f1db8bca064152c1ce2a",
     "title": "Sarr focused on Palace return after Liverpool interest",
     "summary": "Crystal Palace forward Ismaila Sarr says he has moved on from Liverpool's interest in signing him and is keen for a \"fresh start\" under Thomas Frank.",
@@ -229,7 +279,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-21T12:59:13.753813+00:00",
+    "lastSeen": "2026-11-21T13:52:24.307625+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
