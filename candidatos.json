@@ -1,5 +1,58 @@
 [
   {
+    "id": "a8e717eb5eeb71464a28",
+    "title": "Man Utd plotting Toney move - Monday's gossip",
+    "summary": "Manchester United eye move for Al-Ahli striker Ivan Toney, Fulham hold contract talks with Calvin Bassey and PSG could step up pursuit of Eli Junior Kroupi.",
+    "originalTitle": "Man Utd plotting Toney move - Monday's gossip",
+    "originalSummary": "Manchester United eye move for Al-Ahli striker Ivan Toney, Fulham hold contract talks with Calvin Bassey and PSG could step up pursuit of Eli Junior Kroupi.",
+    "translatedTitle": "Man Utd plotting Toney move - Monday's gossip",
+    "translatedSummary": "Manchester United eye move for Al-Ahli striker Ivan Toney, Fulham hold contract talks with Calvin Bassey and PSG could step up pursuit of Eli Junior Kroupi.",
+    "source": "BBC Sport",
+    "domain": "www.bbc.co.uk",
+    "url": "https://www.bbc.co.uk/sport/football/articles/ck053nyl6399o?at_medium=RSS&at_campaign=rss",
+    "date": "2026-11-22T21:04:15+00:00",
+    "firstSeen": "2026-11-22T21:10:16.841837+00:00",
+    "lastSeen": "2026-11-22T21:10:16.841839+00:00",
+    "status": "Negociações",
+    "suggestedStatus": "Negociações",
+    "phase": "Negociações",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 55,
+    "relevance": 55,
+    "classificationReasons": [
+      "Sinal de transferência no resumo",
+      "Referência a negociações",
+      "Dois ou mais clubes identificados"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Fulham",
+      "Manchester United",
+      "PSG"
+    ],
+    "regions": [
+      "Inglaterra",
+      "França"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "BBC Sport",
+        "url": "https://www.bbc.co.uk/sport/football/articles/ck053nyl6399o?at_medium=RSS&at_campaign=rss"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "acb1bd58b173f080be0d",
     "title": "Armstrong plays down talk of Rangers transfer - gossip",
     "summary": "Dinamo Bucharest winger Danny Armstrong says he has not talked with Rangers manager Derek McInnes about a move to Ibrox, while the chances of Jack Grealish joining Celtic are played down.",
@@ -12,7 +65,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/ckdd1epzz60eo?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-22T09:10:02+00:00",
     "firstSeen": "2026-11-22T09:27:00.575526+00:00",
-    "lastSeen": "2026-11-22T20:26:03.199858+00:00",
+    "lastSeen": "2026-11-22T21:10:20.629417+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -56,7 +109,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/c6x2e8devk1po?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-22T08:41:20+00:00",
     "firstSeen": "2026-11-22T09:26:58.949808+00:00",
-    "lastSeen": "2026-11-22T20:26:03.199441+00:00",
+    "lastSeen": "2026-11-22T21:10:20.629241+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -421,7 +474,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-22T20:26:03.199803+00:00",
+    "lastSeen": "2026-11-22T21:10:20.629388+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
