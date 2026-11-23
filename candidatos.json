@@ -1,5 +1,54 @@
 [
   {
+    "id": "64f7d0253e7de3abe448",
+    "title": "Papers: Bassey seeking new Fulham deal rather than Man Utd move",
+    "summary": "The top stories and transfer rumours from Monday's newspapers...",
+    "originalTitle": "Papers: Bassey seeking new Fulham deal rather than Man Utd move",
+    "originalSummary": "The top stories and transfer rumours from Monday's newspapers...",
+    "translatedTitle": "Papers: Bassey seeking new Fulham deal rather than Man Utd move",
+    "translatedSummary": "The top stories and transfer rumours from Monday's newspapers...",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/news/12040/13615514/man-utd-transfer-news-fulham-defender-calvin-bassey-is-in-talks-over-new-contract-amid-man-utd-links-paper-talk",
+    "date": "2026-11-23T08:00:00+00:00",
+    "firstSeen": "2026-11-23T08:41:42.290374+00:00",
+    "lastSeen": "2026-11-23T08:41:42.290376+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 25,
+    "relevance": 25,
+    "classificationReasons": [
+      "Sinal de transferência no resumo",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Fulham"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/news/12040/13615514/man-utd-transfer-news-fulham-defender-calvin-bassey-is-in-talks-over-new-contract-amid-man-utd-links-paper-talk"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "a8e717eb5eeb71464a28",
     "title": "Man Utd plotting Toney move - Monday's gossip",
     "summary": "Manchester United eye move for Al-Ahli striker Ivan Toney, Fulham hold contract talks with Calvin Bassey and PSG could step up pursuit of Eli Junior Kroupi.",
@@ -12,7 +61,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/ck053nyl6399o?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-22T21:04:15+00:00",
     "firstSeen": "2026-11-22T21:10:16.841837+00:00",
-    "lastSeen": "2026-11-23T07:03:30.371190+00:00",
+    "lastSeen": "2026-11-23T08:41:42.921130+00:00",
     "status": "Negociações",
     "suggestedStatus": "Negociações",
     "phase": "Negociações",
@@ -109,7 +158,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/c6x2e8devk1po?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-22T08:41:20+00:00",
     "firstSeen": "2026-11-22T09:26:58.949808+00:00",
-    "lastSeen": "2026-11-23T07:03:30.371317+00:00",
+    "lastSeen": "2026-11-23T08:41:42.921226+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -474,7 +523,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-23T07:03:30.371731+00:00",
+    "lastSeen": "2026-11-23T08:41:42.921422+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
