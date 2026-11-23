@@ -1,5 +1,54 @@
 [
   {
+    "id": "3e157f567e192ad56cc1",
+    "title": "Armstrong is Everton's running man and Moyes believes he can get better",
+    "summary": "Harrison Armstrong has started every Premier League game for Everton this season, ranking in the top three for distance covered in the competition going into the weekend. This has been some year for a player who started 2026 on loan at Preston North End.",
+    "originalTitle": "Armstrong is Everton's running man and Moyes believes he can get better",
+    "originalSummary": "Harrison Armstrong has started every Premier League game for Everton this season, ranking in the top three for distance covered in the competition going into the weekend. This has been some year for a player who started 2026 on loan at Preston North End.",
+    "translatedTitle": "Armstrong is Everton's running man and Moyes believes he can get better",
+    "translatedSummary": "Harrison Armstrong has started every Premier League game for Everton this season, ranking in the top three for distance covered in the competition going into the weekend. This has been some year for a player who started 2026 on loan at Preston North End.",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/news/12040/13610423/harrison-armstrongs-distance-covered-stats-highlight-everton-midfielders-impact-under-david-moyes-this-season",
+    "date": "2026-11-23T10:00:00+00:00",
+    "firstSeen": "2026-11-23T10:54:42.166715+00:00",
+    "lastSeen": "2026-11-23T10:54:42.166719+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 25,
+    "relevance": 25,
+    "classificationReasons": [
+      "Sinal de transferência no resumo",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Everton"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/news/12040/13610423/harrison-armstrongs-distance-covered-stats-highlight-everton-midfielders-impact-under-david-moyes-this-season"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "64f7d0253e7de3abe448",
     "title": "Papers: Bassey seeking new Fulham deal rather than Man Utd move",
     "summary": "The top stories and transfer rumours from Monday's newspapers...",
@@ -12,7 +61,7 @@
     "url": "https://www.skysports.com/football/news/12040/13615514/man-utd-transfer-news-fulham-defender-calvin-bassey-is-in-talks-over-new-contract-amid-man-utd-links-paper-talk",
     "date": "2026-11-23T08:00:00+00:00",
     "firstSeen": "2026-11-23T08:41:42.290374+00:00",
-    "lastSeen": "2026-11-23T09:56:44.115378+00:00",
+    "lastSeen": "2026-11-23T10:54:43.974066+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -61,7 +110,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/ck053nyl6399o?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-22T21:04:15+00:00",
     "firstSeen": "2026-11-22T21:10:16.841837+00:00",
-    "lastSeen": "2026-11-23T09:56:44.114737+00:00",
+    "lastSeen": "2026-11-23T10:54:43.967872+00:00",
     "status": "Negociações",
     "suggestedStatus": "Negociações",
     "phase": "Negociações",
@@ -158,7 +207,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/c6x2e8devk1po?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-22T08:41:20+00:00",
     "firstSeen": "2026-11-22T09:26:58.949808+00:00",
-    "lastSeen": "2026-11-23T09:56:44.114872+00:00",
+    "lastSeen": "2026-11-23T10:54:43.967967+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -523,7 +572,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-23T09:56:44.115324+00:00",
+    "lastSeen": "2026-11-23T10:54:43.968207+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
