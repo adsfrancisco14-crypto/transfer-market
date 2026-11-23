@@ -1,5 +1,54 @@
 [
   {
+    "id": "bf0c54fd5837d547c107",
+    "title": "Papers: Brentford defender emerges as Man Utd target as January budget revealed",
+    "summary": "The top stories and transfer rumours from Tuesday's newspapers...",
+    "originalTitle": "Papers: Brentford defender emerges as Man Utd target as January budget revealed",
+    "originalSummary": "The top stories and transfer rumours from Tuesday's newspapers...",
+    "translatedTitle": "Papers: Brentford defender emerges as Man Utd target as January budget revealed",
+    "translatedSummary": "The top stories and transfer rumours from Tuesday's newspapers...",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/news/12040/13615837/man-utd-transfer-news-brentford-defender-nathan-collins-emerges-as-january-target-paper-talk",
+    "date": "2026-11-23T22:40:00+00:00",
+    "firstSeen": "2026-11-23T23:29:53.991214+00:00",
+    "lastSeen": "2026-11-23T23:29:53.991218+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 25,
+    "relevance": 25,
+    "classificationReasons": [
+      "Sinal de transferência no resumo",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Brentford"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/news/12040/13615837/man-utd-transfer-news-brentford-defender-nathan-collins-emerges-as-january-target-paper-talk"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "35fba6cb9d79340ce9c7",
     "title": "Arsenal and PSG keen on Nusa - Tuesday's gossip",
     "summary": "Arsenal and PSG are both looking at a move for RB Leipzig winger Antonio Nusa, Xabi Alonso has Chelsea hierarchy backing, Liverpool open contract talks with keeper Alisson Becker, plus more.",
@@ -12,7 +61,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/cm8x0grpder5o?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-23T21:41:52+00:00",
     "firstSeen": "2026-11-23T22:31:51.023813+00:00",
-    "lastSeen": "2026-11-23T22:31:51.023817+00:00",
+    "lastSeen": "2026-11-23T23:29:54.755729+00:00",
     "status": "Negociações",
     "suggestedStatus": "Negociações",
     "phase": "Negociações",
@@ -628,7 +677,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-23T22:31:52.620935+00:00",
+    "lastSeen": "2026-11-23T23:29:54.756211+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
