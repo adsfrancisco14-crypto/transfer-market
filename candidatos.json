@@ -1,5 +1,61 @@
 [
   {
+    "id": "35fba6cb9d79340ce9c7",
+    "title": "Arsenal and PSG keen on Nusa - Tuesday's gossip",
+    "summary": "Arsenal and PSG are both looking at a move for RB Leipzig winger Antonio Nusa, Xabi Alonso has Chelsea hierarchy backing, Liverpool open contract talks with keeper Alisson Becker, plus more.",
+    "originalTitle": "Arsenal and PSG keen on Nusa - Tuesday's gossip",
+    "originalSummary": "Arsenal and PSG are both looking at a move for RB Leipzig winger Antonio Nusa, Xabi Alonso has Chelsea hierarchy backing, Liverpool open contract talks with keeper Alisson Becker, plus more.",
+    "translatedTitle": "Arsenal and PSG keen on Nusa - Tuesday's gossip",
+    "translatedSummary": "Arsenal and PSG are both looking at a move for RB Leipzig winger Antonio Nusa, Xabi Alonso has Chelsea hierarchy backing, Liverpool open contract talks with keeper Alisson Becker, plus more.",
+    "source": "BBC Sport",
+    "domain": "www.bbc.co.uk",
+    "url": "https://www.bbc.co.uk/sport/football/articles/cm8x0grpder5o?at_medium=RSS&at_campaign=rss",
+    "date": "2026-11-23T21:41:52+00:00",
+    "firstSeen": "2026-11-23T22:31:51.023813+00:00",
+    "lastSeen": "2026-11-23T22:31:51.023817+00:00",
+    "status": "Negociações",
+    "suggestedStatus": "Negociações",
+    "phase": "Negociações",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 55,
+    "relevance": 55,
+    "classificationReasons": [
+      "Sinal de transferência no resumo",
+      "Referência a negociações",
+      "Dois ou mais clubes identificados"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Arsenal",
+      "Chelsea",
+      "Liverpool",
+      "RB Leipzig",
+      "PSG"
+    ],
+    "regions": [
+      "Inglaterra",
+      "Alemanha",
+      "França"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "BBC Sport",
+        "url": "https://www.bbc.co.uk/sport/football/articles/cm8x0grpder5o?at_medium=RSS&at_campaign=rss"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "3e157f567e192ad56cc1",
     "title": "Armstrong is Everton's running man and Moyes believes he can get better",
     "summary": "Harrison Armstrong has started every Premier League game for Everton this season, ranking in the top three for distance covered in the competition going into the weekend. This has been some year for a player who started 2026 on loan at Preston North End.",
@@ -572,7 +628,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-23T21:41:48.109099+00:00",
+    "lastSeen": "2026-11-23T22:31:52.620935+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
