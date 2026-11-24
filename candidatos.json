@@ -1,5 +1,54 @@
 [
   {
+    "id": "8e5e847fd0f479e6dfc2",
+    "title": "Defender Heaven open to leaving Man Utd",
+    "summary": "Manchester United defender Ayden Heaven is open to a loan move in January amid concerns over his game time as his side battles in the Premier League relegation zone.",
+    "originalTitle": "Defender Heaven open to leaving Man Utd",
+    "originalSummary": "Manchester United defender Ayden Heaven is open to a loan move in January amid concerns over his game time as his side battles in the Premier League relegation zone.",
+    "translatedTitle": "Defender Heaven open to leaving Man Utd",
+    "translatedSummary": "Manchester United defender Ayden Heaven is open to a loan move in January amid concerns over his game time as his side battles in the Premier League relegation zone.",
+    "source": "BBC Sport",
+    "domain": "www.bbc.co.uk",
+    "url": "https://www.bbc.co.uk/sport/football/articles/crd61gy4ednvo?at_medium=RSS&at_campaign=rss",
+    "date": "2026-11-24T15:56:55+00:00",
+    "firstSeen": "2026-11-24T16:44:09.114986+00:00",
+    "lastSeen": "2026-11-24T16:44:09.114991+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 25,
+    "relevance": 25,
+    "classificationReasons": [
+      "Sinal de transferência no resumo",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Manchester United"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "BBC Sport",
+        "url": "https://www.bbc.co.uk/sport/football/articles/crd61gy4ednvo?at_medium=RSS&at_campaign=rss"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "3802ead40af8ace83ab3",
     "title": "Republic of Ireland boss Ward signs new contract",
     "summary": "Republic of Ireland manager Carla Ward signs a contract extension until the conclusion of the side's Euro 2029 campaign.",
@@ -12,7 +61,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/cm4gn31z553go?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-24T10:45:30+00:00",
     "firstSeen": "2026-11-24T11:17:52.198641+00:00",
-    "lastSeen": "2026-11-24T15:43:06.530242+00:00",
+    "lastSeen": "2026-11-24T16:44:13.522053+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -105,7 +154,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/c6d71gjnznz2o?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-24T07:53:41+00:00",
     "firstSeen": "2026-11-24T08:02:21.944364+00:00",
-    "lastSeen": "2026-11-24T15:43:06.530646+00:00",
+    "lastSeen": "2026-11-24T16:44:13.522531+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -817,7 +866,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-24T15:43:06.530609+00:00",
+    "lastSeen": "2026-11-24T16:44:13.522476+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
