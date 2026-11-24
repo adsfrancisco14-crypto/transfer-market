@@ -1,5 +1,52 @@
 [
   {
+    "id": "0df561c6b454c72e29a2",
+    "title": "Celtic duo Duran and Nygren attract interest - gossip",
+    "summary": "Premier League club keep an eye on Celtic summer signing as Serie A sides monitor the champion's Swedish midfielder...",
+    "originalTitle": "Celtic duo Duran and Nygren attract interest - gossip",
+    "originalSummary": "Premier League club keep an eye on Celtic summer signing as Serie A sides monitor the champion's Swedish midfielder...",
+    "translatedTitle": "Celtic duo Duran and Nygren attract interest - gossip",
+    "translatedSummary": "Premier League club keep an eye on Celtic summer signing as Serie A sides monitor the champion's Swedish midfielder...",
+    "source": "BBC Sport",
+    "domain": "www.bbc.co.uk",
+    "url": "https://www.bbc.co.uk/sport/football/articles/c6d71gjnznz2o?at_medium=RSS&at_campaign=rss",
+    "date": "2026-11-24T07:53:41+00:00",
+    "firstSeen": "2026-11-24T08:02:21.944364+00:00",
+    "lastSeen": "2026-11-24T08:02:21.944368+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 20,
+    "relevance": 20,
+    "classificationReasons": [
+      "Sinal de transferência no resumo"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [],
+    "regions": [
+      "Inglaterra",
+      "Itália"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "BBC Sport",
+        "url": "https://www.bbc.co.uk/sport/football/articles/c6d71gjnznz2o?at_medium=RSS&at_campaign=rss"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "bf0c54fd5837d547c107",
     "title": "Papers: Brentford defender emerges as Man Utd target as January budget revealed",
     "summary": "The top stories and transfer rumours from Tuesday's newspapers...",
@@ -12,7 +59,7 @@
     "url": "https://www.skysports.com/football/news/12040/13615837/man-utd-transfer-news-brentford-defender-nathan-collins-emerges-as-january-target-paper-talk",
     "date": "2026-11-23T22:40:00+00:00",
     "firstSeen": "2026-11-23T23:29:53.991214+00:00",
-    "lastSeen": "2026-11-24T06:35:05.464215+00:00",
+    "lastSeen": "2026-11-24T08:02:24.593504+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -61,7 +108,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/cm8x0grpder5o?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-23T21:41:52+00:00",
     "firstSeen": "2026-11-23T22:31:51.023813+00:00",
-    "lastSeen": "2026-11-24T06:35:05.463826+00:00",
+    "lastSeen": "2026-11-24T08:02:24.585113+00:00",
     "status": "Negociações",
     "suggestedStatus": "Negociações",
     "phase": "Negociações",
@@ -677,7 +724,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-24T06:35:05.464177+00:00",
+    "lastSeen": "2026-11-24T08:02:24.585652+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
