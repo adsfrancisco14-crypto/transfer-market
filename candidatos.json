@@ -1,5 +1,54 @@
 [
   {
+    "id": "275624803958be79dc6d",
+    "title": "Berrada admits Man Utd transfer spending will be limited by stadium plans",
+    "summary": "Manchester United chief executive Omar Berrada admits plans to build a new 100,000-seater stadium will limit transfer spending in upcoming windows.",
+    "originalTitle": "Berrada admits Man Utd transfer spending will be limited by stadium plans",
+    "originalSummary": "Manchester United chief executive Omar Berrada admits plans to build a new 100,000-seater stadium will limit transfer spending in upcoming windows.",
+    "translatedTitle": "Berrada admits Man Utd transfer spending will be limited by stadium plans",
+    "translatedSummary": "Manchester United chief executive Omar Berrada admits plans to build a new 100,000-seater stadium will limit transfer spending in upcoming windows.",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/news/12040/13615995/man-utd-transfer-spending-to-be-limited-by-new-stadium-plans-in-the-short-term-according-to-chief-executive-omar-berrada",
+    "date": "2026-11-24T16:00:00+00:00",
+    "firstSeen": "2026-11-24T17:33:17.105764+00:00",
+    "lastSeen": "2026-11-24T17:33:17.105767+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 40,
+    "relevance": 40,
+    "classificationReasons": [
+      "Sinal de transferência no título",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Manchester United"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/news/12040/13615995/man-utd-transfer-spending-to-be-limited-by-new-stadium-plans-in-the-short-term-according-to-chief-executive-omar-berrada"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "8e5e847fd0f479e6dfc2",
     "title": "Defender Heaven open to leaving Man Utd",
     "summary": "Manchester United defender Ayden Heaven is open to a loan move in January amid concerns over his game time as his side battles in the Premier League relegation zone.",
@@ -12,7 +61,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/crd61gy4ednvo?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-24T15:56:55+00:00",
     "firstSeen": "2026-11-24T16:44:09.114986+00:00",
-    "lastSeen": "2026-11-24T16:44:09.114991+00:00",
+    "lastSeen": "2026-11-24T17:33:17.796214+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -61,7 +110,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/cm4gn31z553go?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-24T10:45:30+00:00",
     "firstSeen": "2026-11-24T11:17:52.198641+00:00",
-    "lastSeen": "2026-11-24T16:44:13.522053+00:00",
+    "lastSeen": "2026-11-24T17:33:17.796354+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -154,7 +203,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/c6d71gjnznz2o?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-24T07:53:41+00:00",
     "firstSeen": "2026-11-24T08:02:21.944364+00:00",
-    "lastSeen": "2026-11-24T16:44:13.522531+00:00",
+    "lastSeen": "2026-11-24T17:33:17.796996+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -866,7 +915,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-24T16:44:13.522476+00:00",
+    "lastSeen": "2026-11-24T17:33:17.796943+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
