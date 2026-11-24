@@ -1,5 +1,55 @@
 [
   {
+    "id": "d7d19648b95c6b8fbd19",
+    "title": "Papers: Chelsea will push to sign Bournemouth's Scott in January",
+    "summary": "The top stories and transfer rumours from Tuesday's newspapers...",
+    "originalTitle": "Papers: Chelsea will push to sign Bournemouth's Scott in January",
+    "originalSummary": "The top stories and transfer rumours from Tuesday's newspapers...",
+    "translatedTitle": "Papers: Chelsea will push to sign Bournemouth's Scott in January",
+    "translatedSummary": "The top stories and transfer rumours from Tuesday's newspapers...",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/news/12040/13616238/chelsea-transfer-news-blues-will-push-to-sign-bournemouth-midfielder-alex-scott-in-january-paper-talk",
+    "date": "2026-11-24T23:02:00+00:00",
+    "firstSeen": "2026-11-24T23:28:40.446358+00:00",
+    "lastSeen": "2026-11-24T23:28:40.446361+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 30,
+    "relevance": 30,
+    "classificationReasons": [
+      "Sinal de transferência no resumo",
+      "Dois ou mais clubes identificados"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Bournemouth",
+      "Chelsea"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/news/12040/13616238/chelsea-transfer-news-blues-will-push-to-sign-bournemouth-midfielder-alex-scott-in-january-paper-talk"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "275624803958be79dc6d",
     "title": "Berrada admits Man Utd transfer spending will be limited by stadium plans",
     "summary": "Manchester United chief executive Omar Berrada admits plans to build a new 100,000-seater stadium will limit transfer spending in upcoming windows.",
@@ -61,7 +111,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/crd61gy4ednvo?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-24T15:56:55+00:00",
     "firstSeen": "2026-11-24T16:44:09.114986+00:00",
-    "lastSeen": "2026-11-24T22:36:15.936048+00:00",
+    "lastSeen": "2026-11-24T23:28:41.388737+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -915,7 +965,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-24T22:36:15.936449+00:00",
+    "lastSeen": "2026-11-24T23:28:41.389195+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
