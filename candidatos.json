@@ -1,5 +1,54 @@
 [
   {
+    "id": "eadc74c19f07cea1a4a4",
+    "title": "Papers: Liverpool agree deal to sign Senegal teenager Ndiaye",
+    "summary": "The top stories and transfer rumours from Thursday's newspapers...",
+    "originalTitle": "Papers: Liverpool agree deal to sign Senegal teenager Ndiaye",
+    "originalSummary": "The top stories and transfer rumours from Thursday's newspapers...",
+    "translatedTitle": "Papers: Liverpool agree deal to sign Senegal teenager Ndiaye",
+    "translatedSummary": "The top stories and transfer rumours from Thursday's newspapers...",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/news/12040/13616560/liverpool-transfer-news-sidy-barhama-ndiaye-agrees-deal-to-sign-for-reds-paper-talk",
+    "date": "2026-11-25T21:40:00+00:00",
+    "firstSeen": "2026-11-25T22:21:48.137095+00:00",
+    "lastSeen": "2026-11-25T22:21:48.137098+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 25,
+    "relevance": 25,
+    "classificationReasons": [
+      "Sinal de transferência no resumo",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Liverpool"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/news/12040/13616560/liverpool-transfer-news-sidy-barhama-ndiaye-agrees-deal-to-sign-for-reds-paper-talk"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "d7d19648b95c6b8fbd19",
     "title": "Papers: Chelsea will push to sign Bournemouth's Scott in January",
     "summary": "The top stories and transfer rumours from Tuesday's newspapers...",
@@ -965,7 +1014,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-25T21:23:21.724340+00:00",
+    "lastSeen": "2026-11-25T22:21:48.852674+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
