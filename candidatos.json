@@ -1,5 +1,54 @@
 [
   {
+    "id": "21116a46d6cca437d194",
+    "title": "Calvert-Lewin signs new Leeds deal until 2029",
+    "summary": "England international Dominic Calvert-Lewin signs a new contract to stay with Leeds United until 2029.",
+    "originalTitle": "Calvert-Lewin signs new Leeds deal until 2029",
+    "originalSummary": "England international Dominic Calvert-Lewin signs a new contract to stay with Leeds United until 2029.",
+    "translatedTitle": "Calvert-Lewin signs new Leeds deal until 2029",
+    "translatedSummary": "England international Dominic Calvert-Lewin signs a new contract to stay with Leeds United until 2029.",
+    "source": "BBC Sport",
+    "domain": "www.bbc.co.uk",
+    "url": "https://www.bbc.co.uk/sport/football/articles/cx62pnz1evv4o?at_medium=RSS&at_campaign=rss",
+    "date": "2026-11-26T18:00:31+00:00",
+    "firstSeen": "2026-11-26T18:33:51.450405+00:00",
+    "lastSeen": "2026-11-26T18:33:51.450410+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 25,
+    "relevance": 25,
+    "classificationReasons": [
+      "Sinal de transferência no resumo",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Leeds United"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "BBC Sport",
+        "url": "https://www.bbc.co.uk/sport/football/articles/cx62pnz1evv4o?at_medium=RSS&at_campaign=rss"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "eadc74c19f07cea1a4a4",
     "title": "Papers: Liverpool agree deal to sign Senegal teenager Ndiaye",
     "summary": "The top stories and transfer rumours from Thursday's newspapers...",
@@ -1014,7 +1063,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-26T17:43:48.220561+00:00",
+    "lastSeen": "2026-11-26T18:33:53.471963+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
