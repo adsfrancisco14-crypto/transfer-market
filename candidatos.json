@@ -1,5 +1,55 @@
 [
   {
+    "id": "1f9d6dffe0852bab2984",
+    "title": "Papers: Liverpool interested in exploring Musiala deal",
+    "summary": "The top stories and transfer rumours from Friday's newspapers...",
+    "originalTitle": "Papers: Liverpool interested in exploring Musiala deal",
+    "originalSummary": "The top stories and transfer rumours from Friday's newspapers...",
+    "translatedTitle": "Papers: Liverpool interested in exploring Musiala deal",
+    "translatedSummary": "The top stories and transfer rumours from Friday's newspapers...",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/news/12040/13617073/liverpool-transfer-news-reds-prepared-to-explore-jamal-musiala-deal-next-summer-if-he-can-prove-fitness-paper-talk",
+    "date": "2026-11-27T07:52:00+00:00",
+    "firstSeen": "2026-11-27T08:19:06.386089+00:00",
+    "lastSeen": "2026-11-27T08:19:06.386093+00:00",
+    "status": "Interesse",
+    "suggestedStatus": "Interesse",
+    "phase": "Interesse",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 35,
+    "relevance": 35,
+    "classificationReasons": [
+      "Sinal de transferência no resumo",
+      "Interesse de clube",
+      "Clube identificado"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [
+      "Liverpool"
+    ],
+    "regions": [
+      "Inglaterra"
+    ],
+    "league": "Inglaterra",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/news/12040/13617073/liverpool-transfer-news-reds-prepared-to-explore-jamal-musiala-deal-next-summer-if-he-can-prove-fitness-paper-talk"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
     "id": "21116a46d6cca437d194",
     "title": "Calvert-Lewin signs new Leeds deal until 2029",
     "summary": "England international Dominic Calvert-Lewin signs a new contract to stay with Leeds United until 2029.",
@@ -12,7 +62,7 @@
     "url": "https://www.bbc.co.uk/sport/football/articles/cx62pnz1evv4o?at_medium=RSS&at_campaign=rss",
     "date": "2026-11-26T18:00:31+00:00",
     "firstSeen": "2026-11-26T18:33:51.450405+00:00",
-    "lastSeen": "2026-11-27T06:54:56.619586+00:00",
+    "lastSeen": "2026-11-27T08:19:07.196523+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -1063,7 +1113,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-27T06:54:56.620288+00:00",
+    "lastSeen": "2026-11-27T08:19:07.197332+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
