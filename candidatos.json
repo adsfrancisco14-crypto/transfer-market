@@ -1,49 +1,5 @@
 [
   {
-    "id": "949a4346e24c6cbf614d",
-    "title": "Papers: Man Utd in running for Paz, but Champions League key",
-    "summary": "The top stories and transfer rumours from Saturday's newspapers...",
-    "originalTitle": "Papers: Man Utd in running for Paz, but Champions League key",
-    "originalSummary": "The top stories and transfer rumours from Saturday's newspapers...",
-    "translatedTitle": "Papers: Man Utd in running for Paz, but Champions League key",
-    "translatedSummary": "The top stories and transfer rumours from Saturday's newspapers...",
-    "source": "Sky Sports",
-    "domain": "www.skysports.com",
-    "url": "https://www.skysports.com/football/news/12040/13617280/manchester-united-transfer-news-red-devils-still-in-running-for-comos-nico-paz-paper-talk",
-    "date": "2026-11-27T23:00:00+00:00",
-    "firstSeen": "2026-11-28T00:14:18.833487+00:00",
-    "lastSeen": "2026-11-28T09:30:49.137988+00:00",
-    "status": "Rumor",
-    "suggestedStatus": "Rumor",
-    "phase": "Rumor",
-    "editorStatus": "Por verificar",
-    "verification": "Por verificar",
-    "verificationStatus": "Por verificar",
-    "transferRelevance": 20,
-    "relevance": 20,
-    "classificationReasons": [
-      "Sinal de transferência no resumo"
-    ],
-    "player": "",
-    "detectedPlayers": [],
-    "currentClub": "",
-    "destination": "",
-    "detectedClubs": [],
-    "regions": [],
-    "league": "Por identificar",
-    "sourceLinks": [
-      {
-        "source": "Sky Sports",
-        "url": "https://www.skysports.com/football/news/12040/13617280/manchester-united-transfer-news-red-devils-still-in-running-for-comos-nico-paz-paper-talk"
-      }
-    ],
-    "sourceCount": 1,
-    "translationStatus": "failed",
-    "translationVersion": "",
-    "displayLanguage": "original",
-    "engineVersion": "7.3"
-  },
-  {
     "id": "800125dea2a6e646bc36",
     "title": "Man Utd trigger Fernandes' one-year contract extension",
     "summary": "Manchester United activate an option on captain Bruno Fernandes' contract, extending it until 2028.",
@@ -54,9 +10,9 @@
     "source": "BBC Sport",
     "domain": "www.bbc.co.uk",
     "url": "https://www.bbc.co.uk/sport/football/articles/c6d91j5geepqo?at_medium=RSS&at_campaign=rss",
-    "date": "2026-11-27T15:08:41+00:00",
+    "date": "2026-11-28T10:28:36+00:00",
     "firstSeen": "2026-11-27T14:45:05.354611+00:00",
-    "lastSeen": "2026-11-28T09:30:49.137129+00:00",
+    "lastSeen": "2026-11-28T10:32:11.362144+00:00",
     "status": "Rumor",
     "suggestedStatus": "Rumor",
     "phase": "Rumor",
@@ -84,6 +40,50 @@
       {
         "source": "BBC Sport",
         "url": "https://www.bbc.co.uk/sport/football/articles/c6d91j5geepqo?at_medium=RSS&at_campaign=rss"
+      }
+    ],
+    "sourceCount": 1,
+    "translationStatus": "failed",
+    "translationVersion": "",
+    "displayLanguage": "original",
+    "engineVersion": "7.3"
+  },
+  {
+    "id": "949a4346e24c6cbf614d",
+    "title": "Papers: Man Utd in running for Paz, but Champions League key",
+    "summary": "The top stories and transfer rumours from Saturday's newspapers...",
+    "originalTitle": "Papers: Man Utd in running for Paz, but Champions League key",
+    "originalSummary": "The top stories and transfer rumours from Saturday's newspapers...",
+    "translatedTitle": "Papers: Man Utd in running for Paz, but Champions League key",
+    "translatedSummary": "The top stories and transfer rumours from Saturday's newspapers...",
+    "source": "Sky Sports",
+    "domain": "www.skysports.com",
+    "url": "https://www.skysports.com/football/news/12040/13617280/manchester-united-transfer-news-red-devils-still-in-running-for-comos-nico-paz-paper-talk",
+    "date": "2026-11-27T23:00:00+00:00",
+    "firstSeen": "2026-11-28T00:14:18.833487+00:00",
+    "lastSeen": "2026-11-28T10:32:11.362757+00:00",
+    "status": "Rumor",
+    "suggestedStatus": "Rumor",
+    "phase": "Rumor",
+    "editorStatus": "Por verificar",
+    "verification": "Por verificar",
+    "verificationStatus": "Por verificar",
+    "transferRelevance": 20,
+    "relevance": 20,
+    "classificationReasons": [
+      "Sinal de transferência no resumo"
+    ],
+    "player": "",
+    "detectedPlayers": [],
+    "currentClub": "",
+    "destination": "",
+    "detectedClubs": [],
+    "regions": [],
+    "league": "Por identificar",
+    "sourceLinks": [
+      {
+        "source": "Sky Sports",
+        "url": "https://www.skysports.com/football/news/12040/13617280/manchester-united-transfer-news-red-devils-still-in-running-for-comos-nico-paz-paper-talk"
       }
     ],
     "sourceCount": 1,
@@ -1255,7 +1255,7 @@
     "engineVersion": "7.3",
     "sourceCount": 1,
     "firstSeen": "2026-11-07T09:35:40+00:00",
-    "lastSeen": "2026-11-28T09:30:49.137931+00:00",
+    "lastSeen": "2026-11-28T10:32:11.362717+00:00",
     "verification": "Aguarda verificação editorial.",
     "classification": "Notícia de transferências",
     "transferRelevance": 20,
